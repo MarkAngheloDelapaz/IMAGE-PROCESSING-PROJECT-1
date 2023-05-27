@@ -1,23 +1,7 @@
 /******************************************************************************
-
-	ŒŸ¸ ƒvƒƒOƒ‰ƒ€
-
-    system name		ƒ`ƒbƒvŠOŠÏ”F¯(MCR00x Index)
-    program name	"TMCR00I.C"
-
-											Authered. by	K.Matsunaga
-											Image Processing Group
-											Production System Development Division
-											ROHM CO.,LTD.
-											21,Saiin Mizosaki-cho,Ukyo-ku,Kyoto
-											615-8585, JAPAN
-
-	—š—ğ
-    history
 	<version>		<date>			  <name/id>			<comment>
-	Ver. 1.00		2022-03-14		11911					new
-	Ver. 1.01		2022-07-27		shiotsuka			Ubuntu20.04(64bit) and support DR-CY-143
-  Ver. 1.02		2022-08-4		  11911					Led standardization set-up
+	Ver. 1.00		2022-03-14		Mark Dela Paz11911					new program
+    Ver. 1.02		2022-08-4		  Mark Dela Paz	11911		Led standardization set-up
 
 ******************************************************************************/
 
@@ -26,17 +10,17 @@
 
 /*
   --- memo ---
-  –{ƒvƒƒOƒ‰ƒ€‚ÍˆÈ‰º‚Ìƒn[ƒhƒEƒFƒAd—l‚Å“®ì‚µ‚Ü‚·
+  ï¿½{ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÈ‰ï¿½ï¿½Ìƒnï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½dï¿½lï¿½Å“ï¿½ï¿½ì‚µï¿½Ü‚ï¿½
 	TWA6606F4
-	‰æ‘œƒ{[ƒh	: CO-CZ-43
-    ƒJƒƒ‰		: KP-F31PCL
-	I/Oƒ{[ƒh	: DR-CY-80A
-	LEDƒ{[ƒh	F”CˆÓ(DSW:1,g—pCH:1)
+	ï¿½æ‘œï¿½{ï¿½[ï¿½h	: CO-CZ-43
+    ï¿½Jï¿½ï¿½ï¿½ï¿½		: KP-F31PCL
+	I/Oï¿½{ï¿½[ï¿½h	: DR-CY-80A
+	LEDï¿½{ï¿½[ï¿½h	ï¿½Fï¿½Cï¿½ï¿½(DSW:1,ï¿½gï¿½pCH:1)
 	NWT-70UM
-	‰æ‘œƒ{[ƒh	: CO-CZ-43
-	ƒJƒƒ‰		: acA2000-340km
-	I/Oƒ{[ƒh	: IN-CY-122 (IN 16bit/OUT 16bit)
-	LEDƒ{[ƒh	FDR-X-147A (DSW:optİ’è)
+	ï¿½æ‘œï¿½{ï¿½[ï¿½h	: CO-CZ-43
+	ï¿½Jï¿½ï¿½ï¿½ï¿½		: acA2000-340km
+	I/Oï¿½{ï¿½[ï¿½h	: IN-CY-122 (IN 16bit/OUT 16bit)
+	LEDï¿½{ï¿½[ï¿½h	ï¿½FDR-X-147A (DSW:optï¿½İ’ï¿½)
 */
 
 
@@ -76,19 +60,19 @@
 #include "R_filter.h"
 #include "R_bgray.h"
 #include "R_edge.h"
-#include "R_meas.h"			// ‚Q’l‰æ‘œˆ—ƒ‰ƒCƒuƒ‰ƒŠ—pƒwƒbƒ_
+#include "R_meas.h"			// ï¿½Qï¿½lï¿½æ‘œï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½pï¿½wï¿½bï¿½_
 #include "R_robust.h"
 #include "R_cursor.h"
 #include "R_gray.h"
 #include "R_search.h"
 #include "R_bitmap.h"
-#include "R_incy56.h"		// ‚h‚m[‚b‚x[‚T‚Ui·“®ƒhƒ‰ƒCƒo[ƒCƒ“ƒ^[ƒtƒF[ƒXjƒ‰ƒCƒuƒ‰ƒŠ[
+#include "R_incy56.h"		// ï¿½hï¿½mï¿½[ï¿½bï¿½xï¿½[ï¿½Tï¿½Uï¿½iï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½oï¿½[ï¿½Cï¿½ï¿½ï¿½^ï¿½[ï¿½tï¿½Fï¿½[ï¿½Xï¿½jï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½[
 #include "R_camlnk.h"
 #include "R_drx124.h"
 #include "R_system.h"
 
 #include "R_binrec.h"
-#include "R_trans.h"		// ‚qQ‚”‚’‚‚‚“ŠÖ”‚ğg—p‚·‚é
+#include "R_trans.h"		// ï¿½qï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½
 #include "R_math.h"
 
 
@@ -126,7 +110,7 @@
 #define ALL_NG			4
 
 
-// ˆ—ŠÔŠÇ—
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÔŠÇ—ï¿½
 static RTIME RTProcessTime, RTWaitTime;
 static int ProcessTime;
 
@@ -170,14 +154,14 @@ static int	AutoModeExecute(int code);
 static int  AutoModeExecuteNwt( int code );
 static int	InspectManual(int mode, int number, R_CS_RESULT_DATA *Result);
 static int	ParameterInspSet(int nMenuNumber);			//
-static int	JudgeValueDisp(int nMenuNumber);			// ”»’è’l•\¦
+static int	JudgeValueDisp(int nMenuNumber);			// ï¿½ï¿½ï¿½ï¿½lï¿½\ï¿½ï¿½
 static int	ParameterSysSet(int nMenuNumber);
-static int	LedAdjust(int nMenuNumber);				// Æ–¾’²®
+static int	LedAdjust(int nMenuNumber);				// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
 static int LedLevel(int nMenuNumber);
-static void	CaptureLedAdjust(int mode);				// Æ–¾’²®—p‰æ‘œæ‚è‚İ
-static int	CaptureManual(void);					// ƒ}ƒjƒ…ƒAƒ‹ŒŸ¸—p‰æ‘œæ‚è‚İ
-static void	CaptureThrough(int capture_nb);			// ƒXƒ‹[•\¦—p‰æ‘œæ‚è‚İ
-static int	DispFailImage(int nMenuNumber);				// Fail ‰æ‘œ•\¦
+static void	CaptureLedAdjust(int mode);				// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½æ‘œï¿½ï¿½èï¿½ï¿½
+static int	CaptureManual(void);					// ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½æ‘œï¿½ï¿½èï¿½ï¿½
+static void	CaptureThrough(int capture_nb);			// ï¿½Xï¿½ï¿½ï¿½[ï¿½\ï¿½ï¿½ï¿½pï¿½æ‘œï¿½ï¿½èï¿½ï¿½
+static int	DispFailImage(int nMenuNumber);				// Fail ï¿½æ‘œï¿½\ï¿½ï¿½
 static int	Print2(int nMenuNumber);				    // Print test
 static int	NGLimitCHK(int nMenuNumber);				// NG Limit On/Off 2011.08.17
 static int	MonitorCHK(int nMenuNumber);				// 2017.08.07
@@ -242,13 +226,13 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 int	TWA_LED_set( int page, int level ,int Judge_LED_White, R_LED_PARA *pLedPara);
 
 
-//‚h‚nƒ`ƒFƒbƒN
+//ï¿½hï¿½nï¿½`ï¿½Fï¿½bï¿½N
 static int MenuIOCheck( int nMenuNumber ){	R_CS_IOCheck();		return OK;	};
 //static int	Counter_cls(int nMenuNumber);				// Counter Clear 2012.03.14
 
 
 //
-static void PkgParaSaveLog( void );							//ƒpƒ‰ƒ[ƒ^•ÏXƒƒO		ver3.02 saito
+static void PkgParaSaveLog( void );							//ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ÏXï¿½ï¿½ï¿½O		ver3.02 saito
 
 void	TWA_Ibutsu_error( void );							//Glass IBUTSU error Ver2.21<shio>
 int	Index_Ibutsu_check( int grayPn, int binPn );			//Glass IBUTSU check Ver2.21<shio>
@@ -273,10 +257,10 @@ MACHINE_PARAMETER	SystemPara;
 
 INSPECT_PARAMETER	InspPara, InspParaM;
 
-//‚»‚Ì‘¼‚Ì•Ï”
-//static int				InspValue			= 0;							// ŒŸ¸ ’ïR’l
+//ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½Ì•Ïï¿½
+//static int				InspValue			= 0;							// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Rï¿½l
 
-extern int				Std_rpm;											// İ”õŠî€‰ñ“]”(rmp)
+extern int				Std_rpm;											// ï¿½İ”ï¿½ï¿½î€ï¿½ï¿½]ï¿½ï¿½(rmp)
 
 // --- Inspection Inage(Gray)
 int						GetGrayPn			= (int)NULL;					// Get capture		gray memory
@@ -309,7 +293,7 @@ extern int				Bin_Mz_l[5];									//C1 mezumari Binary level			//<z3>
 EDGE_SEARCH_PARAMETER	IndexEsPara;
 
 
-// --- ‚Q’lŒv‘ªğŒi “Á’¥—Ê‰‰Z@‰‰Z•û®w’è j ---
+// --- ï¿½Qï¿½lï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½i ï¿½ï¿½ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Zï¿½@ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½ ï¿½j ---
 BIN_MEASURE_PARAMETER	BinMeasChip,		// Chip search
 						BinMeasOcoat,		// Overcoat Insp.
 						BinMeasElec,		// Elec Insp.
@@ -317,7 +301,7 @@ BIN_MEASURE_PARAMETER	BinMeasChip,		// Chip search
 
 // --- Chip position data
         int				ChipBlobNo			= 0;			// Chip blob No.( bin measure )
-struct	ChipCornerPosition {												// ŠOŒ`ŠpˆÊ’uƒf[ƒ^
+struct	ChipCornerPosition {												// ï¿½Oï¿½`ï¿½pï¿½Ê’uï¿½fï¿½[ï¿½^
 	int		dx;
 	int		dy;
 }		ChipCorPos[4][4];
@@ -325,15 +309,15 @@ struct	ChipCornerPosition {												// ŠOŒ`ŠpˆÊ’uƒf[ƒ^
 // Electrode and Overcoat data
 Overcoat_data	Elec[3], Overcoat,ElecC12[2],ElecC1[2];
 
-// --- Chip ŒX‚« ---
-    int         		ChipAtan			= 0;				// Chip Šp“x~‚P‚O‚Ì’liƒA[ƒNƒ^ƒ“ƒWƒFƒ“ƒgj
+// --- Chip ï¿½Xï¿½ï¿½ ---
+    int         		ChipAtan			= 0;				// Chip ï¿½pï¿½xï¿½~ï¿½Pï¿½Oï¿½Ì’lï¿½iï¿½Aï¿½[ï¿½Nï¿½^ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½j
 
 // Overcoat insp.
 // --- Chip size ---
 static int				InspOcOffsetSize[4]	= { 5, 3, 0, 0 };				// Overcoat insp. area offset size
 static int				InspOcOffsetCor[4]	= { 40, 30, 0, 0 };				// Overcoat insp. area offset corner size
-static int				InspOcOutside[4][8];								// Overcoat insp. ŒŸ¸œŠO”ÍˆÍ
-static int				InspOcOutsideCor[4][8];								// Overcoat insp. ŒŸ¸œŠO”ÍˆÍ
+static int				InspOcOutside[4][8];								// Overcoat insp. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Íˆï¿½
+static int				InspOcOutsideCor[4][8];								// Overcoat insp. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Íˆï¿½
 static int				InspOcOffsetSizeBlack[4]	= { 5, 3, 0, 0 };				// Overcoat insp. area offset size	v2.11
 static int				InspOcOffsetCorBlack[4]	= { 40, 30, 0, 0 };				// Overcoat insp. area offset corner size v2.11
 // Plating insp.
@@ -342,25 +326,25 @@ static int				InspPlOffsetSize[4]	= { 0, 5, 0, 0 };				// Plating insp. area off
 static int				InspPlatingArea[2][4];
 static int				InspPlatingPos[2][8];
 
-// ‰ñ‹AŒW”E•½‹Ï’lE•W€•Î·
+// ï¿½ï¿½Aï¿½Wï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½Ï’lï¿½Eï¿½Wï¿½ï¿½ï¿½Îï¿½
 Regression_def  ElecEdge[3][8];	// ChipEdge[4], ChipXside, ChipYside,
 
-// ŠOŒ`ƒGƒbƒWƒf[ƒ^Å•p’l
+// ï¿½Oï¿½`ï¿½Gï¿½bï¿½Wï¿½fï¿½[ï¿½^ï¿½Å•pï¿½l
 //struct	frequency_rate {
 //	int		dx;
 //	int		dy;
 //	int		dn;
-//}		 ElecFreqRate[3][4][700],ElecFreqMax[3][4];			  2017.1.10 tanaka Rate g‚í‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅƒRƒƒ“ƒg‰»
+//}		 ElecFreqRate[3][4][700],ElecFreqMax[3][4];			  2017.1.10 tanaka Rate ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½
 
-// --- ƒƒoƒXƒg„’èğŒ\‘¢‘Ì
+// --- ï¿½ï¿½ï¿½oï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½
 ROBUST_CONDITION		RobustCond			=	{
-													-50,					// deg_min;				Å¬Šp“x 10”{’l[deg]
-													50,						// deg_max;				Å‘åŠp“x 10”{’l[deg]
-													5,						// deg_step;			Šp“xƒXƒeƒbƒv 10”{’l[deg]
-													0,						// frequency_rate_min;	À•W“_”‚É‘Î‚·‚éÅ•p’l‚Ì“x”‚ÌÅ’áŠ„‡(0-100%)
-													0,						// moving_average;		ƒqƒXƒgƒOƒ‰ƒ€ˆÚ“®•½‹Ï‹æŠÔ
-													ROBUST_MODE				// method;				ƒqƒXƒgƒOƒ‰ƒ€•]‰¿ğŒ
-												};		//-5`5[deg]‚Ì”ÍˆÍ‚ğA1[deg]‚İ‚Åƒ`ƒFƒbƒN
+													-50,					// deg_min;				ï¿½Åï¿½ï¿½pï¿½x 10ï¿½{ï¿½l[deg]
+													50,						// deg_max;				ï¿½Å‘ï¿½pï¿½x 10ï¿½{ï¿½l[deg]
+													5,						// deg_step;			ï¿½pï¿½xï¿½Xï¿½eï¿½bï¿½v 10ï¿½{ï¿½l[deg]
+													0,						// frequency_rate_min;	ï¿½ï¿½ï¿½Wï¿½_ï¿½ï¿½ï¿½É‘Î‚ï¿½ï¿½ï¿½Å•pï¿½lï¿½Ì“xï¿½ï¿½ï¿½ÌÅ’áŠ„ï¿½ï¿½(0-100%)
+													0,						// moving_average;		ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½Ï‹ï¿½ï¿½
+													ROBUST_MODE				// method;				ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+												};		//-5ï¿½`5[deg]ï¿½Ì”ÍˆÍ‚ï¿½ï¿½A1[deg]ï¿½ï¿½ï¿½İ‚Åƒ`ï¿½Fï¿½bï¿½N
 
 R_POINT					*Src_point			= NULL;
 R_POINT					*Src_point_adr;
@@ -373,18 +357,18 @@ int			RobustDegWidth	= 100;
 int			RobustDegStep	= 5;
 
 
-static int nJudgeMode = 0;		//AllGo,AllNG —pƒtƒ‰ƒO
+static int nJudgeMode = 0;		//AllGo,AllNG ï¿½pï¿½tï¿½ï¿½ï¿½O
 
-// Šî”ÂID(DSW”Ô†)
-// ƒ}ƒ‹ƒ`ƒvƒƒZƒX‚Å‹N“®‚·‚é‚Ì‚ÅAID”Ô†‚ğ‚©‚¦‚é•K—v‚ª‚ ‚é
-// ¨‹N“®ƒIƒvƒVƒ‡ƒ“‚ÅŠî”ÂID‚ğİ’è‚·‚é‚Ì‚ÅAƒ\[ƒX“à‚Å‚Í‘S‚Ä_BOARD_RDSW_0‚Æ‚µ‚Ä‹Lq‚·‚é
-// ¨PCI2724C‚Å‚àDrCy83Ch‚ğID”Ô†‚Æ‚µ‚Äg—p‚·‚é
-#define DRAW_POSI_IO_STATUS_X			60					// ’ÊMó‘Ô@•\¦ˆÊ’uX
-#define DRAW_POSI_IO_STATUS_Y			30					// ’ÊMó‘Ô@•\¦ˆÊ’uY
+// ï¿½ï¿½ï¿½ID(DSWï¿½Ôï¿½)
+// ï¿½}ï¿½ï¿½ï¿½`ï¿½vï¿½ï¿½ï¿½Zï¿½Xï¿½Å‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ÅAIDï¿½Ôï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÅŠï¿½ï¿½IDï¿½ï¿½İ’è‚·ï¿½ï¿½Ì‚ÅAï¿½\ï¿½[ï¿½Xï¿½ï¿½ï¿½Å‚Í‘Sï¿½ï¿½_BOARD_RDSW_0ï¿½Æ‚ï¿½ï¿½Ä‹Lï¿½qï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½PCI2724Cï¿½Å‚ï¿½DrCy83Chï¿½ï¿½IDï¿½Ôï¿½ï¿½Æ‚ï¿½ï¿½Ägï¿½pï¿½ï¿½ï¿½ï¿½
+#define DRAW_POSI_IO_STATUS_X			60					// ï¿½ÊMï¿½ï¿½Ô@ï¿½\ï¿½ï¿½ï¿½Ê’uX
+#define DRAW_POSI_IO_STATUS_Y			30					// ï¿½ÊMï¿½ï¿½Ô@ï¿½\ï¿½ï¿½ï¿½Ê’uY
 
 static int DrCy83Ch = _BOARD_RDSW_0;
 static int DrX124Ch = _BOARD_JPSW0;
-static int HandleDrx124 = 0;			// DR-X-124ƒnƒ“ƒhƒ‹
+static int HandleDrx124 = 0;			// DR-X-124ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
 static int GpioInPort = -1;
 static int GpioOutPort = -1;
 static int CommunicationDeviceShareId = 0;
@@ -393,7 +377,7 @@ static int CommunicationDeviceUseLen = 0;
 static R_POINT DrawPosi_IoStatus = {DRAW_POSI_IO_STATUS_X, DRAW_POSI_IO_STATUS_Y};
 static int UserTimeDelay(int nTimer);
 
-// “ú“ŒH‹Æƒe[ƒsƒ“ƒO‘Î‰  2017.07.11 tanaka
+// ï¿½ï¿½ï¿½ï¿½ï¿½Hï¿½Æƒeï¿½[ï¿½sï¿½ï¿½ï¿½Oï¿½Î‰ï¿½  2017.07.11 tanaka
 #define NWT_INSP_START		0x8000				// Insp. start
 
 static int SetBit(int nBit, int nFlag);
@@ -430,20 +414,20 @@ static int El_aveL[MAX_LIGHT_MONI],El_aveR[MAX_LIGHT_MONI],G2_ave[MAX_LIGHT_MONI
 static int light_monitor_count = 0;
 static int TP_Bright_LowerLimit[3] = {0,0,0};
 
-//LED’²®
-#define LED_CH_MAX	6										// Æ–¾Šî”Âch”
-//#define DRCY80CH	_BOARD_RDSW_1							// Æ–¾Šî”ÂDSW”Ô†
-#define GPDAC_DSW		_BOARD_RDSW_0						// Æ–¾Šî”ÂDSW”Ô†
-#define GPDAC_DSW_Val	0									// Æ–¾Šî”ÂDSW”Ô†
-static int		LedCurrent[LED_CH_MAX];						// Æ–¾“d—¬ [uA]
-static int		LedCaptureNo =0;							// Æ–¾’²®‚Ìæ‚è‚İ”Ô†
+//LEDï¿½ï¿½ï¿½ï¿½
+#define LED_CH_MAX	6										// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½chï¿½ï¿½
+//#define DRCY80CH	_BOARD_RDSW_1							// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½DSWï¿½Ôï¿½
+#define GPDAC_DSW		_BOARD_RDSW_0						// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½DSWï¿½Ôï¿½
+#define GPDAC_DSW_Val	0									// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½DSWï¿½Ôï¿½
+static int		LedCurrent[LED_CH_MAX];						// ï¿½Æ–ï¿½ï¿½dï¿½ï¿½ [uA]
+static int		LedCaptureNo =0;							// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½èï¿½İ”Ôï¿½
 static int		SampleAreaNum;
 static R_RECT	SampleArea[8];
 
-static R_LED_ADJUST LedAdjustPara = {"Æ–¾’²®", "Light Setting", CaptureLedAdjust, NULL,
+static R_LED_ADJUST LedAdjustPara = {"ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½", "Light Setting", CaptureLedAdjust, NULL,
 	{
-		{ "ÎŒõÆ–¾"		,"Slant   Light"	,LED_CH1|LED_CH2|LED_CH3|LED_CH4,	(int *)&LedCurrent[0],	0,	100000,	1000	},
-//		{ "“¯²Æ–¾"		,"Coaxial Light"	,LED_CH4,							(int *)&LedCurrent[1],	0,	100000,	1000	},
+		{ "ï¿½ÎŒï¿½ï¿½Æ–ï¿½"		,"Slant   Light"	,LED_CH1|LED_CH2|LED_CH3|LED_CH4,	(int *)&LedCurrent[0],	0,	100000,	1000	},
+//		{ "ï¿½ï¿½ï¿½ï¿½ï¿½Æ–ï¿½"		,"Coaxial Light"	,LED_CH4,							(int *)&LedCurrent[1],	0,	100000,	1000	},
 		{	NULL	},
 	}
 };
@@ -461,23 +445,23 @@ static R_LED_PARA LedPara = {
 	}
 };
 
-#define USER_DRX124_PATTERN				8					// DR-X-124ƒpƒ^[ƒ“”
+#define USER_DRX124_PATTERN				8					// DR-X-124ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½
 #define USER_DRX124_CH_NUMBER			6
 #define LED_CONTROLL_DR_CY_80			80
 #define LED_CONTROLL_DRX124				124
 #define BRIGHTNESS_CHECK_AREA_NUMBER	4
 int			LedControllMode = LED_CONTROLL_DR_CY_80;
-// DR-X-124ƒpƒ^[ƒ“–ˆ‚Ìİ’è@1–‡‚¾‚¯‚ğg—p‚·‚éê‡‚Ì‚İ(LED_CONTROLL_DR_X_124_SINGLE)A‚±‚Ì\‘¢‘Ì‚ğg—p‚·‚é
-int			nLedBoardType;										// g—p‚·‚éÆ–¾ƒ{[ƒh‚Ìí—Ş
-R_RECT		rectLedCheckArea[4];								// MenuLightSet_DrX124_Single‚Åg—p
+// DR-X-124ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½@1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ê‡ï¿½Ì‚ï¿½(LED_CONTROLL_DR_X_124_SINGLE)ï¿½Aï¿½ï¿½ï¿½Ì\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½
+int			nLedBoardType;										// ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½Æ–ï¿½ï¿½{ï¿½[ï¿½hï¿½Ìï¿½ï¿½
+R_RECT		rectLedCheckArea[4];								// MenuLightSet_DrX124_Singleï¿½Ågï¿½p
 
 typedef struct {
-	int nPatternNumber;							// “_“”ƒpƒ^[ƒ“”
-	int nCameraNo[USER_DRX124_PATTERN];			// Šeƒpƒ^[ƒ“‚ÌƒJƒƒ‰”Ô†
-	int nCaptureNo[USER_DRX124_PATTERN];		// Šeƒpƒ^[ƒ“‚Ìæ‚è‚İ”Ô†
+	int nPatternNumber;							// ï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½
+	int nCameraNo[USER_DRX124_PATTERN];			// ï¿½eï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½Ôï¿½
+	int nCaptureNo[USER_DRX124_PATTERN];		// ï¿½eï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½Ìï¿½èï¿½İ”Ôï¿½
 } DRX124_SETTING;
 static DRX124_SETTING *_Drx124_Setting = NULL;
-static DRX124_SETTING Drx124_Setting_Cam1_Cap1 = {	1,	{0},		{0}			};	// ƒJƒƒ‰1‘ä@æ‚è‚İ1‰ñ
+static DRX124_SETTING Drx124_Setting_Cam1_Cap1 = {	1,	{0},		{0}			};	// ï¿½Jï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½@ï¿½ï¿½èï¿½ï¿½1ï¿½ï¿½
 
 static void CaptureLedAdjustCap0(int nMode);
 static void CaptureLedAdjustEndCap0(int nMode);
@@ -487,41 +471,41 @@ static int MenuLightSet(int nMenuNumber);
 static int DrX124ConditionSet(void);
 static int DrX124ResetTurn(void);
 
-// ƒƒbƒgî•ñ
-// ƒƒbƒgƒf[ƒ^\‘¢‘Ì
+// ï¿½ï¿½ï¿½bï¿½gï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½bï¿½gï¿½fï¿½[ï¿½^ï¿½\ï¿½ï¿½ï¿½ï¿½
 typedef struct {
-	char		sLotNumber[64];				// ƒƒbƒg”Ô†
-	char		sPackageName[64];			// ‹@í–¼
-	char		sMarkCharacter[64];			// •Wˆó•¶š
-	int			nMarkNumber[4];				// •Wˆó•¶š”
-	int			nMarkLines;					// •Wˆós”
-	char		sTapingDirName[64];			// ƒe[ƒsƒ“ƒO•ûŒü
+	char		sLotNumber[64];				// ï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½
+	char		sPackageName[64];			// ï¿½@ï¿½í–¼
+	char		sMarkCharacter[64];			// ï¿½Wï¿½ó•¶ï¿½
+	int			nMarkNumber[4];				// ï¿½Wï¿½ó•¶ï¿½ï¿½ï¿½
+	int			nMarkLines;					// ï¿½Wï¿½ï¿½sï¿½ï¿½
+	char		sTapingDirName[64];			// ï¿½eï¿½[ï¿½sï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½
 } LOT_DATA;
 
-static LOT_DATA LotData = {		// ƒƒbƒgƒf[ƒ^\‘¢‘Ì
-	"-",			// ƒƒbƒg”Ô†
-	"-",			// ‹@í–¼
-	"-",			// •Wˆó•¶š
-	{0,},			// •Wˆó•¶š”
-	0,				// •Wˆós”				2013/05/21 by sassa
-	"-"				// ƒe[ƒsƒ“ƒO•ûŒü
+static LOT_DATA LotData = {		// ï¿½ï¿½ï¿½bï¿½gï¿½fï¿½[ï¿½^ï¿½\ï¿½ï¿½ï¿½ï¿½
+	"-",			// ï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½
+	"-",			// ï¿½@ï¿½í–¼
+	"-",			// ï¿½Wï¿½ó•¶ï¿½
+	{0,},			// ï¿½Wï¿½ó•¶ï¿½ï¿½ï¿½
+	0,				// ï¿½Wï¿½ï¿½sï¿½ï¿½				2013/05/21 by sassa
+	"-"				// ï¿½eï¿½[ï¿½sï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½
 };
 static int TypeChange_ByQrCode(char *sQrCode, LOT_DATA *pLotData);
 static int AutoTypeChangeLanUser(int command);
-static char QrCode[512];		// QRƒR[ƒh•¶š—ñ
+static char QrCode[512];		// QRï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 
-// ‚k‚d‚cÆ–¾
-static	int				TP_BrightFlag		= 0;							//LEDÆ–¾Æ“xŠÄ‹ (0:‚È‚µ 1:‚ ‚è ˆÙí˜A‘±n)
-static	int				TP_Bright_st		= 0;							//LEDÆ–¾Æ“xŠÄ‹ Šî€ƒŒƒxƒ‹
-static	int				TP_Bright_d			= 0;							//LEDÆ–¾Æ“xŠÄ‹ ƒŒƒxƒ‹
-static	int				TP_Bright_xs		= 640-50;						//LEDÆ–¾Æ“xŠÄ‹ Area xs
-static	int				TP_Bright_ys		= 240-100;						//LEDÆ–¾Æ“xŠÄ‹ Area ys
-static	int				TP_Bright_xl		= 20;							//LEDÆ–¾Æ“xŠÄ‹ Area xl
-static	int				TP_Bright_yl		= 200;							//LEDÆ–¾Æ“xŠÄ‹ Area yl
-static	int				TP_Bright_Stop		= OFF;							//LEDÆ–¾ˆÙí@‹@‘ä’â~
-static	int				TP_Bright_n			= 0;							//LEDÆ–¾ˆÙí@˜A‘±n
+// ï¿½kï¿½dï¿½cï¿½Æ–ï¿½
+static	int				TP_BrightFlag		= 0;							//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ (0:ï¿½È‚ï¿½ 1:ï¿½ï¿½ï¿½ï¿½ ï¿½Ùï¿½Aï¿½ï¿½n)
+static	int				TP_Bright_st		= 0;							//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ ï¿½î€ï¿½ï¿½ï¿½xï¿½ï¿½
+static	int				TP_Bright_d			= 0;							//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ ï¿½ï¿½ï¿½xï¿½ï¿½
+static	int				TP_Bright_xs		= 640-50;						//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area xs
+static	int				TP_Bright_ys		= 240-100;						//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area ys
+static	int				TP_Bright_xl		= 20;							//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area xl
+static	int				TP_Bright_yl		= 200;							//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area yl
+static	int				TP_Bright_Stop		= OFF;							//LEDï¿½Æ–ï¿½ï¿½Ùï¿½@ï¿½@ï¿½ï¿½ï¿½~
+static	int				TP_Bright_n			= 0;							//LEDï¿½Æ–ï¿½ï¿½Ùï¿½@ï¿½Aï¿½ï¿½n
 
 static	int				TP_Bright_SetLevel  = 100;
 static	int				TP_Bright_SetPercent= 95;
@@ -533,10 +517,10 @@ static  int             NG_Limit_OnOff[100];                                 //2
 ////////////////             MARKING INSPECTION MCR03                      /////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern int             G2_pos[4];											//‚f‚QˆÊ’uŒŸoƒf[ƒ^( lex, rix, upy, loy )
-extern int             Ap_pos[6];											//ŠOŒ`ˆÊ’uŒŸoƒf[ƒ^( lex, rix, leuy, lely, riuy, rily )
+extern int             G2_pos[4];											//ï¿½fï¿½Qï¿½Ê’uï¿½ï¿½ï¿½oï¿½fï¿½[ï¿½^( lex, rix, upy, loy )
+extern int             Ap_pos[6];											//ï¿½Oï¿½`ï¿½Ê’uï¿½ï¿½ï¿½oï¿½fï¿½[ï¿½^( lex, rix, leuy, lely, riuy, rily )
 
-        int				Index_pos[6];										//ƒCƒ“ƒfƒbƒNƒXƒe[ƒuƒ‹@ƒGƒbƒWˆÊ’u( uy, dy, ly )
+        int				Index_pos[6];										//ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½@ï¿½Gï¿½bï¿½Wï¿½Ê’u( uy, dy, ly )
 
 extern KAIKI		ue, shita, migi, hidari, w, l, Ap_up, Ap_lo, Ap_ri, Ap_le, Ap_w, Ap_l;
 extern MEANSD		up_y, lo_y, le_x, ri_x, Ap_up_y, Ap_lo_y, Ap_le_x, Ap_ri_x;
@@ -544,60 +528,60 @@ extern MEANSD		up_y, lo_y, le_x, ri_x, Ap_up_y, Ap_lo_y, Ap_le_x, Ap_ri_x;
 
 
 
-//        int				TWA_Judge_Ma		= ERROR;						//”»’èŒ‹‰Ê
-        int				Ma_pos[4];											//•WˆóˆÊ’uŒŸoƒf[ƒ^( lex, rix, upy, loy )
+//        int				TWA_Judge_Ma		= ERROR;						//ï¿½ï¿½ï¿½èŒ‹ï¿½ï¿½
+        int				Ma_pos[4];											//ï¿½Wï¿½ï¿½Ê’uï¿½ï¿½ï¿½oï¿½fï¿½[ï¿½^( lex, rix, upy, loy )
 
-//•Wˆó
+//ï¿½Wï¿½ï¿½
             int				TWA_R_n				= 0;							//Resistance value character number F/J
 
 
 
-//static	unsigned int			TWA_test;											//ŒŸ¸ƒeƒXƒgƒ‚[ƒhi0:’Êí@1:‚f‚QŒŸ¸@2:ŠOŒ`ŒŸ¸j
+//static	unsigned int			TWA_test;											//ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½hï¿½i0:ï¿½Êï¿½@1:ï¿½fï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½@2:ï¿½Oï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½j
 
 #define	Mark_DEBUG			1;
 static	int				Nijimi		= ERROR;
 int			 		TWA_X_size			= 640;
 int			 		TWA_Y_size			= 480;
 
-//ƒtƒBƒ‹ƒ^[
-static	int				G2_contrct_x		= 3;							//‚f‚Qk‘Ş‚wƒTƒCƒY
-static	int				G2_contrct_y		= 3;							//‚f‚Qk‘Ş‚xƒTƒCƒY
-static	int				G2_expand_x			= 3;							//‚f‚Q–c’£‚wƒTƒCƒY
-static	int				G2_expand_y			= 3;							//‚f‚Q–c’£‚xƒTƒCƒY
+//ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½[
+static	int				G2_contrct_x		= 3;							//ï¿½fï¿½Qï¿½kï¿½Ş‚wï¿½Tï¿½Cï¿½Y
+static	int				G2_contrct_y		= 3;							//ï¿½fï¿½Qï¿½kï¿½Ş‚xï¿½Tï¿½Cï¿½Y
+static	int				G2_expand_x			= 3;							//ï¿½fï¿½Qï¿½cï¿½ï¿½ï¿½wï¿½Tï¿½Cï¿½Y
+static	int				G2_expand_y			= 3;							//ï¿½fï¿½Qï¿½cï¿½ï¿½ï¿½xï¿½Tï¿½Cï¿½Y
 
-static	int				Ap_contrct_x		= 3;							//ŠOŒ`k‘Ş‚wƒTƒCƒY
-static	int				Ap_contrct_y		= 3;							//ŠOŒ`k‘Ş‚xƒTƒCƒY
-static	int				Ap_expand_x			= 3;							//ŠOŒ`–c’£‚wƒTƒCƒY
-static	int				Ap_expand_y			= 3;							//ŠOŒ`–c’£‚xƒTƒCƒY
+static	int				Ap_contrct_x		= 3;							//ï¿½Oï¿½`ï¿½kï¿½Ş‚wï¿½Tï¿½Cï¿½Y
+static	int				Ap_contrct_y		= 3;							//ï¿½Oï¿½`ï¿½kï¿½Ş‚xï¿½Tï¿½Cï¿½Y
+static	int				Ap_expand_x			= 3;							//ï¿½Oï¿½`ï¿½cï¿½ï¿½ï¿½wï¿½Tï¿½Cï¿½Y
+static	int				Ap_expand_y			= 3;							//ï¿½Oï¿½`ï¿½cï¿½ï¿½ï¿½xï¿½Tï¿½Cï¿½Y
 
 int             	IGuidePos[2]		= { 0, 0 };						// Index guide position
-int                 ElecPosRough[3][4];									// “d‹ÉˆÊ’uŒŸoƒf[ƒ^[side][pos]
+int                 ElecPosRough[3][4];									// ï¿½dï¿½ÉˆÊ’uï¿½ï¿½ï¿½oï¿½fï¿½[ï¿½^[side][pos]
 
-int						bIsNitto =0;										 // “ú“Œ‹@“®ì
-int						bIsMCR01 =0;										 // MCR01ŒŸ¸
-int                     bIsMCR03 =0;                                         // MCR03ŒŸ¸
-int                     bIsMCR10 =0;                                         // MCR10ŒŸ¸
-int                     bIsMCR18 =0;                                         // MCR18ŒŸ¸
-int                     bIsESR25 =0;                                         // ESR25ŒŸ¸
-int                     bIsSFR25 =0;                                         // SFR25ŒŸ¸
-int						bIsLTR50 =0;										 // LTR50ŒŸ¸
-int						bIsLTR18 =0;										 // LTR18ŒŸ¸										//v2.20
-int						bIsG2Straight = 0;									 // G2÷‰•iiŠOŒ`‚ÆÚG‚·‚é‚à‚Ìj
-int						bIsG2Separate = 1;									 // G2ƒKƒ‰ƒX•i‚Æ÷‰‚ÅŒÂ•Ê•i
+int						bIsNitto =0;										 // ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½
+int						bIsMCR01 =0;										 // MCR01ï¿½ï¿½ï¿½ï¿½
+int                     bIsMCR03 =0;                                         // MCR03ï¿½ï¿½ï¿½ï¿½
+int                     bIsMCR10 =0;                                         // MCR10ï¿½ï¿½ï¿½ï¿½
+int                     bIsMCR18 =0;                                         // MCR18ï¿½ï¿½ï¿½ï¿½
+int                     bIsESR25 =0;                                         // ESR25ï¿½ï¿½ï¿½ï¿½
+int                     bIsSFR25 =0;                                         // SFR25ï¿½ï¿½ï¿½ï¿½
+int						bIsLTR50 =0;										 // LTR50ï¿½ï¿½ï¿½ï¿½
+int						bIsLTR18 =0;										 // LTR18ï¿½ï¿½ï¿½ï¿½										//v2.20
+int						bIsG2Straight = 0;									 // G2ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½iï¿½Oï¿½`ï¿½ÆÚGï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìj
+int						bIsG2Separate = 1;									 // G2ï¿½Kï¿½ï¿½ï¿½Xï¿½iï¿½Æï¿½ï¿½ï¿½ï¿½ÅŒÂ•Ê•i
 int g2level;
 
-static	int				TWA_Ibutsu_Stop		= OFF;							// Index IBUTSU@‹@‘ä’â~
+static	int				TWA_Ibutsu_Stop		= OFF;							// Index IBUTSUï¿½@ï¿½@ï¿½ï¿½ï¿½~
 
 /*
 #define RESULT_MONITOR_FILE_NAME	"result.csv"
 
 static R_CS_RESULT_MONITOR_ITEM ResultMonitorList[] = {
-	// ŒŸ¸î•ñ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{	&ResultCode							,NULL,NULL,NULL,NULL,NULL,-1	,"NgCode"		,"NgCode"		,0,0,0	},		// NG code
 	{	&SaveImageCount						,NULL,NULL,NULL,NULL,NULL,-1	,"SaveImageNo"	,"SaveImageNo"	,0,0,0	},
 
-	{	&MoldSurfaceResult.tWorkCenter.x	,NULL,NULL,NULL,NULL,NULL,-1	,"CenterX[um]"	,"CenterX[um]"	,0,0,0	},		// ƒ[ƒNƒZƒ“ƒ^[ˆÊ’u‚w
-	{	&MoldSurfaceResult.tWorkCenter.y	,NULL,NULL,NULL,NULL,NULL,-1	,"CenterY[um]"	,"CenterY[um]"	,0,0,0	},		// ƒ[ƒNƒZƒ“ƒ^[ˆÊ’u‚x
+	{	&MoldSurfaceResult.tWorkCenter.x	,NULL,NULL,NULL,NULL,NULL,-1	,"CenterX[um]"	,"CenterX[um]"	,0,0,0	},		// ï¿½ï¿½ï¿½[ï¿½Nï¿½Zï¿½ï¿½ï¿½^ï¿½[ï¿½Ê’uï¿½w
+	{	&MoldSurfaceResult.tWorkCenter.y	,NULL,NULL,NULL,NULL,NULL,-1	,"CenterY[um]"	,"CenterY[um]"	,0,0,0	},		// ï¿½ï¿½ï¿½[ï¿½Nï¿½Zï¿½ï¿½ï¿½^ï¿½[ï¿½Ê’uï¿½x
 
 	{	NULL,	},
 };
@@ -606,41 +590,41 @@ static R_CS_RESULT_MONITOR_ITEM ResultMonitorList[] = {
 // --- bilingual menu struct ---
 
 static struct winb_para_menu_t WinbParaOnOff[] = {
-	{	"‚n‚e‚e"	,"   OFF",	},				// 0
-	{	"  ‚n‚m"	,"    ON",	},				// 1
+	{	"ï¿½nï¿½eï¿½e"	,"   OFF",	},				// 0
+	{	"  ï¿½nï¿½m"	,"    ON",	},				// 1
 };
 
 int				WorkParaDummy;
 static struct	winb_para_menu_t WorkParaCommentDummy[] = {
-	{	"–¢g—p",	"NO USE",	},
+	{	"ï¿½ï¿½ï¿½gï¿½p",	"NO USE",	},
 };
 
 static struct	winb_para_menu_t WinbParaMeasMode[] = {
-	{	"’Êí",					"Normal",					},			// 0
-	{	"”÷¬ƒ‰ƒ“–³‹",			"Minute run disregard",		},			// 1
-	{	"”÷¬–ÊÏ–³‹",			"Minute area disregard",	},			// 2
+	{	"ï¿½Êï¿½",					"Normal",					},			// 0
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",			"Minute run disregard",		},			// 1
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½ÊÏ–ï¿½ï¿½ï¿½",			"Minute area disregard",	},			// 2
 };
 
 static struct	winb_para_menu_t WinbParaMeasColor[] = {
-	{	"‚È‚µ",					"Nothing",					},			// 0
-	{	"•‚ğíœ",				"Black is deleted",			},			// 1
-	{	"”’‚ğíœ",				"White is deleted",			},			// 2
-	{	"”’•‚Æ‚àíœ",			"B and W are deleted",		},			// 3
+	{	"ï¿½È‚ï¿½",					"Nothing",					},			// 0
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½íœ",				"Black is deleted",			},			// 1
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½íœ",				"White is deleted",			},			// 2
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½íœ",			"B and W are deleted",		},			// 3
 };
 
 static struct winb_para_tm WinbmParaInspect[] = {
 	{	"--- Index guide edge search ---",	"--- Index guide edge search ---",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-    {	"I.Guide search level ƒIƒtƒZƒbƒg",	"I.Guide search level offset",		&IGuideEsLevel.nOffset,			100,	-100,	1		},
-	{	"I.Guide search level ‰ºŒÀ’l",		"I.Guide search level lower limit",	&IGuideEsLevel.nLower,			255,	0,		1		},
-	{	"I.Guide search level ãŒÀ’l",		"I.Guide search level upper limit",	&IGuideEsLevel.nUpper,			255,	0,		1		},
+    {	"I.Guide search level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",	"I.Guide search level offset",		&IGuideEsLevel.nOffset,			100,	-100,	1		},
+	{	"I.Guide search level ï¿½ï¿½ï¿½ï¿½ï¿½l",		"I.Guide search level lower limit",	&IGuideEsLevel.nLower,			255,	0,		1		},
+	{	"I.Guide search level ï¿½ï¿½ï¿½ï¿½l",		"I.Guide search level upper limit",	&IGuideEsLevel.nUpper,			255,	0,		1		},
 	{	"--- Chip edge search ----------",	"--- Chip edge search ----------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-    {	"ƒ`ƒbƒvŒŸo level ƒIƒtƒZƒbƒg",		"Chip search level offset",			&ChipEsLevel.nOffset,			100,	-100,	1		},
-	{	"ƒ`ƒbƒvŒŸo level ‰ºŒÀ’l",			"Chip search level lower limit",	&ChipEsLevel.nLower,			255,	0,		1		},
-	{	"ƒ`ƒbƒvŒŸo level ãŒÀ’l",			"Chip search level upper limit",	&ChipEsLevel.nUpper,			255,	0,		1		},
+    {	"ï¿½`ï¿½bï¿½vï¿½ï¿½ï¿½o level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",		"Chip search level offset",			&ChipEsLevel.nOffset,			100,	-100,	1		},
+	{	"ï¿½`ï¿½bï¿½vï¿½ï¿½ï¿½o level ï¿½ï¿½ï¿½ï¿½ï¿½l",			"Chip search level lower limit",	&ChipEsLevel.nLower,			255,	0,		1		},
+	{	"ï¿½`ï¿½bï¿½vï¿½ï¿½ï¿½o level ï¿½ï¿½ï¿½ï¿½l",			"Chip search level upper limit",	&ChipEsLevel.nUpper,			255,	0,		1		},
 	{	"--- G2 edge search ----------",	"--- G2 edge search ----------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"‚f‚QƒGƒbƒWŒŸo level ƒIƒtƒZƒbƒg",		"G2 search level offset",			&G2EsLevel.nOffset,				100,	-100,	1		},
-	{	"‚f‚QƒGƒbƒWŒŸo level ‰ºŒÀ’l",			"G2 search level lower limit",		&G2EsLevel.nLower,				255,	0,		1		},
-	{	"‚f‚QƒGƒbƒWŒŸo level ãŒÀ’l",			"G2 search level upper limit",		&G2EsLevel.nUpper,				255,	0,		1		},
+	{	"ï¿½fï¿½Qï¿½Gï¿½bï¿½Wï¿½ï¿½ï¿½o level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",		"G2 search level offset",			&G2EsLevel.nOffset,				100,	-100,	1		},
+	{	"ï¿½fï¿½Qï¿½Gï¿½bï¿½Wï¿½ï¿½ï¿½o level ï¿½ï¿½ï¿½ï¿½ï¿½l",			"G2 search level lower limit",		&G2EsLevel.nLower,				255,	0,		1		},
+	{	"ï¿½fï¿½Qï¿½Gï¿½bï¿½Wï¿½ï¿½ï¿½o level ï¿½ï¿½ï¿½ï¿½l",			"G2 search level upper limit",		&G2EsLevel.nUpper,				255,	0,		1		},
 	{	"--- Bin measure [Chip pos.] ---",	"--- Bin measure [Chip pos.] ---",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
 	{	"Bin measure Mode    (chip pos.)",	"Bin measure Mode    (chip pos.)",	&BinMeasChip.nMode,				2,		0,		0,		WinbParaMeasMode		},
 	{	"Bin measure Run size(chip pos.)",	"Bin measure Run size(chip pos.)",	&BinMeasChip.nRun,				639,	0,		1								},
@@ -648,9 +632,9 @@ static struct winb_para_tm WinbmParaInspect[] = {
 	{	"Bin measure Color   (chip pos.)",	"Bin measure Color   (chip pos.)",	&BinMeasChip.nColor,			3,		0,		0,		WinbParaMeasColor		},
 
 	{	"--- Overcoat Insp. ------------",	"--- Overcoat Insp. ------------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"Overcoat Insp. level ƒIƒtƒZƒbƒg",	"Overcoat Insp. level offse",		&OcoatInspLevel.nOffset,		100,	-100,	1		},
-	{	"Overcoat Insp. level ‰ºŒÀ’l",		"Overcoat Insp. level lower limit",	&OcoatInspLevel.nLower,			255,	0,		1		},
-	{	"Overcoat Insp. level ãŒÀ’l",		"Overcoat Insp. level upper limit",	&OcoatInspLevel.nUpper,			255,	0,		1		},
+	{	"Overcoat Insp. level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",	"Overcoat Insp. level offse",		&OcoatInspLevel.nOffset,		100,	-100,	1		},
+	{	"Overcoat Insp. level ï¿½ï¿½ï¿½ï¿½ï¿½l",		"Overcoat Insp. level lower limit",	&OcoatInspLevel.nLower,			255,	0,		1		},
+	{	"Overcoat Insp. level ï¿½ï¿½ï¿½ï¿½l",		"Overcoat Insp. level upper limit",	&OcoatInspLevel.nUpper,			255,	0,		1		},
 	{	"--- Bin measure [Overcoat] ----",	"--- Bin measure [Overcate] ----",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
 	{	"Bin measure Mode    (Overcoat)",	"Bin measure Mode    (Overcoat)",	&BinMeasOcoat.nMode,			2,		0,		0,		WinbParaMeasMode		},
 	{	"Bin measure Run size(Overcoat)",	"Bin measure Run size(Overcoat)",	&BinMeasOcoat.nRun,				639,	0,		1								},
@@ -662,9 +646,9 @@ static struct winb_para_tm WinbmParaInspect[] = {
 	{	"Offset corner X[um] (Overcoat)",	"Offset corner X[um] (Overcoat)",	&InspOcOffsetCor[0],			100,	0,		1								},
 	{	"Offset corner Y[um] (Overcoat)",	"Offset corner Y[um] (Overcoat)",	&InspOcOffsetCor[1],			100,	0,		1								},
 	{	"- Overcoat Insp. Black(Rimen) -",	"- Overcoat Insp. Black(Rimen) -",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},//v2.11
-	{	"Overcoat Insp.Black level ƒIƒtƒZƒbƒg",	"Overcoat Insp.Black level offse",		&OcoatInspLevelBlack.nOffset,	100,	-100,	1		},
-	{	"Overcoat Insp.Black level ‰ºŒÀ’l",		"Overcoat Insp.Black level lower limit",&OcoatInspLevelBlack.nLower,	255,	0,		1		},
-	{	"Overcoat Insp.Black level ãŒÀ’l",		"Overcoat Insp.Black level upper limit",&OcoatInspLevelBlack.nUpper,	255,	0,		1		},
+	{	"Overcoat Insp.Black level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",	"Overcoat Insp.Black level offse",		&OcoatInspLevelBlack.nOffset,	100,	-100,	1		},
+	{	"Overcoat Insp.Black level ï¿½ï¿½ï¿½ï¿½ï¿½l",		"Overcoat Insp.Black level lower limit",&OcoatInspLevelBlack.nLower,	255,	0,		1		},
+	{	"Overcoat Insp.Black level ï¿½ï¿½ï¿½ï¿½l",		"Overcoat Insp.Black level upper limit",&OcoatInspLevelBlack.nUpper,	255,	0,		1		},
 	{	"-Insp. area[Overcoat]Black(Rimen)-",	"-Insp.area[Overcoat]Black(Rimen)-",	&WorkParaDummy,    		0,		0,		0,		WorkParaCommentDummy	},//2.11
 	{	"Offset area   X[um] Black(Overcoat)",	"Offset area   X[um] Black(Overcoat)",	&InspOcOffsetSizeBlack[0],200,	0,		1								},
 	{	"Offset area   Y[um] Black(Overcoat)",	"Offset area   Y[um] Black(Overcoat)",	&InspOcOffsetSizeBlack[1],200,	0,		1								},
@@ -672,13 +656,13 @@ static struct winb_para_tm WinbmParaInspect[] = {
 	{	"Offset corner Y[um] Black(Overcoat)",	"Offset corner Y[um] Black(Overcoat)",	&InspOcOffsetCorBlack[1],100,	0,		1								},
 
 	{	"--- Bin measure [Elec] --------",	"--- Bin measure [Elec] --------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"Electrode Insp. level ƒIƒtƒZƒbƒg",	"Electrode Insp. level offse",		&ElecInspLevel.nOffset,			100,	-100,	1		},
-	{	"Electrode Insp. level ‰ºŒÀ’l",		"Electrode Insp. level lower limit",&ElecInspLevel.nLower,			255,	0,		1		},
-	{	"Electrode Insp. level ãŒÀ’l",		"Electrode Insp. level upper limit",&ElecInspLevel.nUpper,			255,	0,		1		},
+	{	"Electrode Insp. level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",	"Electrode Insp. level offse",		&ElecInspLevel.nOffset,			100,	-100,	1		},
+	{	"Electrode Insp. level ï¿½ï¿½ï¿½ï¿½ï¿½l",		"Electrode Insp. level lower limit",&ElecInspLevel.nLower,			255,	0,		1		},
+	{	"Electrode Insp. level ï¿½ï¿½ï¿½ï¿½l",		"Electrode Insp. level upper limit",&ElecInspLevel.nUpper,			255,	0,		1		},
     {	"--- Bin measure [Elec Kasure] --------",	"--- Bin measure [Elec Kasure] --------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-    {	"Electrode Kasure Insp. level ƒIƒtƒZƒbƒg",	"Electrode Kasure Insp. level offse",		&ElecKasureInspLevel.nOffset,			100,	-100,	1		}, //11911 Kasure
-    {	"Electrode Kasure Insp. level ‰ºŒÀ’l",		"Electrode Kasure Insp. level lower limit",&ElecKasureInspLevel.nLower,			255,	0,		1		},//11911 Kasure
-    {	"Electrode Kasure Insp. level ãŒÀ’l",		"Electrode Kasure Insp. level upper limit",&ElecKasureInspLevel.nUpper,			255,	0,		1		},//11911 Kasure
+    {	"Electrode Kasure Insp. level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",	"Electrode Kasure Insp. level offse",		&ElecKasureInspLevel.nOffset,			100,	-100,	1		}, //11911 Kasure
+    {	"Electrode Kasure Insp. level ï¿½ï¿½ï¿½ï¿½ï¿½l",		"Electrode Kasure Insp. level lower limit",&ElecKasureInspLevel.nLower,			255,	0,		1		},//11911 Kasure
+    {	"Electrode Kasure Insp. level ï¿½ï¿½ï¿½ï¿½l",		"Electrode Kasure Insp. level upper limit",&ElecKasureInspLevel.nUpper,			255,	0,		1		},//11911 Kasure
 	{	"--- Bin measure [Elec] --------",	"--- Bin measure [Elec] --------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
 	{	"Bin measure Mode    (Elec)",		"Bin measure Mode    (Elec)",		&BinMeasElec.nMode,				2,		0,		0,		WinbParaMeasMode		},
 	{	"Bin measure Run size(Elec)",		"Bin measure Run size(Elec)",		&BinMeasElec.nRun,				639,	0,		1								},
@@ -686,9 +670,9 @@ static struct winb_para_tm WinbmParaInspect[] = {
 	{	"Bin measure Color   (Elec)",		"Bin measure Color   (Elec)",		&BinMeasElec.nColor,			3,		0,		0,		WinbParaMeasColor		},
 
 	{	"--- Bin measure [Plating] -----",	"--- Bin measure [latingc] -----",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"Plating Insp. level ƒIƒtƒZƒbƒg",	"Plating Insp. level offse",		&PlatingInspLevel.nOffset,		100,	-100,	1		},
-	{	"Plating Insp. level ‰ºŒÀ’l",		"Plating Insp. level lower limit",	&PlatingInspLevel.nLower,		255,	0,		1		},
-	{	"Plating Insp. level ãŒÀ’l",		"Plating Insp. level upper limit",	&PlatingInspLevel.nUpper,		255,	0,		1		},
+	{	"Plating Insp. level ï¿½Iï¿½tï¿½Zï¿½bï¿½g",	"Plating Insp. level offse",		&PlatingInspLevel.nOffset,		100,	-100,	1		},
+	{	"Plating Insp. level ï¿½ï¿½ï¿½ï¿½ï¿½l",		"Plating Insp. level lower limit",	&PlatingInspLevel.nLower,		255,	0,		1		},
+	{	"Plating Insp. level ï¿½ï¿½ï¿½ï¿½l",		"Plating Insp. level upper limit",	&PlatingInspLevel.nUpper,		255,	0,		1		},
 	{	"--- Bin measure [Plating] -----",	"--- Bin measure [Plating] -----",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
 	{	"Bin measure Mode    (Plating)",	"Bin measure Mode    (Plating)",	&BinMeasPlating.nMode,			2,		0,		0,		WinbParaMeasMode		},
 	{	"Bin measure Run size(Plating)",	"Bin measure Run size(Plating)",	&BinMeasPlating.nRun,			639,	0,		1								},
@@ -727,7 +711,7 @@ static struct winb_para_tm WinbmParaInspect[] = {
 
 static struct winb_para_tm WinbmParaInspectUser[] = {
 	{	"------------------------------",	"------------------------------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"‹@‘äŠî€‰ñ“]”",					"M/C Standard rpm",					&Std_rpm,						6000,	10,		10,		NULL			},
+	{	"ï¿½@ï¿½ï¿½î€ï¿½ï¿½]ï¿½ï¿½",					"M/C Standard rpm",					&Std_rpm,						6000,	10,		10,		NULL			},
 	{	NULL	},
 };
 
@@ -745,18 +729,18 @@ static struct winb_para_menu_t WinbParaResultmarkdisp[] = {
 };
 
 static struct winb_para_tm WinbmParaSystem[] = {
-    {	"‚w•ûŒü•ª‰ğ”\\ [*1000um/pixel]",		"Rate X [*1000um/pixel]",			&SystemPara.nRateX,				100000,	0,		1		},
-    {	"‚x•ûŒü•ª‰ğ”\\ [*1000um/pixel]",		"Rate Y [*1000um/pixel]",			&SystemPara.nRateY,				100000,	0,		1		},
+    {	"ï¿½wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\\ [*1000um/pixel]",		"Rate X [*1000um/pixel]",			&SystemPara.nRateX,				100000,	0,		1		},
+    {	"ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\\ [*1000um/pixel]",		"Rate Y [*1000um/pixel]",			&SystemPara.nRateY,				100000,	0,		1		},
 	{	"------------------------------",	"------------------------------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"ƒVƒƒƒbƒ^[ƒXƒs[ƒh",				"Shutter Speed(Top    Light)",		&SystemPara.nShutterSpeed,		20000,	10,		10		},
-	{	"æ‚è‚İ‘Oƒ^ƒCƒ}[us]",				"Capture Timer[us]",				&SystemPara.nCaptureTimer,		20000,	0,		10		},
+	{	"ï¿½Vï¿½ï¿½ï¿½bï¿½^ï¿½[ï¿½Xï¿½sï¿½[ï¿½h",				"Shutter Speed(Top    Light)",		&SystemPara.nShutterSpeed,		20000,	10,		10		},
+	{	"ï¿½ï¿½èï¿½İ‘Oï¿½^ï¿½Cï¿½}[us]",				"Capture Timer[us]",				&SystemPara.nCaptureTimer,		20000,	0,		10		},
 	{	"------------------------------",	"------------------------------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"Æ–¾“d—¬(ƒh[ƒ€) [uA]",			"Light Current(Dome)    [uA]",		&LedCurrent[0],					100000,	0,		100		},
-	{	"Æ–¾“d—¬(“¯²)   [uA]",			"Light Current(Coaxial) [uA]",		&LedCurrent[1],					100000,	0,		100		},
+	{	"ï¿½Æ–ï¿½ï¿½dï¿½ï¿½(ï¿½hï¿½[ï¿½ï¿½) [uA]",			"Light Current(Dome)    [uA]",		&LedCurrent[0],					100000,	0,		100		},
+	{	"ï¿½Æ–ï¿½ï¿½dï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)   [uA]",			"Light Current(Coaxial) [uA]",		&LedCurrent[1],					100000,	0,		100		},
 	{	"------------------------------",	"------------------------------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"‹@‘äŠî€‰ñ“]”",					"M/C Standard rpm",					&Std_rpm,						4000,	10,		10,		NULL			},
+	{	"ï¿½@ï¿½ï¿½î€ï¿½ï¿½]ï¿½ï¿½",					"M/C Standard rpm",					&Std_rpm,						4000,	10,		10,		NULL			},
 	{	"------------------------------",	"------------------------------",	&WorkParaDummy,    				0,		0,		0,		WorkParaCommentDummy	},
-	{	"”»’èŒ‹‰Ê•ÏX"					,"Change Judge Mode"		,&nJudgeMode				,4			,0		,0		,WinbParaResultOutput },
+	{	"ï¿½ï¿½ï¿½èŒ‹ï¿½Ê•ÏX"					,"Change Judge Mode"		,&nJudgeMode				,4			,0		,0		,WinbParaResultOutput },
 	{	"Marking Character Match Disp."					,"Marking Character Match Disp."		,&nDispMode				,1			,0		,0		,WinbParaResultmarkdisp },
 	{	NULL	},
 };
@@ -803,12 +787,12 @@ static struct winb_para_tm NGLimitOnOff[] = {
 };
 //static int TestFunction(int nNumber);
 
-//ƒƒjƒ…[‚Ìİ’è
+//ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ìİ’ï¿½
 struct winb_t WinbSettingInspMenu2 = {
-    {	"ŒŸ¸İ’è2", "Inspect Setting2"	},
+    {	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½2", "Inspect Setting2"	},
     20, 22, 22, //20, 21, 21,
     {
-		{	"ŒŸ¸İ’è",             "Inspect Setting",		ParameterInspSet,			NULL				},
+		{	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½",             "Inspect Setting",		ParameterInspSet,			NULL				},
 		{	"Search Index Setting", "Search Index Setting",	SetInspSearchIndex,			NULL				},
 		{	"Search Guide Setting", "Search Guide Setting",	SetInspSearchGuide,			NULL				},
         {	"Index Table Bright",   "Index Table Bright",	SetInspTP_IndexTableBright,	NULL				},
@@ -835,60 +819,60 @@ struct winb_t WinbSettingInspMenu2 = {
 	}
 };
 
-//ƒƒjƒ…[‚Ìİ’è(”CˆÓ)
+//ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ìİ’ï¿½(ï¿½Cï¿½ï¿½)
 struct winb_t WinbSettingInspMenu = {
-	{	"ŒŸ¸İ’è", "Inspect Setting"	},
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½", "Inspect Setting"	},
 	20, 4, 4,
 	{
-        {	"ŒŸ¸İ’è2>",			"Inspect Setting2>",	Dummy,          			&WinbSettingInspMenu2},
-		{	"”»’è’l•\\¦",		"Judgment value",		JudgeValueDisp,				NULL				},
-		{	"d—lİ’è",			"Spec setting",			SpecSet,					NULL				},
+        {	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½2>",			"Inspect Setting2>",	Dummy,          			&WinbSettingInspMenu2},
+		{	"ï¿½ï¿½ï¿½ï¿½lï¿½\\ï¿½ï¿½",		"Judgment value",		JudgeValueDisp,				NULL				},
+		{	"ï¿½dï¿½lï¿½İ’ï¿½",			"Spec setting",			SpecSet,					NULL				},
 		{	"Print test",   	"Print test",			Print2,						NULL				},
 	}
 };
 
 struct winb_t WinbSettingSystemMenu = {
-	{	"ƒVƒXƒeƒ€İ’è", "System Setting"	},
+	{	"ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½İ’ï¿½", "System Setting"	},
 	20, 4, 4,
 	{
-		{	"ƒVƒXƒeƒ€İ’è"		,"System Setting"		,&ParameterSysSet				,NULL	},
-		{	"IOƒ`ƒFƒbƒN"			,"IOcheck"				,MenuIOCheck					,NULL	},
+		{	"ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½İ’ï¿½"		,"System Setting"		,&ParameterSysSet				,NULL	},
+		{	"IOï¿½`ï¿½Fï¿½bï¿½N"			,"IOcheck"				,MenuIOCheck					,NULL	},
 		{	"NG limit On/OFF"	,"NG limit On/OFF"		,NGLimitCHK						,NULL	},    //2011.08.17
 		{	"Monitoring Br Set"	,"Monitoring Br Set"	,MonitorCHK						,NULL	},	  //2017.08.07
 	}
 };
 
 struct winb_item_t WinbSettingItem_repi[] = {
-	{	"ŒŸ¸İ’è >"		," Inspect Setting   >"		,Dummy				,&WinbSettingInspMenu	},
-	{	"ƒVƒXƒeƒ€İ’è >"	," System Setting    >"		,Dummy				,&WinbSettingSystemMenu	},
-	{	"Æ–¾’²®"			,"   Light Setting    "		,LedAdjust			,NULL					},
-	{	"Æ–¾’²®2"			,"   Light Setting2    "	,LedLevel			,NULL					},
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ >"		," Inspect Setting   >"		,Dummy				,&WinbSettingInspMenu	},
+	{	"ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½İ’ï¿½ >"	," System Setting    >"		,Dummy				,&WinbSettingSystemMenu	},
+	{	"ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½"			,"   Light Setting    "		,LedAdjust			,NULL					},
+	{	"ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½2"			,"   Light Setting2    "	,LedLevel			,NULL					},
 
-	{	NULL	},															// •K‚¸•K—v
+	{	NULL	},															// ï¿½Kï¿½ï¿½ï¿½Kï¿½v
 };
 
 struct winb_item_t WinbSettingItem_rist[] = {
-	{	"ŒŸ¸İ’è >"		," Inspect Setting   >"		,Dummy				,&WinbSettingInspMenu	},
-	{	"ƒVƒXƒeƒ€İ’è >"	," System Setting    >"		,Dummy				,&WinbSettingSystemMenu	},
-	{	"Æ–¾’²®2"			,"   Light Setting2    "	,LedLevel			,NULL					},
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ >"		," Inspect Setting   >"		,Dummy				,&WinbSettingInspMenu	},
+	{	"ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½İ’ï¿½ >"	," System Setting    >"		,Dummy				,&WinbSettingSystemMenu	},
+	{	"ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½2"			,"   Light Setting2    "	,LedLevel			,NULL					},
 
-	{	NULL	},															// •K‚¸•K—v
+	{	NULL	},															// ï¿½Kï¿½ï¿½ï¿½Kï¿½v
 };
 
 struct winb_item_t WinbSettingItem_Nitto[] = {
-	{	"ŒŸ¸İ’è >"		," Inspect Setting   >"		,Dummy				,&WinbSettingInspMenu	},
-	{	"ƒVƒXƒeƒ€İ’è >"	," System Setting    >"		,Dummy				,&WinbSettingSystemMenu	},
-	{	"Æ–¾’²®3"			,"   Light Setting3    "	,MenuLightSet		,NULL					},
+	{	"ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ >"		," Inspect Setting   >"		,Dummy				,&WinbSettingInspMenu	},
+	{	"ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½İ’ï¿½ >"	," System Setting    >"		,Dummy				,&WinbSettingSystemMenu	},
+	{	"ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½3"			,"   Light Setting3    "	,MenuLightSet		,NULL					},
 
-	{	NULL	},															// •K‚¸•K—v
+	{	NULL	},															// ï¿½Kï¿½ï¿½ï¿½Kï¿½v
 };
 
 struct winb_item_t *WinbSettingItem = WinbSettingItem_rist;
 
 struct winb_item_t WinbFileItem[] = {
-	{	"Fail ‰æ‘œ•\\¦"			,"Fail Display"			,DispFailImage		,NULL					},
+	{	"Fail ï¿½æ‘œï¿½\\ï¿½ï¿½"			,"Fail Display"			,DispFailImage		,NULL					},
 
-	{	NULL	},															// •K‚¸•K—v
+	{	NULL	},															// ï¿½Kï¿½ï¿½ï¿½Kï¿½v
 };
 
 
@@ -899,17 +883,17 @@ struct	ParameterCheckItem {
 	char		Ver[32];
 }		SyFile, JdFile, TyFile;
 
-//‹@‘äƒf[ƒ^E‹@íƒf[ƒ^‚Ìİ’è(”CˆÓ)
+//ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½Eï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½Ìİ’ï¿½(ï¿½Cï¿½ï¿½)
 //R_CS UserCordingStart
 
-// ‹@‘äî•ñiŒŸ¸ğŒj
+// ï¿½@ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
 static char SystemFileName[] = "TP-S_sy.csv";
 R_DATAFILE_ITEM SystemFileData[] = {
-	// --- ƒpƒ‰ƒ[ƒ^Šm”F€–Úi•sˆê’v‚Ìê‡‚ÍAƒGƒ‰[’â~j
+	// --- ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½mï¿½Fï¿½ï¿½ï¿½Úiï¿½sï¿½ï¿½vï¿½Ìê‡ï¿½ÍAï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½~ï¿½j
 	{	"SyFile.Prod",					SyFile.Prod,					R_TYPE_STRING	,32		},
 	{	"SyFile.Insp",					SyFile.Insp,					R_TYPE_STRING	,32		},
 	{	"SyFile.Ver",					SyFile.Ver,						R_TYPE_STRING	,32		},
-	// --- ‹@‘äî•ñiŒŸ¸ğŒj
+	// --- ï¿½@ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
 	{	"MachineName",					&MachineName,					R_TYPE_STRING	,32		},
 	{	"SystemPara.nRateX",			&SystemPara.nRateX,				R_TYPE_INT				},
 	{	"SystemPara.nRateY",			&SystemPara.nRateY,				R_TYPE_INT				},
@@ -1003,32 +987,32 @@ R_DATAFILE_ITEM SystemFileData[] = {
 	{	NULL	},
 };
 
-// ŒŸ¸ƒpƒ‰ƒ[ƒ^i”»’è’lj
+// ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½iï¿½ï¿½ï¿½ï¿½lï¿½j
 static char JudgeFilename[] = "TP-S_Jd.csv";
 R_DATAFILE_ITEM JudgeFileData[] = {
-	// --- ƒpƒ‰ƒ[ƒ^Šm”F€–Úi•sˆê’v‚Ìê‡‚ÍAƒGƒ‰[’â~j
+	// --- ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½mï¿½Fï¿½ï¿½ï¿½Úiï¿½sï¿½ï¿½vï¿½Ìê‡ï¿½ÍAï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½~ï¿½j
 	{	"JdFile.Prod",					&JdFile.Prod,					R_TYPE_STRING	,32		},
 	{	"JdFile.Insp",					&JdFile.Insp,					R_TYPE_STRING	,32		},
 	{	"JdFile.Ver",					&JdFile.Ver,					R_TYPE_STRING	,32		},
 	// --- Judge data
-	// --- G2 Insp. ”»’è’l
-	{	"InspParaM.G2Xmin_0_",			&InspParaM.G2Xmin[0],			R_TYPE_INT		,0	,3	},			// G2 X size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Xmax_0_",			&InspParaM.G2Xmax[0],			R_TYPE_INT		,0	,3	},			// G2 X size Å‘å’l[X,Y,code]
+	// --- G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.G2Xmin_0_",			&InspParaM.G2Xmin[0],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Xmax_0_",			&InspParaM.G2Xmax[0],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Xrange_0_",		&InspParaM.G2Xrange[0],			R_TYPE_INT		,0	,3	},			// G2 X max-min[X,Y,code]
-	{	"InspParaM.G2Xedge_0_",			&InspParaM.G2Xedge[0],			R_TYPE_INT		,0	,3	},			// G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmin_0_",		&InspParaM.G2ZureXmin[0],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmax_0_",		&InspParaM.G2ZureXmax[0],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2Ymin_0_",			&InspParaM.G2Ymin[0],			R_TYPE_INT		,0	,3	},			// G2 Y size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Ymax_0_",			&InspParaM.G2Ymax[0],			R_TYPE_INT		,0	,3	},			// G2 Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.G2Xedge_0_",			&InspParaM.G2Xedge[0],			R_TYPE_INT		,0	,3	},			// G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmin_0_",		&InspParaM.G2ZureXmin[0],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmax_0_",		&InspParaM.G2ZureXmax[0],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymin_0_",			&InspParaM.G2Ymin[0],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymax_0_",			&InspParaM.G2Ymax[0],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Yrange_0_",		&InspParaM.G2Yrange[0],			R_TYPE_INT		,0	,3	},			// G2 Y max-min[X,Y,code]
-	{	"InspParaM.G2Yedge_0_",			&InspParaM.G2Yedge[0],			R_TYPE_INT		,0	,3	},			// G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmin_0_",		&InspParaM.G2ZureYmin[0],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmax_0_",		&InspParaM.G2ZureYmax[0],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YSdl_0_",			&InspParaM.G2YSdl[0],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YApl_0_",			&InspParaM.G2YApl[0],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXsize_0_",		&InspParaM.OCoatXsize[0],		R_TYPE_INT		,0	,3	},			// Overcoat X ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatYsize_0_",		&InspParaM.OCoatYsize[0],		R_TYPE_INT		,0	,3	},			// Overcoat Y ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXYsize_0_",		&InspParaM.OCoatXYsize[0],		R_TYPE_INT		,0	,3	},			// Overcoat XYƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.G2Yedge_0_",			&InspParaM.G2Yedge[0],			R_TYPE_INT		,0	,3	},			// G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmin_0_",		&InspParaM.G2ZureYmin[0],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmax_0_",		&InspParaM.G2ZureYmax[0],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YSdl_0_",			&InspParaM.G2YSdl[0],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YApl_0_",			&InspParaM.G2YApl[0],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXsize_0_",		&InspParaM.OCoatXsize[0],		R_TYPE_INT		,0	,3	},			// Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatYsize_0_",		&InspParaM.OCoatYsize[0],		R_TYPE_INT		,0	,3	},			// Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXYsize_0_",		&InspParaM.OCoatXYsize[0],		R_TYPE_INT		,0	,3	},			// Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- G2 position
 	{	"InspParaM.G2PosXmin_0_",		&InspParaM.G2PosXmin[0],		R_TYPE_INT		,0	,3	},			// G2 X position min[X,Y,code]
 	{	"InspParaM.G2PosXmax_0_",		&InspParaM.G2PosXmax[0],		R_TYPE_INT		,0	,3	},			// G2 X position max[X,Y,code]
@@ -1036,54 +1020,54 @@ R_DATAFILE_ITEM JudgeFileData[] = {
 	{	"InspParaM.G2PosYmax_0_",		&InspParaM.G2PosYmax[0],		R_TYPE_INT		,0	,3	},			// G2 Y position max[X,Y,code]
 	// --- Plating adhesion
 	{	"InspParaM.Plating_0_",			&InspParaM.Plating[0],			R_TYPE_INT		,0	,3	},			// Plating adhesion size[X,Y,code]
-	// --- Chip(Appearence) Insp. ”»’è’l
-	{	"InspParaM.ChipXmin_0_",		&InspParaM.ChipXmin[0],			R_TYPE_INT		,0	,3	},			// Chip X size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipXmax_0_",		&InspParaM.ChipXmax[0],			R_TYPE_INT		,0	,3	},			// Chip X size Å‘å’l[X,Y,code]
+	// --- Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.ChipXmin_0_",		&InspParaM.ChipXmin[0],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipXmax_0_",		&InspParaM.ChipXmax[0],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipXrange_0_",		&InspParaM.ChipXrange[0],		R_TYPE_INT		,0	,3	},			// Chip X max-min[X,Y,code]
-	{	"InspParaM.ChipXedge_0_",		&InspParaM.ChipXedge[0],		R_TYPE_INT		,0	,3	},			// Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ChipYmin_0_",		&InspParaM.ChipYmin[0],			R_TYPE_INT		,0	,3	},			// Chip Y size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipYmax_0_",		&InspParaM.ChipYmax[0],			R_TYPE_INT		,0	,3	},			// Chip Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.ChipXedge_0_",		&InspParaM.ChipXedge[0],		R_TYPE_INT		,0	,3	},			// Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmin_0_",		&InspParaM.ChipYmin[0],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmax_0_",		&InspParaM.ChipYmax[0],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipYrange_0_",		&InspParaM.ChipYrange[0],		R_TYPE_INT		,0	,3	},			// Chip Y max-min[X,Y,code]
-	{	"InspParaM.ChipYedge_0_",		&InspParaM.ChipYedge[0],		R_TYPE_INT		,0	,3	},			// Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.ChipYedge_0_",		&InspParaM.ChipYedge[0],		R_TYPE_INT		,0	,3	},			// Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- Electrode Insp.
-	{	"InspParaM.ElecXmin_0_",		&InspParaM.ElecXmin[0],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecXmax_0_",		&InspParaM.ElecXmax[0],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecXrange_0_",		&InspParaM.ElecXrange[0],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X max-min[X,Y,code]
-	{	"InspParaM.ElecXedge_0_",		&InspParaM.ElecXedge[0],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecYmin_0_",		&InspParaM.ElecYmin[0],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecYmax_0_",		&InspParaM.ElecYmax[0],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecYrange_0_",		&InspParaM.ElecYrange[0],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y max-min[X,Y,code]
-	{	"InspParaM.ElecYedge_0_",		&InspParaM.ElecYedge[0],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecXsub_0_",		&InspParaM.ElecXsub[0],			R_TYPE_INT		,0	,3	},			// “d‹É•¶‰E¡–@·[X,Y,code]
-	{	"InspParaM.ElecKake_0_",		&InspParaM.ElecKake[0],			R_TYPE_INT		,0	,3	},			// “d‹ÉƒJƒPŒŸ¸”»’è’l[%,nu,code]
+	{	"InspParaM.ElecXmin_0_",		&InspParaM.ElecXmin[0],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXmax_0_",		&InspParaM.ElecXmax[0],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXrange_0_",		&InspParaM.ElecXrange[0],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X max-min[X,Y,code]
+	{	"InspParaM.ElecXedge_0_",		&InspParaM.ElecXedge[0],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmin_0_",		&InspParaM.ElecYmin[0],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmax_0_",		&InspParaM.ElecYmax[0],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYrange_0_",		&InspParaM.ElecYrange[0],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y max-min[X,Y,code]
+	{	"InspParaM.ElecYedge_0_",		&InspParaM.ElecYedge[0],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXsub_0_",		&InspParaM.ElecXsub[0],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½[X,Y,code]
+	{	"InspParaM.ElecKake_0_",		&InspParaM.ElecKake[0],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l[%,nu,code]
     {	"InspParaM.ElecKasure_0_",		&InspParaM.ElecKasure[0],		R_TYPE_INT		,0	,3	},			// 11911 Elec kasure
-	{	"InspParaM.ElecBlack_0_",		&InspParaM.ElecBlack[0],		R_TYPE_INT		,0	,3	},			// “d‹É•ÏF”»’è’l[%,nu,code]
-	{	"InspParaM.ElecC2Xmin_0_",		&InspParaM.ElecC2Xmin[0],		R_TYPE_INT		,0	,3	},			// C2“d‹É”í‚è¬[X,Y,code]
-	{	"InspParaM.ElecC1Mezumari_0_",	&InspParaM.ElecC1Mezumari[0],	R_TYPE_INT		,0	,3	},			// C1–Ú‹l‚Ü‚è[%,nu,code]
-	{	"InspParaM.SideElecXmin_0_",	&InspParaM.SideElecXmin[0],		R_TYPE_INT		,0	,3	},			// ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l[X,Y,code]
+	{	"InspParaM.ElecBlack_0_",		&InspParaM.ElecBlack[0],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l[%,nu,code]
+	{	"InspParaM.ElecC2Xmin_0_",		&InspParaM.ElecC2Xmin[0],		R_TYPE_INT		,0	,3	},			// C2ï¿½dï¿½É”ï¿½è¬[X,Y,code]
+	{	"InspParaM.ElecC1Mezumari_0_",	&InspParaM.ElecC1Mezumari[0],	R_TYPE_INT		,0	,3	},			// C1ï¿½Ú‹lï¿½Ü‚ï¿½[%,nu,code]
+	{	"InspParaM.SideElecXmin_0_",	&InspParaM.SideElecXmin[0],		R_TYPE_INT		,0	,3	},			// ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
 	{	"InspParaM.MarkLevel_0_",		&InspParaM.MarkLevel[0],		R_TYPE_INT		,0	,3	},			//
 	{	"InspParaM.MarkShift_0_",		&InspParaM.MarkShift[0],		R_TYPE_INT		,0	,3	},			//
-	{	"InspParaM.IbutsuXsize_0_",		&InspParaM.IbutsuXsize[0],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.IbutsuYsize_0_",		&InspParaM.IbutsuYsize[0],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.IbutsuXsize_0_",		&InspParaM.IbutsuXsize[0],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.IbutsuYsize_0_",		&InspParaM.IbutsuYsize[0],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 
-	// --- G2 Insp. ”»’è’l
-	{	"InspParaM.G2Xmin_1_",			&InspParaM.G2Xmin[1],			R_TYPE_INT		,0	,3	},			// G2 X size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Xmax_1_",			&InspParaM.G2Xmax[1],			R_TYPE_INT		,0	,3	},			// G2 X size Å‘å’l[X,Y,code]
+	// --- G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.G2Xmin_1_",			&InspParaM.G2Xmin[1],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Xmax_1_",			&InspParaM.G2Xmax[1],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Xrange_1_",		&InspParaM.G2Xrange[1],			R_TYPE_INT		,0	,3	},			// G2 X max-min[X,Y,code]
-	{	"InspParaM.G2Xedge_1_",			&InspParaM.G2Xedge[1],			R_TYPE_INT		,0	,3	},			// G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmin_1_",		&InspParaM.G2ZureXmin[1],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmax_1_",		&InspParaM.G2ZureXmax[1],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2Ymin_1_",			&InspParaM.G2Ymin[1],			R_TYPE_INT		,0	,3	},			// G2 Y size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Ymax_1_",			&InspParaM.G2Ymax[1],			R_TYPE_INT		,0	,3	},			// G2 Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.G2Xedge_1_",			&InspParaM.G2Xedge[1],			R_TYPE_INT		,0	,3	},			// G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmin_1_",		&InspParaM.G2ZureXmin[1],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmax_1_",		&InspParaM.G2ZureXmax[1],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymin_1_",			&InspParaM.G2Ymin[1],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymax_1_",			&InspParaM.G2Ymax[1],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Yrange_1_",		&InspParaM.G2Yrange[1],			R_TYPE_INT		,0	,3	},			// G2 Y max-min[X,Y,code]
-	{	"InspParaM.G2Yedge_1_",			&InspParaM.G2Yedge[1],			R_TYPE_INT		,0	,3	},			// G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmin_1_",		&InspParaM.G2ZureYmin[1],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmax_1_",		&InspParaM.G2ZureYmax[1],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YSdl_1_",			&InspParaM.G2YSdl[1],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YApl_1_",			&InspParaM.G2YApl[1],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXsize_1_",		&InspParaM.OCoatXsize[1],		R_TYPE_INT		,0	,3	},			// Overcoat X ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatYsize_1_",		&InspParaM.OCoatYsize[1],		R_TYPE_INT		,0	,3	},			// Overcoat Y ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXYsize_1_",		&InspParaM.OCoatXYsize[1],		R_TYPE_INT		,0	,3	},			// Overcoat XYƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.G2Yedge_1_",			&InspParaM.G2Yedge[1],			R_TYPE_INT		,0	,3	},			// G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmin_1_",		&InspParaM.G2ZureYmin[1],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmax_1_",		&InspParaM.G2ZureYmax[1],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YSdl_1_",			&InspParaM.G2YSdl[1],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YApl_1_",			&InspParaM.G2YApl[1],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXsize_1_",		&InspParaM.OCoatXsize[1],		R_TYPE_INT		,0	,3	},			// Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatYsize_1_",		&InspParaM.OCoatYsize[1],		R_TYPE_INT		,0	,3	},			// Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXYsize_1_",		&InspParaM.OCoatXYsize[1],		R_TYPE_INT		,0	,3	},			// Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- G2 position
 	{	"InspParaM.G2PosXmin_1_",		&InspParaM.G2PosXmin[1],		R_TYPE_INT		,0	,3	},			// G2 X position min[X,Y,code]
 	{	"InspParaM.G2PosXmax_1_",		&InspParaM.G2PosXmax[1],		R_TYPE_INT		,0	,3	},			// G2 X position max[X,Y,code]
@@ -1091,54 +1075,54 @@ R_DATAFILE_ITEM JudgeFileData[] = {
 	{	"InspParaM.G2PosYmax_1_",		&InspParaM.G2PosYmax[1],		R_TYPE_INT		,0	,3	},			// G2 Y position max[X,Y,code]
 	// --- Plating adhesion
 	{	"InspParaM.Plating_1_",			&InspParaM.Plating[1],			R_TYPE_INT		,0	,3	},			// Plating adhesion size[X,Y,code]
-	// --- Chip(Appearence) Insp. ”»’è’l
-	{	"InspParaM.ChipXmin_1_",		&InspParaM.ChipXmin[1],			R_TYPE_INT		,0	,3	},			// Chip X size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipXmax_1_",		&InspParaM.ChipXmax[1],			R_TYPE_INT		,0	,3	},			// Chip X size Å‘å’l[X,Y,code]
+	// --- Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.ChipXmin_1_",		&InspParaM.ChipXmin[1],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipXmax_1_",		&InspParaM.ChipXmax[1],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipXrange_1_",		&InspParaM.ChipXrange[1],		R_TYPE_INT		,0	,3	},			// Chip X max-min[X,Y,code]
-	{	"InspParaM.ChipXedge_1_",		&InspParaM.ChipXedge[1],		R_TYPE_INT		,0	,3	},			// Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ChipYmin_1_",		&InspParaM.ChipYmin[1],			R_TYPE_INT		,0	,3	},			// Chip Y size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipYmax_1_",		&InspParaM.ChipYmax[1],			R_TYPE_INT		,0	,3	},			// Chip Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.ChipXedge_1_",		&InspParaM.ChipXedge[1],		R_TYPE_INT		,0	,3	},			// Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmin_1_",		&InspParaM.ChipYmin[1],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmax_1_",		&InspParaM.ChipYmax[1],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipYrange_1_",		&InspParaM.ChipYrange[1],		R_TYPE_INT		,0	,3	},			// Chip Y max-min[X,Y,code]
-	{	"InspParaM.ChipYedge_1_",		&InspParaM.ChipYedge[1],		R_TYPE_INT		,0	,3	},			// Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.ChipYedge_1_",		&InspParaM.ChipYedge[1],		R_TYPE_INT		,0	,3	},			// Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- Electrode Insp.
-	{	"InspParaM.ElecXmin_1_",		&InspParaM.ElecXmin[1],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecXmax_1_",		&InspParaM.ElecXmax[1],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecXrange_1_",		&InspParaM.ElecXrange[1],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X max-min[X,Y,code]
-	{	"InspParaM.ElecXedge_1_",		&InspParaM.ElecXedge[1],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecYmin_1_",		&InspParaM.ElecYmin[1],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecYmax_1_",		&InspParaM.ElecYmax[1],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecYrange_1_",		&InspParaM.ElecYrange[1],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y max-min[X,Y,code]
-	{	"InspParaM.ElecYedge_1_",		&InspParaM.ElecYedge[1],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecXsub_1_",		&InspParaM.ElecXsub[1],			R_TYPE_INT		,0	,3	},			// “d‹É•¶‰E¡–@·[X,Y,code]
-	{	"InspParaM.ElecKake_1_",		&InspParaM.ElecKake[1],			R_TYPE_INT		,0	,3	},			// “d‹ÉƒJƒPŒŸ¸”»’è’l[%,nu,code]
+	{	"InspParaM.ElecXmin_1_",		&InspParaM.ElecXmin[1],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXmax_1_",		&InspParaM.ElecXmax[1],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXrange_1_",		&InspParaM.ElecXrange[1],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X max-min[X,Y,code]
+	{	"InspParaM.ElecXedge_1_",		&InspParaM.ElecXedge[1],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmin_1_",		&InspParaM.ElecYmin[1],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmax_1_",		&InspParaM.ElecYmax[1],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYrange_1_",		&InspParaM.ElecYrange[1],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y max-min[X,Y,code]
+	{	"InspParaM.ElecYedge_1_",		&InspParaM.ElecYedge[1],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXsub_1_",		&InspParaM.ElecXsub[1],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½[X,Y,code]
+	{	"InspParaM.ElecKake_1_",		&InspParaM.ElecKake[1],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l[%,nu,code]
     {	"InspParaM.ElecKasure_1_",		&InspParaM.ElecKasure[1],		R_TYPE_INT		,0	,3	},			// 11911 Elec kasure
-	{	"InspParaM.ElecBlack_1_",		&InspParaM.ElecBlack[1],		R_TYPE_INT		,0	,3	},			// “d‹É•ÏF”»’è’l[%,nu,code]
-	{	"InspParaM.ElecC2Xmin_1_",		&InspParaM.ElecC2Xmin[1],		R_TYPE_INT		,0	,3	},			// C2“d‹É”í‚è¬[X,Y,code]
-	{	"InspParaM.ElecC1Mezumari_1_",	&InspParaM.ElecC1Mezumari[1],	R_TYPE_INT		,0	,3	},			// C1–Ú‹l‚Ü‚è[%,nu,code]
-	{	"InspParaM.SideElecXmin_1_",	&InspParaM.SideElecXmin[1],		R_TYPE_INT		,0	,3	},			// ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l[X,Y,code]
+	{	"InspParaM.ElecBlack_1_",		&InspParaM.ElecBlack[1],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l[%,nu,code]
+	{	"InspParaM.ElecC2Xmin_1_",		&InspParaM.ElecC2Xmin[1],		R_TYPE_INT		,0	,3	},			// C2ï¿½dï¿½É”ï¿½è¬[X,Y,code]
+	{	"InspParaM.ElecC1Mezumari_1_",	&InspParaM.ElecC1Mezumari[1],	R_TYPE_INT		,0	,3	},			// C1ï¿½Ú‹lï¿½Ü‚ï¿½[%,nu,code]
+	{	"InspParaM.SideElecXmin_1_",	&InspParaM.SideElecXmin[1],		R_TYPE_INT		,0	,3	},			// ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
 	{	"InspParaM.MarkLevel_1_",		&InspParaM.MarkLevel[1],		R_TYPE_INT		,0	,3	},			//
 	{	"InspParaM.MarkShift_1_",		&InspParaM.MarkShift[1],		R_TYPE_INT		,0	,3	},			//
-	{	"InspParaM.IbutsuXsize_1_",		&InspParaM.IbutsuXsize[1],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.IbutsuYsize_1_",		&InspParaM.IbutsuYsize[1],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.IbutsuXsize_1_",		&InspParaM.IbutsuXsize[1],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.IbutsuYsize_1_",		&InspParaM.IbutsuYsize[1],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 
-	// --- G2 Insp. ”»’è’l
-	{	"InspParaM.G2Xmin_2_",			&InspParaM.G2Xmin[2],			R_TYPE_INT		,0	,3	},			// G2 X size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Xmax_2_",			&InspParaM.G2Xmax[2],			R_TYPE_INT		,0	,3	},			// G2 X size Å‘å’l[X,Y,code]
+	// --- G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.G2Xmin_2_",			&InspParaM.G2Xmin[2],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Xmax_2_",			&InspParaM.G2Xmax[2],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Xrange_2_",		&InspParaM.G2Xrange[2],			R_TYPE_INT		,0	,3	},			// G2 X max-min[X,Y,code]
-	{	"InspParaM.G2Xedge_2_",			&InspParaM.G2Xedge[2],			R_TYPE_INT		,0	,3	},			// G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmin_2_",		&InspParaM.G2ZureXmin[2],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmax_2_",		&InspParaM.G2ZureXmax[2],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2Ymin_2_",			&InspParaM.G2Ymin[2],			R_TYPE_INT		,0	,3	},			// G2 Y size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Ymax_2_",			&InspParaM.G2Ymax[2],			R_TYPE_INT		,0	,3	},			// G2 Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.G2Xedge_2_",			&InspParaM.G2Xedge[2],			R_TYPE_INT		,0	,3	},			// G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmin_2_",		&InspParaM.G2ZureXmin[2],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmax_2_",		&InspParaM.G2ZureXmax[2],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymin_2_",			&InspParaM.G2Ymin[2],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymax_2_",			&InspParaM.G2Ymax[2],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Yrange_2_",		&InspParaM.G2Yrange[2],			R_TYPE_INT		,0	,3	},			// G2 Y max-min[X,Y,code]
-	{	"InspParaM.G2Yedge_2_",			&InspParaM.G2Yedge[2],			R_TYPE_INT		,0	,3	},			// G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmin_2_",		&InspParaM.G2ZureYmin[2],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmax_2_",		&InspParaM.G2ZureYmax[2],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YSdl_2_",			&InspParaM.G2YSdl[2],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YApl_2_",			&InspParaM.G2YApl[2],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXsize_2_",		&InspParaM.OCoatXsize[2],		R_TYPE_INT		,0	,3	},			// Overcoat X ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatYsize_2_",		&InspParaM.OCoatYsize[2],		R_TYPE_INT		,0	,3	},			// Overcoat Y ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXYsize_2_",		&InspParaM.OCoatXYsize[2],		R_TYPE_INT		,0	,3	},			// Overcoat XYƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.G2Yedge_2_",			&InspParaM.G2Yedge[2],			R_TYPE_INT		,0	,3	},			// G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmin_2_",		&InspParaM.G2ZureYmin[2],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmax_2_",		&InspParaM.G2ZureYmax[2],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YSdl_2_",			&InspParaM.G2YSdl[2],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YApl_2_",			&InspParaM.G2YApl[2],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXsize_2_",		&InspParaM.OCoatXsize[2],		R_TYPE_INT		,0	,3	},			// Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatYsize_2_",		&InspParaM.OCoatYsize[2],		R_TYPE_INT		,0	,3	},			// Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXYsize_2_",		&InspParaM.OCoatXYsize[2],		R_TYPE_INT		,0	,3	},			// Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- G2 position
 	{	"InspParaM.G2PosXmin_2_",		&InspParaM.G2PosXmin[2],		R_TYPE_INT		,0	,3	},			// G2 X position min[X,Y,code]
 	{	"InspParaM.G2PosXmax_2_",		&InspParaM.G2PosXmax[2],		R_TYPE_INT		,0	,3	},			// G2 X position max[X,Y,code]
@@ -1146,54 +1130,54 @@ R_DATAFILE_ITEM JudgeFileData[] = {
 	{	"InspParaM.G2PosYmax_2_",		&InspParaM.G2PosYmax[2],		R_TYPE_INT		,0	,3	},			// G2 Y position max[X,Y,code]
 	// --- Plating adhesion
 	{	"InspParaM.Plating_2_",			&InspParaM.Plating[2],			R_TYPE_INT		,0	,3	},			// Plating adhesion size[X,Y,code]
-	// --- Chip(Appearence) Insp. ”»’è’l
-	{	"InspParaM.ChipXmin_2_",		&InspParaM.ChipXmin[2],			R_TYPE_INT		,0	,3	},			// Chip X size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipXmax_2_",		&InspParaM.ChipXmax[2],			R_TYPE_INT		,0	,3	},			// Chip X size Å‘å’l[X,Y,code]
+	// --- Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.ChipXmin_2_",		&InspParaM.ChipXmin[2],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipXmax_2_",		&InspParaM.ChipXmax[2],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipXrange_2_",		&InspParaM.ChipXrange[2],		R_TYPE_INT		,0	,3	},			// Chip X max-min[X,Y,code]
-	{	"InspParaM.ChipXedge_2_",		&InspParaM.ChipXedge[2],		R_TYPE_INT		,0	,3	},			// Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ChipYmin_2_",		&InspParaM.ChipYmin[2],			R_TYPE_INT		,0	,3	},			// Chip Y size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipYmax_2_",		&InspParaM.ChipYmax[2],			R_TYPE_INT		,0	,3	},			// Chip Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.ChipXedge_2_",		&InspParaM.ChipXedge[2],		R_TYPE_INT		,0	,3	},			// Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmin_2_",		&InspParaM.ChipYmin[2],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmax_2_",		&InspParaM.ChipYmax[2],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipYrange_2_",		&InspParaM.ChipYrange[2],		R_TYPE_INT		,0	,3	},			// Chip Y max-min[X,Y,code]
-	{	"InspParaM.ChipYedge_2_",		&InspParaM.ChipYedge[2],		R_TYPE_INT		,0	,3	},			// Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.ChipYedge_2_",		&InspParaM.ChipYedge[2],		R_TYPE_INT		,0	,3	},			// Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- Electrode Insp.
-	{	"InspParaM.ElecXmin_2_",		&InspParaM.ElecXmin[2],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecXmax_2_",		&InspParaM.ElecXmax[2],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecXrange_2_",		&InspParaM.ElecXrange[2],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X max-min[X,Y,code]
-	{	"InspParaM.ElecXedge_2_",		&InspParaM.ElecXedge[2],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecYmin_2_",		&InspParaM.ElecYmin[2],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecYmax_2_",		&InspParaM.ElecYmax[2],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecYrange_2_",		&InspParaM.ElecYrange[2],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y max-min[X,Y,code]
-	{	"InspParaM.ElecYedge_2_",		&InspParaM.ElecYedge[2],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecXsub_2_",		&InspParaM.ElecXsub[2],			R_TYPE_INT		,0	,3	},			// “d‹É•¶‰E¡–@·[X,Y,code]
-	{	"InspParaM.ElecKake_2_",		&InspParaM.ElecKake[2],			R_TYPE_INT		,0	,3	},			// “d‹ÉƒJƒPŒŸ¸”»’è’l[%,nu,code]
+	{	"InspParaM.ElecXmin_2_",		&InspParaM.ElecXmin[2],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXmax_2_",		&InspParaM.ElecXmax[2],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXrange_2_",		&InspParaM.ElecXrange[2],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X max-min[X,Y,code]
+	{	"InspParaM.ElecXedge_2_",		&InspParaM.ElecXedge[2],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmin_2_",		&InspParaM.ElecYmin[2],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmax_2_",		&InspParaM.ElecYmax[2],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYrange_2_",		&InspParaM.ElecYrange[2],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y max-min[X,Y,code]
+	{	"InspParaM.ElecYedge_2_",		&InspParaM.ElecYedge[2],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXsub_2_",		&InspParaM.ElecXsub[2],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½[X,Y,code]
+	{	"InspParaM.ElecKake_2_",		&InspParaM.ElecKake[2],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l[%,nu,code]
     {	"InspParaM.ElecKasure_2_",		&InspParaM.ElecKasure[2],		R_TYPE_INT		,0	,3	},			// 11911 Elec kasure
-	{	"InspParaM.ElecBlack_2_",		&InspParaM.ElecBlack[2],		R_TYPE_INT		,0	,3	},			// “d‹É•ÏF”»’è’l[%,nu,code]
-	{	"InspParaM.ElecC2Xmin_2_",		&InspParaM.ElecC2Xmin[2],		R_TYPE_INT		,0	,3	},			// C2“d‹É”í‚è¬[X,Y,code]
-	{	"InspParaM.ElecC1Mezumari_2_",	&InspParaM.ElecC1Mezumari[2],	R_TYPE_INT		,0	,3	},			// C1–Ú‹l‚Ü‚è[%,nu,code]
-	{	"InspParaM.SideElecXmin_2_",	&InspParaM.SideElecXmin[2],		R_TYPE_INT		,0	,3	},			// ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l[X,Y,code]
+	{	"InspParaM.ElecBlack_2_",		&InspParaM.ElecBlack[2],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l[%,nu,code]
+	{	"InspParaM.ElecC2Xmin_2_",		&InspParaM.ElecC2Xmin[2],		R_TYPE_INT		,0	,3	},			// C2ï¿½dï¿½É”ï¿½è¬[X,Y,code]
+	{	"InspParaM.ElecC1Mezumari_2_",	&InspParaM.ElecC1Mezumari[2],	R_TYPE_INT		,0	,3	},			// C1ï¿½Ú‹lï¿½Ü‚ï¿½[%,nu,code]
+	{	"InspParaM.SideElecXmin_2_",	&InspParaM.SideElecXmin[2],		R_TYPE_INT		,0	,3	},			// ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
 	{	"InspParaM.MarkLevel_2_",		&InspParaM.MarkLevel[2],		R_TYPE_INT		,0	,3	},			//
 	{	"InspParaM.MarkShift_2_",		&InspParaM.MarkShift[2],		R_TYPE_INT		,0	,3	},			//
-	{	"InspParaM.IbutsuXsize_2_",		&InspParaM.IbutsuXsize[2],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.IbutsuYsize_2_",		&InspParaM.IbutsuYsize[2],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.IbutsuXsize_2_",		&InspParaM.IbutsuXsize[2],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.IbutsuYsize_2_",		&InspParaM.IbutsuYsize[2],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 
-	// --- G2 Insp. ”»’è’l
-	{	"InspParaM.G2Xmin_3_",			&InspParaM.G2Xmin[3],			R_TYPE_INT		,0	,3	},			// G2 X size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Xmax_3_",			&InspParaM.G2Xmax[3],			R_TYPE_INT		,0	,3	},			// G2 X size Å‘å’l[X,Y,code]
+	// --- G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.G2Xmin_3_",			&InspParaM.G2Xmin[3],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Xmax_3_",			&InspParaM.G2Xmax[3],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Xrange_3_",		&InspParaM.G2Xrange[3],			R_TYPE_INT		,0	,3	},			// G2 X max-min[X,Y,code]
-	{	"InspParaM.G2Xedge_3_",			&InspParaM.G2Xedge[3],			R_TYPE_INT		,0	,3	},			// G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmin_3_",		&InspParaM.G2ZureXmin[3],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmax_3_",		&InspParaM.G2ZureXmax[3],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2Ymin_3_",			&InspParaM.G2Ymin[3],			R_TYPE_INT		,0	,3	},			// G2 Y size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Ymax_3_",			&InspParaM.G2Ymax[3],			R_TYPE_INT		,0	,3	},			// G2 Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.G2Xedge_3_",			&InspParaM.G2Xedge[3],			R_TYPE_INT		,0	,3	},			// G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmin_3_",		&InspParaM.G2ZureXmin[3],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmax_3_",		&InspParaM.G2ZureXmax[3],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymin_3_",			&InspParaM.G2Ymin[3],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymax_3_",			&InspParaM.G2Ymax[3],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Yrange_3_",		&InspParaM.G2Yrange[3],			R_TYPE_INT		,0	,3	},			// G2 Y max-min[X,Y,code]
-	{	"InspParaM.G2Yedge_3_",			&InspParaM.G2Yedge[3],			R_TYPE_INT		,0	,3	},			// G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmin_3_",		&InspParaM.G2ZureYmin[3],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmax_3_",		&InspParaM.G2ZureYmax[3],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YSdl_3_",			&InspParaM.G2YSdl[3],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YApl_3_",			&InspParaM.G2YApl[3],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXsize_3_",		&InspParaM.OCoatXsize[3],		R_TYPE_INT		,0	,3	},			// Overcoat X ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatYsize_3_",		&InspParaM.OCoatYsize[3],		R_TYPE_INT		,0	,3	},			// Overcoat Y ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXYsize_3_",		&InspParaM.OCoatXYsize[3],		R_TYPE_INT		,0	,3	},			// Overcoat XYƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.G2Yedge_3_",			&InspParaM.G2Yedge[3],			R_TYPE_INT		,0	,3	},			// G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmin_3_",		&InspParaM.G2ZureYmin[3],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmax_3_",		&InspParaM.G2ZureYmax[3],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YSdl_3_",			&InspParaM.G2YSdl[3],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YApl_3_",			&InspParaM.G2YApl[3],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXsize_3_",		&InspParaM.OCoatXsize[3],		R_TYPE_INT		,0	,3	},			// Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatYsize_3_",		&InspParaM.OCoatYsize[3],		R_TYPE_INT		,0	,3	},			// Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXYsize_3_",		&InspParaM.OCoatXYsize[3],		R_TYPE_INT		,0	,3	},			// Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- G2 position
 	{	"InspParaM.G2PosXmin_3_",		&InspParaM.G2PosXmin[3],		R_TYPE_INT		,0	,3	},			// G2 X position min[X,Y,code]
 	{	"InspParaM.G2PosXmax_3_",		&InspParaM.G2PosXmax[3],		R_TYPE_INT		,0	,3	},			// G2 X position max[X,Y,code]
@@ -1201,54 +1185,54 @@ R_DATAFILE_ITEM JudgeFileData[] = {
 	{	"InspParaM.G2PosYmax_3_",		&InspParaM.G2PosYmax[3],		R_TYPE_INT		,0	,3	},			// G2 Y position max[X,Y,code]
 	// --- Plating adhesion
 	{	"InspParaM.Plating_3_",			&InspParaM.Plating[3],			R_TYPE_INT		,0	,3	},			// Plating adhesion size[X,Y,code]
-	// --- Chip(Appearence) Insp. ”»’è’l
-	{	"InspParaM.ChipXmin_3_",		&InspParaM.ChipXmin[3],			R_TYPE_INT		,0	,3	},			// Chip X size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipXmax_3_",		&InspParaM.ChipXmax[3],			R_TYPE_INT		,0	,3	},			// Chip X size Å‘å’l[X,Y,code]
+	// --- Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.ChipXmin_3_",		&InspParaM.ChipXmin[3],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipXmax_3_",		&InspParaM.ChipXmax[3],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipXrange_3_",		&InspParaM.ChipXrange[3],		R_TYPE_INT		,0	,3	},			// Chip X max-min[X,Y,code]
-	{	"InspParaM.ChipXedge_3_",		&InspParaM.ChipXedge[3],		R_TYPE_INT		,0	,3	},			// Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ChipYmin_3_",		&InspParaM.ChipYmin[3],			R_TYPE_INT		,0	,3	},			// Chip Y size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipYmax_3_",		&InspParaM.ChipYmax[3],			R_TYPE_INT		,0	,3	},			// Chip Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.ChipXedge_3_",		&InspParaM.ChipXedge[3],		R_TYPE_INT		,0	,3	},			// Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmin_3_",		&InspParaM.ChipYmin[3],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmax_3_",		&InspParaM.ChipYmax[3],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipYrange_3_",		&InspParaM.ChipYrange[3],		R_TYPE_INT		,0	,3	},			// Chip Y max-min[X,Y,code]
-	{	"InspParaM.ChipYedge_3_",		&InspParaM.ChipYedge[3],		R_TYPE_INT		,0	,3	},			// Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.ChipYedge_3_",		&InspParaM.ChipYedge[3],		R_TYPE_INT		,0	,3	},			// Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- Electrode Insp.
-	{	"InspParaM.ElecXmin_3_",		&InspParaM.ElecXmin[3],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecXmax_3_",		&InspParaM.ElecXmax[3],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecXrange_3_",		&InspParaM.ElecXrange[3],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X max-min[X,Y,code]
-	{	"InspParaM.ElecXedge_3_",		&InspParaM.ElecXedge[3],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecYmin_3_",		&InspParaM.ElecYmin[3],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecYmax_3_",		&InspParaM.ElecYmax[3],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecYrange_3_",		&InspParaM.ElecYrange[3],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y max-min[X,Y,code]
-	{	"InspParaM.ElecYedge_3_",		&InspParaM.ElecYedge[3],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecXsub_3_",		&InspParaM.ElecXsub[3],			R_TYPE_INT		,0	,3	},			// “d‹É•¶‰E¡–@·[X,Y,code]
-	{	"InspParaM.ElecKake_3_",		&InspParaM.ElecKake[3],			R_TYPE_INT		,0	,3	},			// “d‹ÉƒJƒPŒŸ¸”»’è’l[%,nu,code]
+	{	"InspParaM.ElecXmin_3_",		&InspParaM.ElecXmin[3],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXmax_3_",		&InspParaM.ElecXmax[3],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXrange_3_",		&InspParaM.ElecXrange[3],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X max-min[X,Y,code]
+	{	"InspParaM.ElecXedge_3_",		&InspParaM.ElecXedge[3],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmin_3_",		&InspParaM.ElecYmin[3],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmax_3_",		&InspParaM.ElecYmax[3],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYrange_3_",		&InspParaM.ElecYrange[3],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y max-min[X,Y,code]
+	{	"InspParaM.ElecYedge_3_",		&InspParaM.ElecYedge[3],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXsub_3_",		&InspParaM.ElecXsub[3],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½[X,Y,code]
+	{	"InspParaM.ElecKake_3_",		&InspParaM.ElecKake[3],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l[%,nu,code]
     {	"InspParaM.ElecKasure_3_",		&InspParaM.ElecKasure[3],		R_TYPE_INT		,0	,3	},			// 11911 Elec kasure
-	{	"InspParaM.ElecBlack_3_",		&InspParaM.ElecBlack[3],		R_TYPE_INT		,0	,3	},			// “d‹É•ÏF”»’è’l[%,nu,code]
-	{	"InspParaM.SideElecXmin_3_",	&InspParaM.SideElecXmin[3],		R_TYPE_INT		,0	,3	},			// ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecC2Xmin_3_",		&InspParaM.ElecC2Xmin[3],		R_TYPE_INT		,0	,3	},			// C2“d‹É”í‚è¬[X,Y,code]
-	{	"InspParaM.ElecC1Mezumari_3_",	&InspParaM.ElecC1Mezumari[3],	R_TYPE_INT		,0	,3	},			// C1–Ú‹l‚Ü‚è[%,nu,code]
+	{	"InspParaM.ElecBlack_3_",		&InspParaM.ElecBlack[3],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l[%,nu,code]
+	{	"InspParaM.SideElecXmin_3_",	&InspParaM.SideElecXmin[3],		R_TYPE_INT		,0	,3	},			// ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecC2Xmin_3_",		&InspParaM.ElecC2Xmin[3],		R_TYPE_INT		,0	,3	},			// C2ï¿½dï¿½É”ï¿½è¬[X,Y,code]
+	{	"InspParaM.ElecC1Mezumari_3_",	&InspParaM.ElecC1Mezumari[3],	R_TYPE_INT		,0	,3	},			// C1ï¿½Ú‹lï¿½Ü‚ï¿½[%,nu,code]
 	{	"InspParaM.MarkLevel_3_",		&InspParaM.MarkLevel[3],		R_TYPE_INT		,0	,3	},			//
 	{	"InspParaM.MarkShift_3_",		&InspParaM.MarkShift[3],		R_TYPE_INT		,0	,3	},			//
-	{	"InspParaM.IbutsuXsize_3_",		&InspParaM.IbutsuXsize[3],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.IbutsuYsize_3_",		&InspParaM.IbutsuYsize[3],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.IbutsuXsize_3_",		&InspParaM.IbutsuXsize[3],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.IbutsuYsize_3_",		&InspParaM.IbutsuYsize[3],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 
-	// --- G2 Insp. ”»’è’l
-	{	"InspParaM.G2Xmin_4_",			&InspParaM.G2Xmin[4],			R_TYPE_INT		,0	,3	},			// G2 X size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Xmax_4_",			&InspParaM.G2Xmax[4],			R_TYPE_INT		,0	,3	},			// G2 X size Å‘å’l[X,Y,code]
+	// --- G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.G2Xmin_4_",			&InspParaM.G2Xmin[4],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Xmax_4_",			&InspParaM.G2Xmax[4],			R_TYPE_INT		,0	,3	},			// G2 X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Xrange_4_",		&InspParaM.G2Xrange[4],			R_TYPE_INT		,0	,3	},			// G2 X max-min[X,Y,code]
-	{	"InspParaM.G2Xedge_4_",			&InspParaM.G2Xedge[4],			R_TYPE_INT		,0	,3	},			// G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmin_4_",		&InspParaM.G2ZureXmin[4],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureXmax_4_",		&InspParaM.G2ZureXmax[4],		R_TYPE_INT		,0	,3	},			// G2 X ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2Ymin_4_",			&InspParaM.G2Ymin[4],			R_TYPE_INT		,0	,3	},			// G2 Y size Å¬’l[X,Y,code]
-	{	"InspParaM.G2Ymax_4_",			&InspParaM.G2Ymax[4],			R_TYPE_INT		,0	,3	},			// G2 Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.G2Xedge_4_",			&InspParaM.G2Xedge[4],			R_TYPE_INT		,0	,3	},			// G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmin_4_",		&InspParaM.G2ZureXmin[4],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureXmax_4_",		&InspParaM.G2ZureXmax[4],		R_TYPE_INT		,0	,3	},			// G2 X Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymin_4_",			&InspParaM.G2Ymin[4],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2Ymax_4_",			&InspParaM.G2Ymax[4],			R_TYPE_INT		,0	,3	},			// G2 Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.G2Yrange_4_",		&InspParaM.G2Yrange[4],			R_TYPE_INT		,0	,3	},			// G2 Y max-min[X,Y,code]
-	{	"InspParaM.G2Yedge_4_",			&InspParaM.G2Yedge[4],			R_TYPE_INT		,0	,3	},			// G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmin_4_",		&InspParaM.G2ZureYmin[4],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2ZureYmax_4_",		&InspParaM.G2ZureYmax[4],		R_TYPE_INT		,0	,3	},			// G2 Y ZureŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YSdl_4_",			&InspParaM.G2YSdl[4],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.G2YApl_4_",			&InspParaM.G2YApl[4],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXsize_4_",		&InspParaM.OCoatXsize[4],		R_TYPE_INT		,0	,3	},			// Overcoat X ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatYsize_4_",		&InspParaM.OCoatYsize[4],		R_TYPE_INT		,0	,3	},			// Overcoat Y ƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.OCoatXYsize_4_",		&InspParaM.OCoatXYsize[4],		R_TYPE_INT		,0	,3	},			// Overcoat XYƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.G2Yedge_4_",			&InspParaM.G2Yedge[4],			R_TYPE_INT		,0	,3	},			// G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmin_4_",		&InspParaM.G2ZureYmin[4],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2ZureYmax_4_",		&InspParaM.G2ZureYmax[4],		R_TYPE_INT		,0	,3	},			// G2 Y Zureï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YSdl_4_",			&InspParaM.G2YSdl[4],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoG2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.G2YApl_4_",			&InspParaM.G2YApl[4],			R_TYPE_INT		,0	,3	},			// G2 Y SDtoAPï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXsize_4_",		&InspParaM.OCoatXsize[4],		R_TYPE_INT		,0	,3	},			// Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatYsize_4_",		&InspParaM.OCoatYsize[4],		R_TYPE_INT		,0	,3	},			// Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.OCoatXYsize_4_",		&InspParaM.OCoatXYsize[4],		R_TYPE_INT		,0	,3	},			// Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- G2 position
 	{	"InspParaM.G2PosXmin_4_",		&InspParaM.G2PosXmin[4],		R_TYPE_INT		,0	,3	},			// G2 X position min[X,Y,code]
 	{	"InspParaM.G2PosXmax_4_",		&InspParaM.G2PosXmax[4],		R_TYPE_INT		,0	,3	},			// G2 X position max[X,Y,code]
@@ -1256,48 +1240,48 @@ R_DATAFILE_ITEM JudgeFileData[] = {
 	{	"InspParaM.G2PosYmax_4_",		&InspParaM.G2PosYmax[4],		R_TYPE_INT		,0	,3	},			// G2 Y position max[X,Y,code]
 	// --- Plating adhesion
 	{	"InspParaM.Plating_4_",			&InspParaM.Plating[4],			R_TYPE_INT		,0	,3	},			// Plating adhesion size[X,Y,code]
-	// --- Chip(Appearence) Insp. ”»’è’l
-	{	"InspParaM.ChipXmin_4_",		&InspParaM.ChipXmin[4],			R_TYPE_INT		,0	,3	},			// Chip X size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipXmax_4_",		&InspParaM.ChipXmax[4],			R_TYPE_INT		,0	,3	},			// Chip X size Å‘å’l[X,Y,code]
+	// --- Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+	{	"InspParaM.ChipXmin_4_",		&InspParaM.ChipXmin[4],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipXmax_4_",		&InspParaM.ChipXmax[4],			R_TYPE_INT		,0	,3	},			// Chip X size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipXrange_4_",		&InspParaM.ChipXrange[4],		R_TYPE_INT		,0	,3	},			// Chip X max-min[X,Y,code]
-	{	"InspParaM.ChipXedge_4_",		&InspParaM.ChipXedge[4],		R_TYPE_INT		,0	,3	},			// Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ChipYmin_4_",		&InspParaM.ChipYmin[4],			R_TYPE_INT		,0	,3	},			// Chip Y size Å¬’l[X,Y,code]
-	{	"InspParaM.ChipYmax_4_",		&InspParaM.ChipYmax[4],			R_TYPE_INT		,0	,3	},			// Chip Y size Å‘å’l[X,Y,code]
+	{	"InspParaM.ChipXedge_4_",		&InspParaM.ChipXedge[4],		R_TYPE_INT		,0	,3	},			// Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmin_4_",		&InspParaM.ChipYmin[4],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ChipYmax_4_",		&InspParaM.ChipYmax[4],			R_TYPE_INT		,0	,3	},			// Chip Y size ï¿½Å‘ï¿½l[X,Y,code]
 	{	"InspParaM.ChipYrange_4_",		&InspParaM.ChipYrange[4],		R_TYPE_INT		,0	,3	},			// Chip Y max-min[X,Y,code]
-	{	"InspParaM.ChipYedge_4_",		&InspParaM.ChipYedge[4],		R_TYPE_INT		,0	,3	},			// Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.ChipYedge_4_",		&InspParaM.ChipYedge[4],		R_TYPE_INT		,0	,3	},			// Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 	// --- Electrode Insp.
-	{	"InspParaM.ElecXmin_4_",		&InspParaM.ElecXmin[4],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecXmax_4_",		&InspParaM.ElecXmax[4],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ XÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecXrange_4_",		&InspParaM.ElecXrange[4],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X max-min[X,Y,code]
-	{	"InspParaM.ElecXedge_4_",		&InspParaM.ElecXedge[4],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecYmin_4_",		&InspParaM.ElecYmin[4],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ¬’l[X,Y,code]
-	{	"InspParaM.ElecYmax_4_",		&InspParaM.ElecYmax[4],			R_TYPE_INT		,0	,3	},			// “d‹É¡–@ YÅ‘å’l[X,Y,code]
-	{	"InspParaM.ElecYrange_4_",		&InspParaM.ElecYrange[4],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y max-min[X,Y,code]
-	{	"InspParaM.ElecYedge_4_",		&InspParaM.ElecYedge[4],		R_TYPE_INT		,0	,3	},			// “d‹É¡–@ Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.ElecXsub_4_",		&InspParaM.ElecXsub[4],			R_TYPE_INT		,0	,3	},			// “d‹É•¶‰E¡–@·[X,Y,code]
-	{	"InspParaM.ElecKake_4_",		&InspParaM.ElecKake[4],			R_TYPE_INT		,0	,3	},			// “d‹ÉƒJƒPŒŸ¸”»’è’l[%,nu,code]
+	{	"InspParaM.ElecXmin_4_",		&InspParaM.ElecXmin[4],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXmax_4_",		&InspParaM.ElecXmax[4],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXrange_4_",		&InspParaM.ElecXrange[4],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X max-min[X,Y,code]
+	{	"InspParaM.ElecXedge_4_",		&InspParaM.ElecXedge[4],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmin_4_",		&InspParaM.ElecYmin[4],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYmax_4_",		&InspParaM.ElecYmax[4],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l[X,Y,code]
+	{	"InspParaM.ElecYrange_4_",		&InspParaM.ElecYrange[4],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y max-min[X,Y,code]
+	{	"InspParaM.ElecYedge_4_",		&InspParaM.ElecYedge[4],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½Éï¿½ï¿½@ Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.ElecXsub_4_",		&InspParaM.ElecXsub[4],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½[X,Y,code]
+	{	"InspParaM.ElecKake_4_",		&InspParaM.ElecKake[4],			R_TYPE_INT		,0	,3	},			// ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l[%,nu,code]
     {	"InspParaM.ElecKasure_4_",		&InspParaM.ElecKasure[4],		R_TYPE_INT		,0	,3	},			// 11911 Elec kasure
-	{	"InspParaM.ElecBlack_4_",		&InspParaM.ElecBlack[4],		R_TYPE_INT		,0	,3	},			// “d‹É•ÏF”»’è’l[%,nu,code]
-	{	"InspParaM.ElecC2Xmin_4_",		&InspParaM.ElecC2Xmin[4],		R_TYPE_INT		,0	,3	},			// C2“d‹É”í‚è¬[X,Y,code]
-	{	"InspParaM.ElecC1Mezumari_4_",	&InspParaM.ElecC1Mezumari[4],	R_TYPE_INT		,0	,3	},			// C1–Ú‹l‚Ü‚è[%,nu,code]
-	{	"InspParaM.SideElecXmin_4_",	&InspParaM.SideElecXmin[4],		R_TYPE_INT		,0	,3	},			// ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l[X,Y,code]
+	{	"InspParaM.ElecBlack_4_",		&InspParaM.ElecBlack[4],		R_TYPE_INT		,0	,3	},			// ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l[%,nu,code]
+	{	"InspParaM.ElecC2Xmin_4_",		&InspParaM.ElecC2Xmin[4],		R_TYPE_INT		,0	,3	},			// C2ï¿½dï¿½É”ï¿½è¬[X,Y,code]
+	{	"InspParaM.ElecC1Mezumari_4_",	&InspParaM.ElecC1Mezumari[4],	R_TYPE_INT		,0	,3	},			// C1ï¿½Ú‹lï¿½Ü‚ï¿½[%,nu,code]
+	{	"InspParaM.SideElecXmin_4_",	&InspParaM.SideElecXmin[4],		R_TYPE_INT		,0	,3	},			// ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l[X,Y,code]
 	{	"InspParaM.MarkLevel_4_",		&InspParaM.MarkLevel[4],		R_TYPE_INT		,0	,3	},			//
 	{	"InspParaM.MarkShift_4_",		&InspParaM.MarkShift[4],		R_TYPE_INT		,0	,3	},			//
-	{	"InspParaM.IbutsuXsize_4_",		&InspParaM.IbutsuXsize[4],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ŒŸ¸ ”»’è’l[X,Y,code]
-	{	"InspParaM.IbutsuYsize_4_",		&InspParaM.IbutsuYsize[4],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ŒŸ¸ ”»’è’l[X,Y,code]
+	{	"InspParaM.IbutsuXsize_4_",		&InspParaM.IbutsuXsize[4],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
+	{	"InspParaM.IbutsuYsize_4_",		&InspParaM.IbutsuYsize[4],		R_TYPE_INT		,0	,3	},			// Glass Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y,code]
 
 	// --- system
-	{	"InspParaM.Focus",				&InspParaM.Focus,				R_TYPE_INT		,0	,3	},			// ƒŒƒ“ƒYÅ“_[d,nu,code]
-	{	"InspParaM.Bright",				&InspParaM.Bright,				R_TYPE_INT		,0	,3	},			// Æ“xŠÇ—[d,nu,code]
+	{	"InspParaM.Focus",				&InspParaM.Focus,				R_TYPE_INT		,0	,3	},			// ï¿½ï¿½ï¿½ï¿½ï¿½Yï¿½Å“_[d,nu,code]
+	{	"InspParaM.Bright",				&InspParaM.Bright,				R_TYPE_INT		,0	,3	},			// ï¿½Æ“xï¿½Ç—ï¿½[d,nu,code]
 
 	{	NULL	},
 };
 
 
-// »•iƒf[ƒ^
+// ï¿½ï¿½ï¿½iï¿½fï¿½[ï¿½^
 static char TypeFileName[] = "TP-S_Ty.csv";
 R_DATAFILE_ITEM TypeFileData[] = {
-	// --- ƒpƒ‰ƒ[ƒ^Šm”F€–Úi•sˆê’v‚Ìê‡‚ÍAƒGƒ‰[’â~j
+	// --- ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½mï¿½Fï¿½ï¿½ï¿½Úiï¿½sï¿½ï¿½vï¿½Ìê‡ï¿½ÍAï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½~ï¿½j
 	{	"TyFile.Prod",					&TyFile.Prod,					R_TYPE_STRING	,32		},
 	{	"TyFile.Insp",					&TyFile.Insp,					R_TYPE_STRING	,32		},
 	{	"TyFile.Ver",					&TyFile.Ver,					R_TYPE_STRING	,32		},
@@ -1312,9 +1296,9 @@ R_DATAFILE_ITEM TypeFileData[] = {
 
 
 
-static	int				ProjectBuf[2560];									// projectƒf[ƒ^[‚ğŠi”[‚·‚éƒoƒbƒtƒ@[
-static	int				ProjectBuf1[2560];									// projectƒf[ƒ^[‚ğŠi”[‚·‚éƒoƒbƒtƒ@[
-static	int				ProjectBuf2[2560];									// projectƒf[ƒ^[‚ğŠi”[‚·‚éƒoƒbƒtƒ@[
+static	int				ProjectBuf[2560];									// projectï¿½fï¿½[ï¿½^ï¿½[ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½[
+static	int				ProjectBuf1[2560];									// projectï¿½fï¿½[ï¿½^ï¿½[ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½[
+static	int				ProjectBuf2[2560];									// projectï¿½fï¿½[ï¿½^ï¿½[ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½[
 
         char			Comment[2048];                                      // Comment Buffer
         char			Comment1[200];										// Comment Buffer
@@ -1390,15 +1374,15 @@ FILE *fin1;
 //static char Charactor_drive[25] = {b,c,d,e,f,g,h,i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
 /**********************************************************
-	ŠÖ”–¼F	‚q‚n‚g‚l
-	‹@  ”\F	‚q‚n‚g‚lƒƒCƒ“ŠÖ”
-	Œ`  ®F	int ROHM( int argc, char *argv[] )
-	ˆø‚«”F	int argc
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½qï¿½nï¿½gï¿½l
+	ï¿½@  ï¿½\ï¿½F	ï¿½qï¿½nï¿½gï¿½lï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Öï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	int ROHM( int argc, char *argv[] )
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int argc
 				char *argv[]
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 int		ROHM( int argc, char *argv[] )
@@ -1417,13 +1401,13 @@ int		ROHM( int argc, char *argv[] )
 						return ERROR;
 				}
 			}
-		// ‰Šú‰»
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if(OK!=Initial()) return ERROR;
 
-		// R_CSƒVƒXƒeƒ€‹N“®
+		// R_CSï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Nï¿½ï¿½
 			if(OK!=R_CS(argc,argv))		return ERROR;
 
-		// ƒvƒƒOƒ‰ƒ€I—¹
+		// ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
 			ProgExit();
 
 		return OK;
@@ -1432,25 +1416,25 @@ int		ROHM( int argc, char *argv[] )
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚f‚…‚”‚n‚‚”‚‰‚‚
-	‹@  ”\F	ƒIƒvƒVƒ‡ƒ“æ“¾
-	Œ`  ®F	static int GetOption(char *opt)
-	ˆø‚«”F
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
+	ï¿½`  ï¿½ï¿½ï¿½F	static int GetOption(char *opt)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static int	GetOption( char *opt )
 	{
 
-		char StringWork[4096];						// charŒ^ƒf[ƒ^ì‹ÆƒGƒŠƒA
+		char StringWork[4096];						// charï¿½^ï¿½fï¿½[ï¿½^ï¿½ï¿½ÆƒGï¿½ï¿½ï¿½A
 		while( *opt++ == '/' ) {
 			switch( *opt++ ) {
 				case '?':
 				case 'h':
-				case 'H': //ƒwƒ‹ƒv
+				case 'H': //ï¿½wï¿½ï¿½ï¿½v
 					Ussage();
 					return ERROR;
 				case 'a':
@@ -1512,12 +1496,12 @@ static int	GetOption( char *opt )
 					break;
 				case 'n':
 				case 'N':
-					if( strncmp( opt, "80", 2 )==0 )	Option |= NO_DRCY80;	// DR-CY-93‚È‚µ
-//					if( strncmp( opt, "83", 2 )==0 )	Option |= NO_DRCY83;	// DR-CY-93‚È‚µ
-//					if( strncmp( opt, "84", 2 )==0 )	Option |= NO_INCY84;	// IN-CY-84‚È‚µ
+					if( strncmp( opt, "80", 2 )==0 )	Option |= NO_DRCY80;	// DR-CY-93ï¿½È‚ï¿½
+//					if( strncmp( opt, "83", 2 )==0 )	Option |= NO_DRCY83;	// DR-CY-93ï¿½È‚ï¿½
+//					if( strncmp( opt, "84", 2 )==0 )	Option |= NO_INCY84;	// IN-CY-84ï¿½È‚ï¿½
 					//if( strncmp( opt, "76", 2 )==0 )	Option |= NO_INCY76;	// <shio> recovery
 					if( strncmp( opt, "119", 2 )==0 )	Option |= NO_INCY119; //<z1>
-					if( strncmp( opt, "okey",4)==0 )	Option |= NO_USBKEY;	// key check ‚µ‚È‚¢
+					if( strncmp( opt, "okey",4)==0 )	Option |= NO_USBKEY;	// key check ï¿½ï¿½ï¿½È‚ï¿½
 					if( strncmp( opt, "itto",4)==0 ){
 						Option |= NO_DRCY80;
 						//<z1> Option |= NO_INCY76;
@@ -1527,9 +1511,9 @@ static int	GetOption( char *opt )
 						bIsNitto = 1;
 						WinbSettingItem = WinbSettingItem_Nitto;
 					}
-					if(0==strncmp(opt,"124", 3))		Option |= NO_DRX124;	// DR-X-124‚È‚µ
+					if(0==strncmp(opt,"124", 3))		Option |= NO_DRX124;	// DR-X-124ï¿½È‚ï¿½
 					break;
-				case '1':	// "124=?"	DR-X-124‚ÌIDw’è	2012/03/29 by sassa
+				case '1':	// "124=?"	DR-X-124ï¿½ï¿½IDï¿½wï¿½ï¿½	2012/03/29 by sassa
 					if(     0==strncmp(opt,"24=", 3)){
 						switch(opt[3]){
 							case '0':	DrX124Ch = _BOARD_JPSW0;	break;
@@ -1559,13 +1543,13 @@ static int	GetOption( char *opt )
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚t‚“‚“‚‚‡‚…
-	‹@  ”\F	ƒIƒvƒVƒ‡ƒ“•\¦
-	Œ`  ®F	static void ussage(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	‚È‚µ
-	‰ğ  àF	ƒIƒvƒVƒ‡ƒ“ƒRƒ}ƒ“ƒh‚ğ•\¦‚·‚é
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void ussage(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½È‚ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static void Ussage(void)
@@ -1582,71 +1566,71 @@ static void Ussage(void)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚h‚‚‰‚”‚‰‚‚Œ
-	‹@  ”\F	‰Šú‰»
-	Œ`  ®F	int Initial(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F	R_CSƒ‰ƒCƒuƒ‰ƒŠ‚Ì“®ìİ’è‚È‚ÇÅ’áŒÀ‚Ì‰Šú‰»‚ğs‚¢‚Ü‚·
-				Šî–{“I‚É‚ÍR_CS_User_Initial()‚É‹Lq‚µ‚Ü‚·
-				¦‰æ‘œ‰ğ‘œ“x“™‚ÍR_CS‹N“®Œã‚Éİ’è‚³‚ê‚Ü‚·
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	int Initial(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	R_CSï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ï¿½İ’ï¿½È‚ÇÅ’ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½
+				ï¿½ï¿½{ï¿½Iï¿½É‚ï¿½R_CS_User_Initial()ï¿½É‹Lï¿½qï¿½ï¿½ï¿½Ü‚ï¿½
+				ï¿½ï¿½ï¿½æ‘œï¿½ğ‘œ“xï¿½ï¿½ï¿½ï¿½R_CSï¿½Nï¿½ï¿½ï¿½ï¿½Éİ’è‚³ï¿½ï¿½Ü‚ï¿½
 **********************************************************/
 
 static int	Initial(void)
 	{
 		int						res;
 
-		// R_DrawŒnŠÖ”ƒI[ƒvƒ“
+		// R_Drawï¿½nï¿½Öï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½
 			R_DrawOpen();
 
-		// ƒ{[ƒh‰Šú‰»
+		// ï¿½{ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if(OK!=(res=InitialBoard()))	return res;
 			DrawMessage( " board initialize complete ", DRAW_GREEN, 0, 0 );
 
-		// R_CSƒ‰ƒCƒuƒ‰ƒŠ‚Ì“®ìİ’è
-			R_CS_InformationMode(ON);						// î•ñ•\¦ƒ‚[ƒhON
-			R_CS_InitialTime(OFF);							// ŠÔ‰Šú‰»‚µ‚È‚¢
-			R_LedAdjustFocusMode(ON);						// Æ–¾’²®‚Éƒsƒ“ƒg•]‰¿’l•\¦’Ç‰Á
+		// R_CSï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ï¿½İ’ï¿½
+			R_CS_InformationMode(ON);						// ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hON
+			R_CS_InitialTime(OFF);							// ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+			R_LedAdjustFocusMode(ON);						// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éƒsï¿½ï¿½ï¿½gï¿½]ï¿½ï¿½ï¿½lï¿½\ï¿½ï¿½ï¿½Ç‰ï¿½
 
-		// ƒpƒ‰ƒ[ƒ^“™ƒtƒ@ƒCƒ‹İ’è
-			R_CS_SetToolConfigFileName("cs_tool.csv");							// ƒc[ƒ‹‹@”\İ’èƒtƒ@ƒCƒ‹
-			R_CS_SetParameterFileSystem(SystemFileData, SystemFileName);		// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹
-			R_CS_SetParameterFilePackage(JudgeFileData, JudgeFilename);			// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹i”»’è’lj
-			R_CS_SetParameterFileType(TypeFileData, TypeFileName);				// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹i»•iƒf[ƒ^j
+		// ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½İ’ï¿½
+			R_CS_SetToolConfigFileName("cs_tool.csv");							// ï¿½cï¿½[ï¿½ï¿½ï¿½@ï¿½\ï¿½İ’ï¿½tï¿½@ï¿½Cï¿½ï¿½
+			R_CS_SetParameterFileSystem(SystemFileData, SystemFileName);		// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½
+			R_CS_SetParameterFilePackage(JudgeFileData, JudgeFilename);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½lï¿½j
+			R_CS_SetParameterFileType(TypeFileData, TypeFileName);				// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½ï¿½iï¿½fï¿½[ï¿½^ï¿½j
 
-			R_datafile_load(SystemFileData, SystemFileName);					// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹
-			strcpy(ProductName,SyFile.Prod);									// 20170113 tanaka ƒVƒXƒeƒ€ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ•ií–¼‚ğ•ií–¼‚Æ‚·‚é
+			R_datafile_load(SystemFileData, SystemFileName);					// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½
+			strcpy(ProductName,SyFile.Prod);									// 20170113 tanaka ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì“Ç‚İï¿½ï¿½İ•iï¿½í–¼ï¿½ï¿½iï¿½í–¼ï¿½Æ‚ï¿½ï¿½ï¿½
 			bIsG2Separate = 0;
 			bIsG2Straight = 0;
 			if(strncmp(ProductName,"MCR03",5)==0){
-				bIsMCR03 = 1;           // 20170204 tanaka ‹@íŒÀ’è
-				bIsG2Straight = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsMCR03 = 1;           // 20170204 tanaka ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½
+				bIsG2Straight = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"MCR10",5)==0){
 				bIsMCR10 = 1;
-				bIsG2Separate = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsG2Separate = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"ESR10",5)==0){
 				bIsMCR10 = 1;
-				bIsG2Separate = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsG2Separate = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"MCR18",5)==0){
 				bIsMCR18 = 1;
-				bIsG2Separate = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsG2Separate = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"ESR18",5)==0){
 				bIsMCR18 = 1;
-				bIsG2Separate = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsG2Separate = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"MCR01",5)==0){
 				bIsMCR01 = 1;
-				bIsG2Straight = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsG2Straight = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"ESR25",5)==0){
 				bIsESR25 = 1;
-				bIsG2Separate = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+				bIsG2Separate = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 			} else if(strncmp(ProductName,"SFR25",5)==0){
 				bIsSFR25 = 1;
 				if((Option & BACKINSP_MODE)){
 					bIsG2Straight = 1;
 				}else{
-					bIsG2Separate = 1;		// 20170808 tanaka default‚ÌŒ`ó‚ğİ’è
+					bIsG2Separate = 1;		// 20170808 tanaka defaultï¿½ÌŒ`ï¿½ï¿½ï¿½İ’ï¿½
 				}
 			} else if(strncmp(ProductName,"LTR50",5)==0 || strncmp(ProductName,"LTR50L",6)==0){
 				bIsLTR50 = 1;
@@ -1667,17 +1651,17 @@ static int	Initial(void)
 				DrawMessage( Comment, DRAW_RED, 2, 2 );
 				return ERROR;
 			}
-			R_datafile_load(JudgeFileData, JudgeFilename);						// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹i”»’è’lj
-			R_datafile_load(TypeFileData, TypeFileName);						// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹i»•iƒf[ƒ^j
+			R_datafile_load(JudgeFileData, JudgeFilename);						// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½lï¿½j
+			R_datafile_load(TypeFileData, TypeFileName);						// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½ï¿½iï¿½fï¿½[ï¿½^ï¿½j
 			if( OK != CheckParameterFile() )	return ERROR;
-			if( OK != SetsubiDataLoadfile() )	return ERROR;					// İ”õƒf[ƒ^“Ç‚İ‚İ
+			if( OK != SetsubiDataLoadfile() )	return ERROR;					// ï¿½İ”ï¿½ï¿½fï¿½[ï¿½^ï¿½Ç‚İï¿½ï¿½ï¿½
 			if( OK != NGLimitDataLoadfile() )	return ERROR;					// 2011.08.17
 
-		// ƒ†[ƒU[‰Šú‰»ŠÖ”İ’è
+		// ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öï¿½ï¿½İ’ï¿½
 			R_CS_SetFunctionUserInitial(InitialUserOnR_CS);
 			R_CS_SetFunctionUserInitialLast(InitialUserOnR_CSLast);
 
-		// ƒƒjƒ…[ŠÖ”‚Ì“o˜^
+		// ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Öï¿½ï¿½Ì“oï¿½^
 			R_CS_SetFunctionManualCapture(CaptureManual);
 			R_CS_SetFunctionCaptureThrough(CaptureThrough);
 			R_CS_SetFunctionAutoModeReady(AutoModeReady);
@@ -1688,14 +1672,14 @@ static int	Initial(void)
 				R_CS_SetFunctionAutoModeExecute(AutoModeExecuteNwt);
 			}
 			R_CS_SetFunctionInspect(InspectManual);
-			if((1==bIsNitto)||(0==(Option & BACKINSP_MODE))){		//v2.11 “ú“Œ‚Ìor— –Ê‚¶‚á‚È‚¢
+			if((1==bIsNitto)||(0==(Option & BACKINSP_MODE))){		//v2.11 ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½orï¿½ï¿½ï¿½Ê‚ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½
 				R_CS_SetFunctionUserLanExecute(AutoTypeChangeLanUser);
 			}
-		// ƒ†[ƒUİ’èƒƒjƒ…[‚Ìİ’è
+		// ï¿½ï¿½ï¿½[ï¿½Uï¿½İ’èƒï¿½jï¿½ï¿½ï¿½[ï¿½Ìİ’ï¿½
 			R_CS_SetMenuUserSetting(WinbSettingItem);
 			R_CS_SetMenuUserFile(WinbFileItem);
 			R_CS_SetFunctionManualInspectFileAllReady(ManualInspectFileAllReady);
-			Pilot_mode = OFF;													// ƒpƒCƒƒbƒgƒ‚[ƒh OFF
+			Pilot_mode = OFF;													// ï¿½pï¿½Cï¿½ï¿½ï¿½bï¿½gï¿½ï¿½ï¿½[ï¿½h OFF
 			OutputPilotOff();
 
 		return OK;
@@ -1704,28 +1688,28 @@ static int	Initial(void)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚h‚‚‰‚”‚‰‚‚Œ‚a‚‚‚’‚„
-	‹@  ”\F	ƒ{[ƒh‰Šú‰»
-	Œ`  ®F	static int InitialBoard(void)
-	ˆø‚«”F	–³‚µ
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF	Šeíƒ{[ƒh‚ğ‰Šú‰»‚·‚é
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½{ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int InitialBoard(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	ï¿½eï¿½ï¿½{ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static int	InitialBoard( void )
 	{
 
-		// DR-X-124‰Šú‰»
+		// DR-X-124ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(0 == (Option&NO_DRX124) && (LedControllMode == LED_CONTROLL_DRX124 )){
-				if(0>(HandleDrx124=R_drx124_open(DrX124Ch))){	// ƒnƒ“ƒhƒ‹‚È‚Ì‚ÅA0ˆÈã‚È‚çƒI[ƒvƒ“¬Œ÷
+				if(0>(HandleDrx124=R_drx124_open(DrX124Ch))){	// ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½È‚Ì‚ÅA0ï¿½Èï¿½È‚ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					printf("DR-X-124/136 open error!\n");
 					R_DrawPopupMessage(POPUP_WAIT_CLICK, "DR-X-124/136 open error!");
 					return ERROR;
 				}
 				_Drx124_Setting = &Drx124_Setting_Cam1_Cap1;
-				// Æ–¾’²®‚Ì”Z“xƒ`ƒFƒbƒNƒGƒŠƒA
+				// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”Zï¿½xï¿½`ï¿½Fï¿½bï¿½Nï¿½Gï¿½ï¿½ï¿½A
 				R_rect_init_by_point(&rectLedCheckArea[0],  10, 200,  60, 250);
 				R_rect_init_by_point(&rectLedCheckArea[1],  70, 200, 120, 250);
 				R_rect_init_by_point(&rectLedCheckArea[2], 130, 200, 180, 250);
@@ -1777,7 +1761,7 @@ int		InitDRCY80( void )
 		if(!r_system_is_virtual_io()){
 		// initialze
 			Drcy80Ch = ERROR;
-		// DR-CY-80 ‰Šú‰»
+		// DR-CY-80 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			for( ch=0x00000; ch!=0x10000; ch+=0x01000, dsw++ ) {
 				if( R_gpio_open(ch)==OK ) {
 					if(((nGpioPort[(ch>>12)&0xf]>>24) == PCI_GPIO_DRCY80)
@@ -1805,7 +1789,7 @@ int		InitDRCY80( void )
 				d_mode = 2;
 				res = ERROR2;
 			} else {
-		//		R_CS_IOCheckRegisterBoard( Drcy80Ch, -1, "DR-CY-80" );	// I/Oƒ`ƒFƒbƒN—p‚Éƒ{[ƒh“o˜^
+		//		R_CS_IOCheckRegisterBoard( Drcy80Ch, -1, "DR-CY-80" );	// I/Oï¿½`ï¿½Fï¿½bï¿½Nï¿½pï¿½Éƒ{ï¿½[ï¿½hï¿½oï¿½^
 				sprintf( Comment, " DR-CY-80 DSW:%X ", dsw );
 				d_color = DRAW_GREEN;
 				d_mode = 1;
@@ -1835,7 +1819,7 @@ int		InitINCY76( void )
 
 		// initialze
 			Incy76Ch = ERROR;
-		// IN-CY-76 ‰Šú‰»
+		// IN-CY-76 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			//for( ch=0x00000; ch!=0x10000; ch+=0x01000, dsw++ ) {
 			{
 				ch=0x2000;
@@ -1854,7 +1838,7 @@ int		InitINCY76( void )
 				d_mode = 2;
 				res = ERROR;
 			} else {
-	//			R_CS_IOCheckRegisterBoard( Incy76Ch, -1, "IN-CY-76" );	// I/Oƒ`ƒFƒbƒN—p‚Éƒ{[ƒh“o˜^
+	//			R_CS_IOCheckRegisterBoard( Incy76Ch, -1, "IN-CY-76" );	// I/Oï¿½`ï¿½Fï¿½bï¿½Nï¿½pï¿½Éƒ{ï¿½[ï¿½hï¿½oï¿½^
 				sprintf( Comment, " IN-CY-76 DSW:%X ", dsw );
 				d_color = DRAW_GREEN;
 				d_mode = 1;
@@ -1882,7 +1866,7 @@ int		InitINCY119( void )
 
 			// initialze
 				Incy119Ch = ERROR;
-			// IN-CY-119 ‰Šú‰»
+			// IN-CY-119 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				//for( ch=0x00000; ch!=0x10000; ch+=0x01000, dsw++ ) {
 				{
 					ch=0x2000;
@@ -1900,7 +1884,7 @@ int		InitINCY119( void )
 					d_mode = 2;
 					res = ERROR;
 				} else {
-		//			R_CS_IOCheckRegisterBoard( Incy76Ch, -1, "IN-CY-76" );	// I/Oƒ`ƒFƒbƒN—p‚Éƒ{[ƒh“o˜^
+		//			R_CS_IOCheckRegisterBoard( Incy76Ch, -1, "IN-CY-76" );	// I/Oï¿½`ï¿½Fï¿½bï¿½Nï¿½pï¿½Éƒ{ï¿½[ï¿½hï¿½oï¿½^
 					sprintf( Comment, " IN-CY-119 DSW:%X ", dsw );
 					d_color = DRAW_GREEN;
 					d_mode = 1;
@@ -1927,7 +1911,7 @@ int		InitINCY122( void )
 		GpioOutPort	= DrCy83Ch | CNa_OUT_port_1;
 
 		{
-			if (OK != R_gpio_open(DrCy83Ch)) {	// Šî”ÂID‚ÍADR-CY-83İ’è‚Æ“¯‚¶•Ï”‚ğg‚¤
+			if (OK != R_gpio_open(DrCy83Ch)) {	// ï¿½ï¿½ï¿½IDï¿½ÍADR-CY-83ï¿½İ’ï¿½Æ“ï¿½ï¿½ï¿½ï¿½Ïï¿½ï¿½ï¿½ï¿½gï¿½ï¿½
 				char*	string = "GPIO board open error!";
 				printf("ERROR: %s\n", string);
 				R_DrawPopupMessage(POPUP_WAIT_CLICK, string);
@@ -1974,7 +1958,7 @@ int		CheckParameterFile( void )
 	{
 		int						ans = OK;
 
-		// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹
+		// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½
 			if( 0 != strcmp( ProductName,		SyFile.Prod ) )	ans = ERROR;
 			if( 0 != strcmp( InspectionName,	SyFile.Insp ) )	ans = ERROR;
 			if( 0 != strcmp( ProgramVer,		SyFile.Ver ) )	ans = ERROR;
@@ -1984,7 +1968,7 @@ int		CheckParameterFile( void )
 				DrawMessage( Comment, DRAW_RED, 2, 0 );
 				return ERROR;
 			}
-		// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹i”»’è’lj
+		// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½lï¿½j
 			if( 0 != strcmp( ProductName,		JdFile.Prod ) )	ans = ERROR;
 			if( 0 != strcmp( InspectionName,	JdFile.Insp ) )	ans = ERROR;
 			if( 0 != strcmp( ProgramVer,		JdFile.Ver ) )	ans = ERROR;
@@ -1994,7 +1978,7 @@ int		CheckParameterFile( void )
 				DrawMessage( Comment, DRAW_RED, 2, 0 );
 				return ERROR;
 			}
-		// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹i»•iƒf[ƒ^j
+		// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½ï¿½iï¿½fï¿½[ï¿½^ï¿½j
 			if( 0 != strcmp( ProductName,		TyFile.Prod ) )	ans = ERROR;
 			if( 0 != strcmp( InspectionName,	TyFile.Insp ) )	ans = ERROR;
 			if( 0 != strcmp( ProgramVer,		TyFile.Ver ) )	ans = ERROR;
@@ -2004,21 +1988,21 @@ int		CheckParameterFile( void )
 				DrawMessage( Comment, DRAW_RED, 2, 0 );
 				return ERROR;
 			}
-		// ƒpƒ‰ƒ[ƒ^Šm”F€–Úˆê’v
+		// ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½mï¿½Fï¿½ï¿½ï¿½Úˆï¿½v
 			return(ans);
 
 	}
 
 
 /********************************************************************
-	ŠÖ”–¼F	‚h‚‚‰‚”‚‰‚‚Œ‚t‚“‚…‚’‚n‚‚qQ‚b‚r
-	‹@  ”\F	R_CSŠÖ”‰Šúİ’è
-	Œ`  ®F	int InitialUserOnR_CS(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F	¦ R_CS‚Ö‚Ì“o˜^•û–@
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½ï¿½qï¿½Qï¿½bï¿½r
+	ï¿½@  ï¿½\ï¿½F	R_CSï¿½Öï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	int InitialUserOnR_CS(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ R_CSï¿½Ö‚Ì“oï¿½^ï¿½ï¿½ï¿½@
 				R_CS_SetFunctionUserInitial(InitialUserOnR_CS);
 **********************************************************************/
 int InitialUserOnR_CS(void)
@@ -2026,19 +2010,19 @@ int InitialUserOnR_CS(void)
 		int						res;
 		int						pn;
 
-		// ƒo[ƒWƒ‡ƒ“•\¦ƒ‚[ƒh‚ğİ’è
+		// ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½İ’ï¿½
 			sprintf( Comment, "Ver. %s", ProgramVer );
 			if(!(Option & MECHA_CHECK))		R_CS_SetDispVersionString( Comment );
 			else							R_CS_SetDispVersionString( "ADJUST");
 			R_CS_SetDispVersionMode( R_CS_VER_USER );
 
-		// ŒŸ¸î•ñ		¦ƒJƒƒ‰ŠÖŒW‚Ìİ’è‚Ì‘O‚ÉÀs‚·‚é
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½		ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÖŒWï¿½Ìİ’ï¿½Ì‘Oï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½
 //			sprintf( Comment, "%s[%s%s%s]%s", ProductName, MarkChar, DataClass[InspClass], PilotDisp[PilotFlag], MachineName );
 			sprintf( Comment, "%s[%s ]%s", ProductName, MarkChar,  MachineName );
 			res = R_CS_SetInspectionInfo(1, 1, 1, 1, 1, 1, InspectionName, Comment);
 			if(res!=OK)		return ERROR;
 
-		// ƒJƒƒ‰ŠÖ˜Aİ’è
+		// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ö˜Aï¿½İ’ï¿½
 			if (CAM_ACA2000KM == SystemPara.nCameraName){
 				int	result = R_video_init(CAM_ACA2000KM, VM_640_480_EXT, SHUTTER, 0);
 				if (OK != result) {
@@ -2076,17 +2060,17 @@ int InitialUserOnR_CS(void)
             InspGray4Pn	= BASE4_GRAYADDRESS;
 
 
-        // ƒƒ‚ƒŠ‰Šú‰»
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			for( pn=0; pn<10; pn++ ) {
 				GrayClsPn( pn, 0, 0, FxSize-1, FySize-1 );
 				BinClsPn( pn, 0, 0, FxSize-1, FySize-1 );
 			}
 
-		// ƒVƒƒƒbƒ^ƒXƒs[ƒh‚Ìİ’è
+		// ï¿½Vï¿½ï¿½ï¿½bï¿½^ï¿½Xï¿½sï¿½[ï¿½hï¿½Ìİ’ï¿½
 			res = R_CS_SetShutterSpeed(0, 0, SystemPara.nShutterSpeed);
 			if(res!=OK)		return ERROR2;
 
-		// æ‚è‚İ‰æ‘œ‚Ìİ’è
+		// ï¿½ï¿½èï¿½İ‰æ‘œï¿½Ìİ’ï¿½
 ///			if(OK!=R_CS_SetImagePara(0, 0, 1, BASE_GRAYADDRESS, "?????")){
 ///				printf("Camera ch0 SettingError\n");
 ///			}
@@ -2094,29 +2078,29 @@ int InitialUserOnR_CS(void)
 				printf("Camera ch0 SettingError\n");
 			}
 
-		// ŒŸ¸ƒpƒ‰ƒ[ƒ^‰Šú‰»
+		// ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			InitialInspectionData();
 
-		// NGƒJƒEƒ“ƒ^İ’è
+		// NGï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½İ’ï¿½
 ///			R_CS_SetCounterNgCode(NgCode);
 ///			R_CS_SetCounterNgClass(NgClass);
 			SetCounter();
 
-		// ’ÊMİ’è
+		// ï¿½ÊMï¿½İ’ï¿½
 			if((Option & IO_INCY122) == 0){
 				R_CS_SetCommunicationMode(R_CS_COMMUNICATION_LED_BOARD_IO, GPDAC_DSW);
 			} else {
 				R_CS_SetCommunicationMode(R_CS_COMMUNICATION_USER, GpioInPort);
 			}
 
-		// R_bgray_thresholding‚Ì‰Šú‰»‚ğs‚¤
+		// R_bgray_thresholdingï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 		//	if( ERROR == R_bgray_thresholding_open( THRESH_DEPTH_8BIT )) {
 		//		sprintf( Comment, " *** R_bgray_thresholding_open ERROR *** \n [ malloc Error ] " );
 		//		DrawMessage( Comment, DRAW_RED, 2, 0 );
 		//		return ERROR;
 		//	}
 
-		// “Á’¥—ÊŠi”[—ÌˆæŠm•Û
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ÊŠiï¿½[ï¿½Ìˆï¿½mï¿½ï¿½
 			res = R_measure_open( &Mpx, 2000 );
 			if( res != OK ) {
 				sprintf( Comment, " *** R_measure_open ERROR *** \n [ Error code : %d ] ", res );
@@ -2124,27 +2108,27 @@ int InitialUserOnR_CS(void)
 				return ERROR;
 			}
 
-		// ƒƒoƒXƒg„’èƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒI[ƒvƒ“
+		// ï¿½ï¿½ï¿½oï¿½Xï¿½gï¿½ï¿½ï¿½èƒ‰ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ÌƒIï¿½[ï¿½vï¿½ï¿½
 			res = R_robust_open(MAX_POINT);
 			if( res != OK ) {
 				sprintf( Comment, " *** R_robust_open ERROR *** \n [ Error code : %d ] ", res );
 				DrawMessage( Comment, DRAW_RED, 2, 0 );
 				return ERROR;
 			}
-		// À•W“_ŒQ‚Ì—ÌˆæŠm•Û
+		// ï¿½ï¿½ï¿½Wï¿½_ï¿½Qï¿½Ì—Ìˆï¿½mï¿½ï¿½
 			if(NULL == ( Src_point_adr = (R_POINT *)malloc(MAX_POINT * sizeof(R_POINT))))return ERROR;
 			if(NULL == ( Dst_point_adr = (R_POINT *)malloc(MAX_POINT * sizeof(R_POINT))))return ERROR;
 			Src_point = Src_point_adr;
 			Dst_point = Dst_point_adr;
 
-		// --- ŒŸ¸—pŠÖ”‰Šú‰» ---
-			if(OK!=R_gs_defadrs( INITIAL_PTN_AREA )){		//ƒOƒŒ[ƒT[ƒ`‰Šú‰»
+		// --- ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Öï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ---
+			if(OK!=R_gs_defadrs( INITIAL_PTN_AREA )){		//ï¿½Oï¿½ï¿½ï¿½[ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				sprintf( Comment, " !! gray search initialize error !! ");
 				DrawMessage( Comment, DRAW_RED, 2, 0 );
 				return ERROR;
 			}
 
-		// --- ‹@‘äNo.İ’è ---
+		// --- ï¿½@ï¿½ï¿½No.ï¿½İ’ï¿½ ---
 
 			SetMcacineNo();
 		// --- insp. Type name set
@@ -2154,10 +2138,10 @@ int InitialUserOnR_CS(void)
 		if(res!=OK)		return ERROR;
 		R_CS_DispTitle(INSPECT_MANUAL);
 
-		// --- ‰Šú‰»Š®—¹ƒtƒ‰ƒO
+		// --- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
 			InitializeFlag = ERROR;
 
-	// ŒŸ¸ƒvƒƒOƒ‰ƒ€‰Šú‰»
+	// ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //	if(OK!=InspectionOpen()){
 //		printf("*E* InspectionOpen\n");
 //		return ERROR;
@@ -2177,33 +2161,33 @@ int InitialUserOnR_CS(void)
 static int InitialUserOnR_CSLast(void)
 	{
 
-		// æ‚è‚İ‰æ‘œ‚Ìİ’è
+		// ï¿½ï¿½èï¿½İ‰æ‘œï¿½Ìİ’ï¿½
 			if(OK!=R_CS_SetImagePara(0, 0, 1, BASE_GRAYADDRESS, "?????")){
 				printf("Camera ch0 SettingError\n");
 			}
 
-		//INDEXŒŸ¸—p@R_TRANS_DATA\‘¢‘Ì‚ÌOPEN
+		//INDEXï¿½ï¿½ï¿½ï¿½ï¿½pï¿½@R_TRANS_DATAï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½OPEN
 			if( OK != R_trans_data_open( &IndexTrans, TRANS_TYPE_INT, FxSize ) ){
 				printf("R_trans_open()  error!!   --INDEX--\n");
 				return ERROR;
 			} else {
 				printf(" InspPara.tIndex.tTrans.id=%x\n", IndexTrans.id);
-				R_trans_para_set_count_smooth( IndexTrans, 1 );		// •½ŠŠ‰»‰ñ”‚Ìİ’è
-				R_trans_para_set_index       ( IndexTrans, 1 );		// ‰½”Ô–Ú‚Ì´¯¼Ş‚ğ‚Æ‚é‚©
-				R_trans_para_set_thickness   ( IndexTrans, 5 );		// •½ŠŠ‰»ˆ—•
-				R_trans_para_set_diff_step   ( IndexTrans, 1 );		// ‚PŸ”÷•ªŠÔŠu
-				R_trans_para_set_thresh_amp  ( IndexTrans, 1000 );	// U•‚µ‚«‚¢’l
-				R_trans_para_set_thresh_area ( IndexTrans, 100 );	// –ÊÏ‚µ‚«‚¢’l
+				R_trans_para_set_count_smooth( IndexTrans, 1 );		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚Ìİ’ï¿½
+				R_trans_para_set_index       ( IndexTrans, 1 );		// ï¿½ï¿½ï¿½Ô–Ú‚Ì´ï¿½ï¿½Ş‚ï¿½ï¿½Æ‚é‚©
+				R_trans_para_set_thickness   ( IndexTrans, 5 );		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				R_trans_para_set_diff_step   ( IndexTrans, 1 );		// ï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÔŠu
+				R_trans_para_set_thresh_amp  ( IndexTrans, 1000 );	// ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l
+				R_trans_para_set_thresh_area ( IndexTrans, 100 );	// ï¿½ÊÏ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l
 			}
 
-		// DR-X-124İ’è
+		// DR-X-124ï¿½İ’ï¿½
 			if(0 == (Option&NO_DRX124) && (LedControllMode == LED_CONTROLL_DRX124 )){
 				if(OK != DrX124ConditionSet()){
-					R_DrawPopupMessage(POPUP_WAIT_CLICK,"DR-X-124 Condisiton Set Error");		// ƒNƒŠƒbƒN‘Ò‚¿‚·‚é‚æ‚¤‚ÉC³
+					R_DrawPopupMessage(POPUP_WAIT_CLICK,"DR-X-124 Condisiton Set Error");		// ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ÉCï¿½ï¿½
 					return ERROR;
 				}
-				// CO-CZ-43‚ÌƒgƒŠƒKo—Í‚ğ—LŒø‚É‚·‚é
-				// (R_CS‚ÅƒJƒƒ‰İ’èCO-CZ-43İ’è‚ğ‚µ‚½Œã‚És‚¤•K—v‚ª‚ ‚é)
+				// CO-CZ-43ï¿½Ìƒgï¿½ï¿½ï¿½Kï¿½oï¿½Í‚ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
+				// (R_CSï¿½ÅƒJï¿½ï¿½ï¿½ï¿½ï¿½İ’èCO-CZ-43ï¿½İ’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ésï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 				{
 					int nOldId = R_video_get_card_id();
 					R_change_video_card(0);
@@ -2212,28 +2196,28 @@ static int InitialUserOnR_CSLast(void)
 				}
 			}
 
-			// ‹ÆÒ’²®ƒ‚[ƒh‚Íƒo[ƒR[ƒhİ’è–³‚µ‚Å‰Ò“­‚Å‚«‚é
+			// ï¿½ÆÒ’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Íƒoï¿½[ï¿½Rï¿½[ï¿½hï¿½İ’è–³ï¿½ï¿½ï¿½Å‰Ò“ï¿½ï¿½Å‚ï¿½ï¿½ï¿½
 			if((Option & MECHA_CHECK)){
 				InitializeFlag = OK;
-				TWA_Spec		= SpecResin;	//’Êí•i
-				TWA_Insp_level	= Insp_Low;		//’ÊíŒŸ¸
+				TWA_Spec		= SpecResin;	//ï¿½Êï¿½i
+				TWA_Insp_level	= Insp_Low;		//ï¿½ÊíŒŸï¿½ï¿½
 				TWA_Insp_mode   = Insp_Normal;
-				InspClass		= CLASS_J;		// J‹‰
+				InspClass		= CLASS_J;		// Jï¿½ï¿½
 			}
-			// — –ÊŒŸ¸‚ÍAƒo[ƒR[ƒhİ’è–³‚µ‚Å‚à‰Ò“­o—ˆ‚é
+			// ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍAï¿½oï¿½[ï¿½Rï¿½[ï¿½hï¿½İ’è–³ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ò“ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½
 			if((Option & BACKINSP_MODE)){
 				InitializeFlag = OK;
 				TWA_Spec		= SpecResin;		//MCR01 Nitto
-				TWA_Insp_level	= Insp_Low;			//’ÊíŒŸ¸
+				TWA_Insp_level	= Insp_Low;			//ï¿½ÊíŒŸï¿½ï¿½
 				TWA_Insp_mode   = Insp_Pinhole;
-				InspClass       = CLASS_J;			// J‹‰
+				InspClass       = CLASS_J;			// Jï¿½ï¿½
 			}
 
 			if(bIsNitto){
-				TP_Bright_xs		= 50;						//LEDÆ–¾Æ“xŠÄ‹ Area xs
-				TP_Bright_ys		= 20;						//LEDÆ–¾Æ“xŠÄ‹ Area ys
-				TP_Bright_xl		= 200;						//LEDÆ–¾Æ“xŠÄ‹ Area xl
-				TP_Bright_yl		= 20;						//LEDÆ–¾Æ“xŠÄ‹ Area yl
+				TP_Bright_xs		= 50;						//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area xs
+				TP_Bright_ys		= 20;						//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area ys
+				TP_Bright_xl		= 200;						//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area xl
+				TP_Bright_yl		= 20;						//LEDï¿½Æ–ï¿½ï¿½Æ“xï¿½Äï¿½ Area yl
 			}
 		return OK;
 	}
@@ -2282,13 +2266,13 @@ static int SetDateTime( int nMenuNumber )
 	}
 
 /**********************************************************
-	ŠÖ”–¼F	‚o‚’‚‚‡‚d‚˜‚‰‚”
-	‹@  ”\F	ƒvƒƒOƒ‰ƒ€I—¹ˆ—
-	Œ`  ®F	void ProgExit(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	void ProgExit(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 void ProgExit(void)
 {
@@ -2299,14 +2283,14 @@ void ProgExit(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚`‚•‚”‚‚l‚‚„‚…‚q‚…‚‚„‚™
-	‹@  ”\F	ƒI[ƒg“®ì‚Ì€”õ‚ğs‚¤
-	Œ`  ®F	int AutoModeReady(void)
-	ˆø‚«”F	–³‚µ
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF	BUSYM†‚ğƒNƒŠƒA‚·‚é‚È‚ÇA’ÊM‰Â”\‚Èó‘Ô‚É‚·‚é
-	—¯ˆÓ–€F	¦ R_CS‚Ö‚Ì“o˜^•û–@
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Iï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	int AutoModeReady(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	BUSYï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½È‚ÇAï¿½ÊMï¿½Â”\ï¿½Èï¿½Ô‚É‚ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ R_CSï¿½Ö‚Ì“oï¿½^ï¿½ï¿½ï¿½@
 				R_CS_SetFunctionAutoModeReady(AutoModeReady);
 **********************************************************/
 int AutoModeReady(void)
@@ -2329,20 +2313,20 @@ int AutoModeReady(void)
 	//	OutputSaveBusyOff();
 	}
 	if(0 == (Option&NO_DRX124) && (LedControllMode == LED_CONTROLL_DRX124 )){
-		DrX124ResetTurn();			// “_“”ƒpƒ^[ƒ“‚ğƒŠƒZƒbƒg‚·‚é	 USB‚ÌÚ‘±‚ªØ‚ê‚Ä‚¢‚½ê‡‚ÍÄÚ‘±‚·‚é
+		DrX124ResetTurn();			// ï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½	 USBï¿½ÌÚ‘ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍÄÚ‘ï¿½ï¿½ï¿½ï¿½ï¿½
 	}
 	return OK;
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚`‚•‚”‚‚l‚‚„‚…‚b‚Œ‚‚“‚‰‚‚‡
-	‹@  ”\F	ƒI[ƒg“®ì‚ÌI—¹ˆ—‚ğs‚¤
-	Œ`  ®F	int AutoModeClosing(void)
-	ˆø‚«”F	–³‚µ
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF	BUSYM†‚ğƒIƒ“‚·‚é‚È‚ÇA’ÊM•s‰Â”\‚Èó‘Ô‚É‚·‚é
-	—¯ˆÓ–€F	¦ R_CS‚Ö‚Ì“o˜^•û–@
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Iï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ÌIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	int AutoModeClosing(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	BUSYï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ÇAï¿½ÊMï¿½sï¿½Â”\ï¿½Èï¿½Ô‚É‚ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ R_CSï¿½Ö‚Ì“oï¿½^ï¿½ï¿½ï¿½@
 				R_CS_SetFunctionAutoModeClosing(AutoModeClosing);
 **********************************************************/
 int AutoModeClosing(void)
@@ -2365,14 +2349,14 @@ int AutoModeClosing(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚`‚•‚”‚‚l‚‚„‚…‚d‚˜‚…‚ƒ‚•‚”‚…
-	‹@  ”\F	ƒI[ƒg“®ì‚ÅA’ÊM‚ÌŠO•”ƒgƒŠƒK‚Ìƒ`ƒFƒbƒN‚ğs‚¤
-	Œ`  ®F	int AutoModeExecute(int code)
-	ˆø‚«”F	int code	ƒI[ƒg“®ìƒR[ƒh
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F	¦ R_CS‚Ö‚Ì“o˜^•û–@
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Iï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ÅAï¿½ÊMï¿½ÌŠOï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Kï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½sï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	int AutoModeExecute(int code)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int code	ï¿½Iï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½h
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ R_CSï¿½Ö‚Ì“oï¿½^ï¿½ï¿½ï¿½@
 				R_CS_SetFunctionAutoModeExecute(AutoModeExecute);
 					R_CS_CODE_NO_SIGNAL			0
 					R_CS_CODE_INSPECT_START		1	0x01
@@ -2386,7 +2370,7 @@ int		AutoModeExecute(int code)
 	{
 		int						ret=OK;
 //		int                     n,dn;    //2012.03.14
-//		R_CS_COUNTER_DATA		*pCounter	= R_CS_GetCounterDataStruct(0);			// ƒJƒEƒ“ƒ^\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^æ“¾ //2012.03.14
+//		R_CS_COUNTER_DATA		*pCounter	= R_CS_GetCounterDataStruct(0);			// ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½\ï¿½ï¿½ï¿½Ì‚Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½æ“¾ //2012.03.14
 
 //			dn = 0x0ff & ~(R_gpio_read( Incy76Ch | CNa_IN_port_1 ));                //2012.03.14
 //			if(dn==0x0ff) Lot_num++;                                                //2012.03.14
@@ -2418,7 +2402,7 @@ int		AutoModeExecute(int code)
 		// Spec set
 			if((Option & NO_DRCY80)==0){
 				if( CheckSpecSet() == 0 ) {
-					if((1==bIsNitto)||(0==(Option & BACKINSP_MODE))){		//v2.11 “ú“Œ‚Ìor— –Ê‚¶‚á‚È‚¢
+					if((1==bIsNitto)||(0==(Option & BACKINSP_MODE))){		//v2.11 ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½orï¿½ï¿½ï¿½Ê‚ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½
 						if( OK == SpecSet(0) ){
 							if(GLMode != YES){
 								R_CS_CounterAllClear();
@@ -2474,13 +2458,13 @@ static int AutoModeExecuteNwt( int code )
 	int nStartBit;
 	int nColletNumber;
 	int nWorkState;
-//	if(0<SystemPara.nWaitIoRead)	UserTimeDelay(SystemPara.nWaitIoRead);							// I/O“Ç‚İæ‚è‘Oƒ^ƒCƒ}[usec](ƒ|[ƒŠƒ“ƒO‚ÉƒoƒX‚ğè—L‚µ‚Ä‚µ‚Ü‚¤‚Ì‚ğ–h‚®‚Ì‚É•K—v)		0‚È‚çÀs‚µ‚È‚¢ 2013/05/03 by sassa
+//	if(0<SystemPara.nWaitIoRead)	UserTimeDelay(SystemPara.nWaitIoRead);							// I/Oï¿½Ç‚İï¿½ï¿½Oï¿½^ï¿½Cï¿½}[usec](ï¿½|ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Éƒoï¿½Xï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ì‚ï¿½hï¿½ï¿½ï¿½Ì‚É•Kï¿½v)		0ï¿½È‚ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½È‚ï¿½ 2013/05/03 by sassa
 	UserTimeDelay(100);
 	data = InputByte();
 
-	code = code;	// ˆø”‚ğ–¢g—p‚Ì‚Æ‚«‚É‚Å‚éƒ[ƒjƒ“ƒO‘Îô
+	code = code;	// ï¿½ï¿½ï¿½ï¿½ï¿½ğ–¢gï¿½pï¿½Ì‚Æ‚ï¿½ï¿½É‚Å‚éƒï¿½[ï¿½jï¿½ï¿½ï¿½Oï¿½Îï¿½
 
-	// IO‚Ìó‘Ô‚ğ•\¦‚·‚é
+	// IOï¿½Ìï¿½Ô‚ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//if(SystemPara.nFlagDispIoStatus){
 	{
 		int posi_x = DrawPosi_IoStatus.x;
@@ -2490,7 +2474,7 @@ static int AutoModeExecuteNwt( int code )
 		R_DrawPrintf(DRAW_WHITE, DISP_NORMAL, posi_x, posi_y+2, "OUT:%02X", GetOutputStatus());	// 2015.01.15 by araki
 	}
 
-	// ƒXƒ‹[ƒ‚[ƒh‚ÌƒLƒƒƒvƒ`ƒƒ‚ğs‚¤
+	// ï¿½Xï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½hï¿½Ìï¿½ï¿½Lï¿½ï¿½ï¿½vï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 //	if(ON == ThroughCapture){
 //		if(R_time_read(&ThroughTimer) > ThroughInt){
 //			CaptureThroughUser(0);
@@ -2498,21 +2482,21 @@ static int AutoModeExecuteNwt( int code )
 //		}
 //	}
 
-	// ƒXƒ^[ƒg‚ªON‚È‚çƒtƒ@ƒ“ƒNƒVƒ‡ƒ“M†‚ğƒ`ƒFƒbƒN‚µ‚ÄA‚»‚ê‚É]‚Á‚½ˆ—‚ğs‚¤
+	// ï¿½Xï¿½^ï¿½[ï¿½gï¿½ï¿½ONï¿½È‚ï¿½tï¿½@ï¿½ï¿½ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½ï¿½É]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 	nStartBit = GetStartBit(data);
-	if(0 == nStartBit){			// ‰Šú’l‚Í0‚ÅON
+	if(0 == nStartBit){			// ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½0ï¿½ï¿½ON
 
 	//	if (SystemPara.nFlagDispTimeOfWaitTrigger) {
 	//		R_gui_display_clock_stop(_guiDisplayClock);
 	//	}
 
-	//	if( 0 < SystemPara.nWaitSignalInput){		// ƒ^ƒCƒ}‚ª“ü‚Á‚Ä‚¢‚éê‡‚ÍA‘Ò‚Á‚Ä‚©‚çÄ“xƒf[ƒ^‚ğ“Ç‚Ş
-	//		// “ü—Í‚ªˆÀ’è‚·‚é‚Ü‚Å‚Ìƒ^ƒCƒ}
-	//		if(0<SystemPara.nWaitSignalInput)	UserTimeDelay(SystemPara.nWaitSignalInput);		// 0‚È‚çÀs‚µ‚È‚¢
+	//	if( 0 < SystemPara.nWaitSignalInput){		// ï¿½^ï¿½Cï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½Ò‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ä“xï¿½fï¿½[ï¿½^ï¿½ï¿½Ç‚ï¿½
+	//		// ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½è‚·ï¿½ï¿½Ü‚Å‚Ìƒ^ï¿½Cï¿½}
+	//		if(0<SystemPara.nWaitSignalInput)	UserTimeDelay(SystemPara.nWaitSignalInput);		// 0ï¿½È‚ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½È‚ï¿½
 	//		data = InputByte();
 	//	}
 
-		// ‹¤’ÊƒXƒe[ƒVƒ‡ƒ“ƒ^ƒCƒv
+		// ï¿½ï¿½ï¿½ÊƒXï¿½eï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½v
 		if(CommunicationDeviceShareId == 999){
 			unsigned long long int mask = 0;
 			for(i = 0; i < CommunicationDeviceUseLen; i++) mask = (mask<<1) + 1;
@@ -2522,9 +2506,9 @@ static int AutoModeExecuteNwt( int code )
 			{	data = ( ~data) & 0xFFFF;	/*printf("reverse off\n");*/ }
 		}
 
-			// ƒJƒEƒ“ƒ^ƒNƒŠƒAƒ`ƒFƒbƒN
+			// ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½Nï¿½ï¿½ï¿½Aï¿½`ï¿½Fï¿½bï¿½N
 			if(0x00ff==(GetCounterClear(data) & 0x60ff)){
-				// ’ÊMî•ñ‚Ì•\¦
+				// ï¿½ÊMï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
 				{
 					int posi_x = DrawPosi_IoStatus.x;
 					int posi_y = DrawPosi_IoStatus.y + 3;
@@ -2539,9 +2523,9 @@ static int AutoModeExecuteNwt( int code )
 				OutputBusyOnNwt();
 				goto COMMON_END;
 			}
-			// ƒŒƒV[ƒgƒf[ƒ^ì¬
+			// ï¿½ï¿½ï¿½Vï¿½[ï¿½gï¿½fï¿½[ï¿½^ï¿½ì¬
 			if(0x00fe==(GetCounterClear(data) & 0x60ff)){
-				// ’ÊMî•ñ‚Ì•\¦
+				// ï¿½ÊMï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
 				{
 					int posi_x = DrawPosi_IoStatus.x;
 					int posi_y = DrawPosi_IoStatus.y + 3;
@@ -2554,55 +2538,55 @@ static int AutoModeExecuteNwt( int code )
 				OutputBusyOnNwt();
 				goto COMMON_END;
 			}
-			// ƒI[ƒgƒƒbƒgƒXƒ^[ƒgƒ`ƒFƒbƒN
+			// ï¿½Iï¿½[ï¿½gï¿½ï¿½ï¿½bï¿½gï¿½Xï¿½^ï¿½[ï¿½gï¿½`ï¿½Fï¿½bï¿½N
 		//	if((0<=SystemPara.tInputPara.nCheckLotStart)&&(SystemPara.tInputPara.nCheckLotStart==GetLotStart(data))){
 		//		AutoLotStart();
 		//		goto COMMON_END;
 		//	}
-			// ‹³¦ƒ‚[ƒhƒ`ƒFƒbƒN
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½`ï¿½Fï¿½bï¿½N
 		//	tInputState.nRegistration = GetRegistration(data);
-		//	if(tInputState.nRegistration==-1){							// ƒrƒbƒg”Ô†orƒrƒbƒg”ˆÙí  2015/06/02 kitamura
+		//	if(tInputState.nRegistration==-1){							// ï¿½rï¿½bï¿½gï¿½Ôï¿½orï¿½rï¿½bï¿½gï¿½ï¿½ï¿½Ùï¿½  2015/06/02 kitamura
 		//		printf("Registnumber parameter %d,%d(not 1-%d)", SystemPara.tInputPara.nRegistrationBitStart, SystemPara.tInputPara.nRegistrationBitSize, nMaxBitNumber);
-		//		tInputState.nRegistration = -2;				// g—p‚µ‚È‚¢ƒtƒ‰ƒO‚ğ—§‚Ä‚é 2015/06/02 kitamura
-		//	}else if(tInputState.nRegistration!=-2){		// g—p‚·‚éê‡
-		//		if((0<=SystemPara.tInputPara.nCheckRegistration_0)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_0)){								// 0“x‚ÌRegistration
-		//			for(i=0;i<USER_CAMERA_NUMBER;i++)	SystemPara.nInspImageRotateMode[i] = 0;		// ‹­§“I‚É‰ñ“]–³‚µ‚É‚·‚é
+		//		tInputState.nRegistration = -2;				// ï¿½gï¿½pï¿½ï¿½ï¿½È‚ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½ 2015/06/02 kitamura
+		//	}else if(tInputState.nRegistration!=-2){		// ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ê‡
+		//		if((0<=SystemPara.tInputPara.nCheckRegistration_0)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_0)){								// 0ï¿½xï¿½ï¿½Registration
+		//			for(i=0;i<USER_CAMERA_NUMBER;i++)	SystemPara.nInspImageRotateMode[i] = 0;		// ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½É‰ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
 		//			AutoInspectStart(AUTO_START_REGISTER);
 		//			goto COMMON_END;
-		//		}else if((0<=SystemPara.tInputPara.nCheckRegistration_90)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_90)){							// 90“x‚ÌRegistration –¢‘Î‰
+		//		}else if((0<=SystemPara.tInputPara.nCheckRegistration_90)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_90)){							// 90ï¿½xï¿½ï¿½Registration ï¿½ï¿½ï¿½Î‰ï¿½
 		//			R_DrawPopupMessage(POPUP_WAIT_CLICK, "Now, no function registration rotate 90 %x\n", SystemPara.tInputPara.nCheckRegistration_90);
 		//			goto COMMON_END;
-		//		}else if((0<=SystemPara.tInputPara.nCheckRegistration_180)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_180)){						// 180“x‚ÌRegistration –¢‘Î‰
-		//			for(i=0;i<USER_CAMERA_NUMBER;i++)	SystemPara.nInspImageRotateMode[i] = 1;		// ‹­§“I‚É180“x‰ñ“]‚·‚é
+		//		}else if((0<=SystemPara.tInputPara.nCheckRegistration_180)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_180)){						// 180ï¿½xï¿½ï¿½Registration ï¿½ï¿½ï¿½Î‰ï¿½
+		//			for(i=0;i<USER_CAMERA_NUMBER;i++)	SystemPara.nInspImageRotateMode[i] = 1;		// ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½180ï¿½xï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½
 		//			AutoInspectStart(AUTO_START_REGISTER);
 		//			goto COMMON_END;
-		//		}else if((0<=SystemPara.tInputPara.nCheckRegistration_270)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_270)){						// 270“x‚ÌRegistration –¢‘Î‰
+		//		}else if((0<=SystemPara.tInputPara.nCheckRegistration_270)&&(tInputState.nRegistration == SystemPara.tInputPara.nCheckRegistration_270)){						// 270ï¿½xï¿½ï¿½Registration ï¿½ï¿½ï¿½Î‰ï¿½
 		//			R_DrawPopupMessage(POPUP_WAIT_CLICK, "Now, no function registration rotate 270 %x\n", SystemPara.tInputPara.nCheckRegistration_270);
 		//			goto COMMON_END;
 		//		}
 		//	}
-			// ƒI[ƒgƒmƒYƒ‹ƒ`ƒFƒbƒNƒ‚[ƒhƒ`ƒFƒbƒN
+			// ï¿½Iï¿½[ï¿½gï¿½mï¿½Yï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½`ï¿½Fï¿½bï¿½N
 		//	if((0<=SystemPara.tInputPara.nCheckAutoNozzleCheck)&&(SystemPara.tInputPara.nCheckAutoNozzleCheck==GetAutoNozzleCheck(data))){
 		//		AutoNozzleCheck();
 		//		goto COMMON_END;
 		//	}
-			// ƒ}ƒjƒ…ƒAƒ‹ƒXƒ^[ƒgƒ`ƒFƒbƒN
+			// ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½gï¿½`ï¿½Fï¿½bï¿½N
 		//	if((0<=SystemPara.tInputPara.nCheckManualStart)&&(SystemPara.tInputPara.nCheckManualStart==GetManualStart(data))){
 		//		AutoInspectStart(AUTO_START_MANUAL);
 		//		goto COMMON_END;
 		//	}
-			// ƒRƒŒƒbƒg”Ô†
-			nColletNumber = (~GetColletNumber(data)) & 0xff;// +1;			// ƒƒJ‚©‚çó‚¯æ‚é’l+1
-		//	InspectResult.nColletNumber = nColletNumber;		// ƒRƒŒƒbƒg”Ô†BƒƒJ‚©‚çó‚¯æ‚é”’l+1(1‚©‚ç‚É‚·‚é‚½‚ß)
-		//	if(InspectResult.nColletNumber<=0){					// ƒrƒbƒg”Ô†orƒrƒbƒg”ˆÙíorg—p‚µ‚È‚¢ê‡‚Í0‚ğ“ü‚ê‚é
+			// ï¿½Rï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½
+			nColletNumber = (~GetColletNumber(data)) & 0xff;// +1;			// ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ó‚¯ï¿½ï¿½l+1
+		//	InspectResult.nColletNumber = nColletNumber;		// ï¿½Rï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½ï¿½Bï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ó‚¯ï¿½é”ï¿½l+1(1ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚½ï¿½ï¿½)
+		//	if(InspectResult.nColletNumber<=0){					// ï¿½rï¿½bï¿½gï¿½Ôï¿½orï¿½rï¿½bï¿½gï¿½ï¿½ï¿½Ùï¿½orï¿½gï¿½pï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		//		InspectResult.nColletNumber = 0;
 		//	}
 
-			// ƒŠƒgƒ‰ƒCƒXƒ^[ƒgƒtƒ‰ƒOƒ`ƒFƒbƒN			ƒ[ƒNƒXƒXƒe[ƒgƒ`ƒFƒbƒN‘O‚ÉˆÚ“®
-		//	if((0<=SystemPara.tInputPara.nCheckRetryStartBit)&&(SystemPara.tInputPara.nCheckRetryStartBit==GetRetryStartBit(data))){				AutoInspectStart(AUTO_START_RETRY);				goto COMMON_END;	}	// ƒŠƒgƒ‰ƒCƒXƒ^[ƒg
+			// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½Xï¿½^ï¿½[ï¿½gï¿½tï¿½ï¿½ï¿½Oï¿½`ï¿½Fï¿½bï¿½N			ï¿½ï¿½ï¿½[ï¿½Nï¿½Xï¿½Xï¿½eï¿½[ï¿½gï¿½`ï¿½Fï¿½bï¿½Nï¿½Oï¿½ÉˆÚ“ï¿½
+		//	if((0<=SystemPara.tInputPara.nCheckRetryStartBit)&&(SystemPara.tInputPara.nCheckRetryStartBit==GetRetryStartBit(data))){				AutoInspectStart(AUTO_START_RETRY);				goto COMMON_END;	}	// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½Xï¿½^ï¿½[ï¿½g
 
 			PocketNo=nColletNumber;
-			// ƒ[ƒNó‘Ôƒ`ƒFƒbƒN
+			// ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½Ôƒ`ï¿½Fï¿½bï¿½N
 			nWorkState = GetWorkState(data);
 			if(nWorkState == 3){
 											InspectStartNwt(INSPECT_AUTO);
@@ -2621,14 +2605,14 @@ static int AutoModeExecuteNwt( int code )
 	}
 COMMON_END:
 
-	// ©“®‹@íØ‚è‘Ö‚¦
+	// ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½
 //	if(OFF != AutoTypeChangeMode)	AutoTypeChange();
 
 	// Check alarm
 		//if(!(Option & MECHA_CHECK))		TP_CheckAlarm();
 		TP_CheckAlarm();
 
-	// ƒL[ƒ{[ƒhƒfƒoƒbƒO
+	// ï¿½Lï¿½[ï¿½{ï¿½[ï¿½hï¿½fï¿½oï¿½bï¿½O
 	if(Option&DEBUG_MODE){
 		if(user_kbhit()){
 			int key;
@@ -2675,23 +2659,23 @@ COMMON_END:
 
 
 /******************************************************************************
-	ŠÖ”–¼F	‚h‚‚“‚‚…‚ƒ‚”‚l‚‚‚•‚‚Œ
-	‹@  ”\F	ƒ}ƒjƒ…ƒAƒ‹ŒŸ¸Às
-	Œ`  ®F	int InspectManual(int mode, int number, R_CS_RESULT_DATA *Result)
-	ˆø‚«”F	int mode					ŒŸ¸ƒ‚[ƒh
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½s
+	ï¿½`  ï¿½ï¿½ï¿½F	int InspectManual(int mode, int number, R_CS_RESULT_DATA *Result)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int mode					ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½h
 												INSPECT_AUTO
 												INSPECT_MANUAL
 												INSPECT_STEP
-				int number					ŒŸ¸”Ô†
-				R_CS_RESULT_DATA *Result	ŒŸ¸Œ‹‰Ê\‘¢‘Ì
-	–ß‚è’lF
-				’l		’è”		ˆÓ@–¡
-				0		OK		—Ç•i
-				-1		ERROR	•s—Ç•iEˆÙíI—¹
-	‰ğ  àF	R_CSŠÖ”“à‚æ‚èAƒ}ƒjƒ…ƒAƒ‹”»’èAƒXƒeƒbƒv”»’è‚Å‚±‚Ìƒ‹[ƒ`ƒ“‚ªŒÄ‚Î‚ê‚Ü‚·B
-	—¯ˆÓ–€F	ƒƒCƒ“¨”F¯¨ƒƒ‚ƒŠ”»’è^ƒXƒeƒbƒv”»’è ‚ÅÀs‚·‚éŠÖ”
-				ƒ}ƒjƒ…ƒAƒ‹”»’è‚ÉR_CS_RESULT_DATA‚Éİ’è‚µ‚½’l‚ÍƒJƒEƒ“ƒ^ˆ—‚µ‚Ü‚¹‚ñ
-	—¯ˆÓ–€F	¦ R_CS‚Ö‚Ì“o˜^•û–@
+				int number					ï¿½ï¿½ï¿½ï¿½ï¿½Ôï¿½
+				R_CS_RESULT_DATA *Result	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê\ï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F
+				ï¿½l		ï¿½è”		ï¿½Ó@ï¿½ï¿½
+				0		OK		ï¿½Ç•i
+				-1		ERROR	ï¿½sï¿½Ç•iï¿½Eï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	R_CSï¿½Öï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Xï¿½eï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Î‚ï¿½Ü‚ï¿½ï¿½B
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Xï¿½eï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ ï¿½Åï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Öï¿½
+				ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½èï¿½ï¿½R_CS_RESULT_DATAï¿½Éİ’è‚µï¿½ï¿½ï¿½lï¿½ÍƒJï¿½Eï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ R_CSï¿½Ö‚Ì“oï¿½^ï¿½ï¿½ï¿½@
 				R_CS_SetFunctionInspect(InspectManual);
 ******************************************************************************/
 int InspectManual(int mode, int number, R_CS_RESULT_DATA *pResult)
@@ -2708,7 +2692,7 @@ int InspectManual(int mode, int number, R_CS_RESULT_DATA *pResult)
 		else					SetStepMode(OFF);
 	}
 */
-	// ŒŸ¸‘ÎÛGray Pn
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Îï¿½Gray Pn
 ///		InspGrayPn	= BASE_GRAYADDRESS;
 ///		R_move_gray_memory( InspGrayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
 		R_move_gray_memory( MANUAL_GRAYADDRESS, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -2720,12 +2704,12 @@ int InspectManual(int mode, int number, R_CS_RESULT_DATA *pResult)
 		R_move_gray_memory( InspGray4Pn, GrayP0, 0, 0, FxSize-1, FySize-1 );
 */
 
-	// --- ŒŸ¸ŠJn ---
+	// --- ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n ---
 		ProcessTimerStart();
 
 		res = Inspect( pResult );
 
-	// --- ŒŸ¸I—¹ ---
+	// --- ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ ---
 		ProcessTimerStop();
 //		if(mode==INSPECT_MANUAL)		ProcessTimerDisplay();
 		ProcessTimerDisplay();
@@ -2738,18 +2722,18 @@ if(nJudgeMode == ALL_GO) R_DrawPrintf( DRAW_RED, DISP_4, 4, 6, "WARNING : JUDGEM
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚h‚‚“‚‚…‚ƒ‚”‚r‚”‚‚’‚”
-	‹@  ”\F	ŒŸ¸‚ğs‚¢‚Ü‚·
-	Œ`  ®F	static int InputInspectStart(int mode)
-	ˆø‚«”F	int mode	ŒŸ¸ƒ‚[ƒh
-								INSPECT_AUTO	ƒI[ƒg‰Ò“®
-								INSPECT_MANUAL	ƒ}ƒjƒ…ƒAƒ‹‰Ò“®
-								INSPECT_STEP	ƒXƒeƒbƒv”»’è
-	–ß‚è’lF	OK		æ‚è‚İ¬Œ÷
-				ERROR	æ‚è‚İ¸”s
-				ERROR2	STARTM†‚ª“ü‚Á‚Ä‚¢‚È‚¢
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int InputInspectStart(int mode)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int mode	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½h
+								INSPECT_AUTO	ï¿½Iï¿½[ï¿½gï¿½Ò“ï¿½
+								INSPECT_MANUAL	ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ò“ï¿½
+								INSPECT_STEP	ï¿½Xï¿½eï¿½bï¿½vï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½èï¿½İï¿½ï¿½ï¿½
+				ERROR	ï¿½ï¿½èï¿½İï¿½ï¿½s
+				ERROR2	STARTï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static int	InspectStart(int mode)
@@ -2758,13 +2742,13 @@ static int	InspectStart(int mode)
 		int						res;
 		int                     NG_count;
 		R_LED_PARA				*pLedPara;
-		R_CS_COUNTER_DATA		*pCounter = R_CS_GetCounterDataStruct(0);		// ƒJƒEƒ“ƒ^\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^æ“¾
+		R_CS_COUNTER_DATA		*pCounter = R_CS_GetCounterDataStruct(0);		// ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½\ï¿½ï¿½ï¿½Ì‚Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½æ“¾
 
 			twa_TimeStart( &twaTime[0] );
 		// NG Limit check
 			Work_count ++;          //2011.08.17
 
-		// ŒŸ¸Œ‹‰Êo—Í
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êoï¿½ï¿½
 			switch( OutputJudge() ) {
 				case ERROR:
 					DrawMessage( "Waiting for judgment output", DRAW_RED, 5, 0 );
@@ -2784,10 +2768,10 @@ static int	InspectStart(int mode)
 
 			twa_TimeRead( &twaTime[0],0 );
 
-		// ‰æ‘œ“]‘—
+		// ï¿½æ‘œï¿½]ï¿½ï¿½
 			switch( R_CS_CaptureEndCheck(0) ) {
 				case OK:
-					if( GetGrayPn == (int)NULL ) {	// ‹N“®Œã1‰ñ–Ú
+					if( GetGrayPn == (int)NULL ) {	// ï¿½Nï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½
 						R_CS_Result[0].nCode = NG_CANT_INSP;
 						GetGrayPn = BASE_GRAYADDRESS;
 					} else {
@@ -2795,7 +2779,7 @@ static int	InspectStart(int mode)
 						if( GetGrayPn == BASE_GRAYADDRESS )	GetGrayPn = BASE2_GRAYADDRESS;
 						else								GetGrayPn = BASE_GRAYADDRESS;
 					}
-					// --- æ‚è‚İ‰æ‘œ‚Ìİ’è
+					// --- ï¿½ï¿½èï¿½İ‰æ‘œï¿½Ìİ’ï¿½
 					if(OK!=R_CS_SetImagePara(0, 0, 1, GetGrayPn, "?????")){
 						R_CS_Result[0].nCode = NG_CANT_INSP;
 					}
@@ -2808,23 +2792,23 @@ static int	InspectStart(int mode)
 					break;
 			}
 
-		// ‰æ‘œæ‚è‚İ
+		// ï¿½æ‘œï¿½ï¿½èï¿½ï¿½
 			// --- LED set
 			pLedPara = &LedPara;
-			// --- ‰æ–Êæ‚è‚İI—¹‘Ò‚¿
+			// --- ï¿½ï¿½Êï¿½èï¿½İIï¿½ï¿½ï¿½Ò‚ï¿½
 			R_time_delay(SystemPara.nCaptureTimer);
-			// --- Æ–¾“_“”
+			// --- ï¿½Æ–ï¿½ï¿½_ï¿½ï¿½
 			R_LedOn(pLedPara);
-			// --- æ‚è‚İ
+			// --- ï¿½ï¿½èï¿½ï¿½
 			res = R_CS_Capture(0, 0, 0);
 			if( res != OK ) {
 				R_CS_Result[0].nCode = NG_CAPTURE;
 				printf("*E* Capture ERROR:%d\n", res);
 			}
-			// --- Æ–¾Á“”
+			// --- ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
 			R_LedOff(pLedPara);
 
-		// --- ƒXƒ^[ƒgM†‚n‚e‚eŠm”F
+		// --- ï¿½Xï¿½^ï¿½[ï¿½gï¿½Mï¿½ï¿½ï¿½nï¿½eï¿½eï¿½mï¿½F
 			OutputBusyOn();
 			twa_TimeRead( &twaTime[0],1 );
 
@@ -2836,7 +2820,7 @@ static int	InspectStart(int mode)
 			}
 			R_time_start( &RTWaitTime );
 			while( 0 == CheckInspStart() ) {
-				// --- ƒ^ƒCƒ€ƒAƒEƒg
+				// --- ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½
 				if( 3000000 < R_time_read(&RTWaitTime) ) {
 					R_CS_Result[0].nCode = NG_CANT_INSP;
 					sprintf( Comment, "Insp. start signal ERROR" );
@@ -2845,7 +2829,7 @@ static int	InspectStart(int mode)
 			}
 ///			OutputBusyOff();
 
-		// ”»’èo—ÍƒNƒŠƒA
+		// ï¿½ï¿½ï¿½ï¿½oï¿½ÍƒNï¿½ï¿½ï¿½A
 			OutputJudgeNg();
 			twa_TimeRead( &twaTime[0],2 );
 
@@ -2863,20 +2847,20 @@ static int	InspectStart(int mode)
 				}
 			}
 
-		// ‚±‚Ì“_‚ÅGray_address[BASE_GRAYADDRESS]‚É‰æ‘œ‚ªæ‚è‚Ü‚ê‚Ä‚¢‚Ü‚·
+		// ï¿½ï¿½ï¿½Ìï¿½ï¿½_ï¿½ï¿½Gray_address[BASE_GRAYADDRESS]ï¿½É‰æ‘œï¿½ï¿½ï¿½ï¿½èï¿½Ü‚ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½
 		// int InspectManual(int mode, R_CS_RESULT_DATA *pCsResult)
 
-		// --- ‰æ‘œ•Û‘¶—p ---
+		// --- ï¿½æ‘œï¿½Û‘ï¿½ï¿½p ---
 			R_move_gray_memory( InspGrayPn, SAVE_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 			R_move_gray_memory( InspGrayPn, MANUAL_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 			twa_TimeRead( &twaTime[0],3 );
 
-		// --- ŒŸ¸ŠJn ---
+		// --- ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n ---
 			if( 0 == R_CS_Result[0].nCode )	Inspect( &R_CS_Result[0]);
 			else							R_time_delay(12*1000);		// 500->12 20170213 tanaka
 			twa_TimeRead( &twaTime[0],4 );
-		// --- ŒŸ¸I—¹ ---
-			ResultCode = R_CS_Result[0].nCode;							// ResultMonitor‚ÅNGƒR[ƒh‚ğ•Û‘¶‚·‚é‚½‚ß
+		// --- ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ ---
+			ResultCode = R_CS_Result[0].nCode;							// ResultMonitorï¿½ï¿½NGï¿½Rï¿½[ï¿½hï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ï¿½
 			R_CS_AfterInspection(0, mode|NO_COUNT_UP_RESULT_MONITOR);
 
 		// Data Back Up Counter
@@ -2901,9 +2885,9 @@ static int	InspectStartNwt(int mode)
 		int						dn;
 		int						res;
 		int                     NG_count;
-		R_CS_COUNTER_DATA		*pCounter = R_CS_GetCounterDataStruct(0);		// ƒJƒEƒ“ƒ^\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^æ“¾
+		R_CS_COUNTER_DATA		*pCounter = R_CS_GetCounterDataStruct(0);		// ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½\ï¿½ï¿½ï¿½Ì‚Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½æ“¾
 
-		// ’ÊMî•ñ‚Ì•\¦
+		// ï¿½ÊMï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
 		{
 			int posi_x = DrawPosi_IoStatus.x;
 			int posi_y = DrawPosi_IoStatus.y + 3;
@@ -2922,7 +2906,7 @@ static int	InspectStartNwt(int mode)
 		// NG Limit check
 			Work_count ++;          //2011.08.17
 
-		// ŒŸ¸Œ‹‰Êo—Í
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êoï¿½ï¿½
 			OutputJudgeNwt();
 R_time_delay(1000); // setup time
 		//	switch( OutputJudgeNwt() ) {
@@ -2954,10 +2938,10 @@ R_time_delay(1000); // setup time
 			}
 			twa_TimeRead( &twaTime[0],0 );
 
-		// ‰æ‘œ“]‘—
+		// ï¿½æ‘œï¿½]ï¿½ï¿½
 			switch( R_CS_CaptureEndCheck(0) ) {
 				case OK:
-					if( GetGrayPn == (int)NULL ) {	// ‹N“®Œã1‰ñ–Ú
+					if( GetGrayPn == (int)NULL ) {	// ï¿½Nï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½
 						R_CS_Result[0].nCode = NG_CANT_INSP;
 						GetGrayPn = BASE_GRAYADDRESS;
 					} else {
@@ -2965,7 +2949,7 @@ R_time_delay(1000); // setup time
 						if( GetGrayPn == BASE_GRAYADDRESS )	GetGrayPn = BASE2_GRAYADDRESS;
 						else								GetGrayPn = BASE_GRAYADDRESS;
 					}
-					// --- æ‚è‚İ‰æ‘œ‚Ìİ’è
+					// --- ï¿½ï¿½èï¿½İ‰æ‘œï¿½Ìİ’ï¿½
 					if(OK!=R_CS_SetImagePara(0, 0, 1, GetGrayPn, "?????")){
 						R_CS_Result[0].nCode = NG_CANT_INSP;
 					}
@@ -2978,10 +2962,10 @@ R_time_delay(1000); // setup time
 					break;
 			}
 
-		// ‰æ‘œæ‚è‚İ
-			// --- ‰æ–Êæ‚è‚İI—¹‘Ò‚¿
+		// ï¿½æ‘œï¿½ï¿½èï¿½ï¿½
+			// --- ï¿½ï¿½Êï¿½èï¿½İIï¿½ï¿½ï¿½Ò‚ï¿½
 			R_time_delay(SystemPara.nCaptureTimer);
-			// --- æ‚è‚İ
+			// --- ï¿½ï¿½èï¿½ï¿½
 			if(Option&DEBUG_MODE){
 				R_move_gray_memory(0,InspGrayPn,0,0,FxSize-1,FySize-1);
 				R_move_gray_memory(0,GetGrayPn ,0,0,FxSize-1,FySize-1);
@@ -3003,7 +2987,7 @@ R_time_delay(1000); // setup time
 		//	}
 			R_time_start( &RTWaitTime );
 
-		// ”»’èo—ÍƒNƒŠƒA
+		// ï¿½ï¿½ï¿½ï¿½oï¿½ÍƒNï¿½ï¿½ï¿½A
 		//	OutputJudgeNgNwt();
 			twa_TimeRead( &twaTime[0],2 );
 
@@ -3021,21 +3005,21 @@ R_time_delay(1000); // setup time
 	//			}
 	//		}
 
-		// ‚±‚Ì“_‚ÅGray_address[BASE_GRAYADDRESS]‚É‰æ‘œ‚ªæ‚è‚Ü‚ê‚Ä‚¢‚Ü‚·
+		// ï¿½ï¿½ï¿½Ìï¿½ï¿½_ï¿½ï¿½Gray_address[BASE_GRAYADDRESS]ï¿½É‰æ‘œï¿½ï¿½ï¿½ï¿½èï¿½Ü‚ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½
 		// int InspectManual(int mode, R_CS_RESULT_DATA *pCsResult)
 
-		// --- ‰æ‘œ•Û‘¶—p ---
+		// --- ï¿½æ‘œï¿½Û‘ï¿½ï¿½p ---
 			R_move_gray_memory( InspGrayPn, SAVE_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 			R_move_gray_memory( InspGrayPn, MANUAL_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 			twa_TimeRead( &twaTime[0],3 );
 
-		// --- ŒŸ¸ŠJn ---
+		// --- ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n ---
 			if( 0 == R_CS_Result[0].nCode )	Inspect( &R_CS_Result[0]);
 			else							R_time_delay(12*1000);		// 500->12 20170213 tanaka
 			twa_TimeRead( &twaTime[0],4 );
-		// --- ŒŸ¸I—¹ ---
-			ResultCode = R_CS_Result[0].nCode;							// ResultMonitor‚ÅNGƒR[ƒh‚ğ•Û‘¶‚·‚é‚½‚ß
-			// ‰æ‘œƒtƒ@ƒCƒ‹‚É–„‚ß‚ŞƒRƒƒ“ƒg
+		// --- ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ ---
+			ResultCode = R_CS_Result[0].nCode;							// ResultMonitorï¿½ï¿½NGï¿½Rï¿½[ï¿½hï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ï¿½
+			// ï¿½æ‘œï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É–ï¿½ï¿½ßï¿½ï¿½ŞƒRï¿½ï¿½ï¿½ï¿½ï¿½g
 			sprintf( R_CS_Result[0].sImageComment, "INDEX,%d,state,%d",Result_PocketNo[1],(Result_NGStart[1]<<1) + Result_CheckChip[1] );
 
 			if((!Result_NGStart[1]) && (!Result_CheckChip[1])){
@@ -3047,9 +3031,9 @@ R_time_delay(1000); // setup time
 											|NO_COUNT_UP_PRODUCT);
 			}
 
-			// --- ƒXƒ^[ƒgM†‚n‚e‚eŠm”F
+			// --- ï¿½Xï¿½^ï¿½[ï¿½gï¿½Mï¿½ï¿½ï¿½nï¿½eï¿½eï¿½mï¿½F
 			while( 0 == CheckInspStartNwt() ) {
-				// --- ƒ^ƒCƒ€ƒAƒEƒg
+				// --- ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½
 				if( 3000000 < R_time_read(&RTWaitTime) ) {
 					R_CS_Result[0].nCode = NG_CANT_INSP;
 					sprintf( Comment, "Insp. start signal ERROR" );
@@ -3077,7 +3061,7 @@ if(nJudgeMode == ALL_GO) R_DrawPrintf( DRAW_RED, DISP_4, 4, 6, "WARNING : JUDGEM
 
 
 //================================================
-//	ŒŸ¸Œ‹‰Êo—Í
+//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êoï¿½ï¿½
 //================================================
 
 int		OutputJudge( void )
@@ -3085,26 +3069,26 @@ int		OutputJudge( void )
 		int						i_mode = R_CS_GetInspectMode();
 		int						res = OK;
 
-		// ”»’è“Ç‚İæ‚èŠm”F
+		// ï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½mï¿½F
 			if((i_mode&INSPECT_AUTO)&&(CheckJudgeRead()==0))	return ERROR2;
 		// Lock ON
 			OutputLockOn();
-		// ”»’èo—Í
+		// ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
 
 
 		if(NORMAL == nJudgeMode){
 			switch(R_CS_Result[0].nCode){
-				case OK:				// OK”»’è‚Ì‚Æ‚«
+				case OK:				// OKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeGo();
 					OutputReverseOff();
 					OutputNoworkOff();                             //No work Signal
 					break;
-				case NG_NO_WORK:		// NO WORK”»’è‚Ì‚Æ‚«
+				case NG_NO_WORK:		// NO WORKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNg();
 					OutputReverseOn();
 					OutputNoworkOn();                             //No work Signal
 					break;
-				case NG_CANT_INSP:		// ŒŸ¸•s‰Â
+				case NG_CANT_INSP:		// ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 				case NG_INDEX_POS:		// Index pos. Error
 				case NG_REVERSE:		// Chip Reverse
 				case NG_FOCUS:			// Focus Error
@@ -3113,7 +3097,7 @@ int		OutputJudge( void )
 					OutputNoworkOff();                             //No work Signal
 					R_move_gray_memory( InspGrayPn, FAIL_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 					break;
-				default:				// NG”»’è‚Ì‚Æ‚«
+				default:				// NGï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNg();
 					OutputReverseOff();
 					OutputNoworkOff();                             //No work Signal
@@ -3123,12 +3107,12 @@ int		OutputJudge( void )
 
 		}else{
 			switch(nJudgeMode){
-				case ALL_GO:				// OK”»’è‚Ì‚Æ‚«
+				case ALL_GO:				// OKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeGo();
 					OutputReverseOff();
 					OutputNoworkOff();                             //No work Signal
 					break;
-				case ALL_NG_NOWORK:			// NO WORK”»’è‚Ì‚Æ‚«
+				case ALL_NG_NOWORK:			// NO WORKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNg();
 					OutputReverseOn();
 					OutputNoworkOn();                             //No work Signal
@@ -3139,7 +3123,7 @@ int		OutputJudge( void )
 					OutputNoworkOff();                             //No work Signal
 					R_move_gray_memory( InspGrayPn, FAIL_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 					break;
-				default:				// NG”»’è‚Ì‚Æ‚«
+				default:				// NGï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNg();
 					OutputReverseOff();
 					OutputNoworkOff();                             //No work Signal
@@ -3149,11 +3133,11 @@ int		OutputJudge( void )
 
 		}
 
-		// ”»’è“Ç‚İæ‚èŠm”F
+		// ï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½mï¿½F
 			if(i_mode&INSPECT_AUTO) {
 				R_time_start( &RTWaitTime );
 				while( CheckJudgeRead() != 0 ) {
-					// --- ƒ^ƒCƒ€ƒAƒEƒg
+					// --- ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½
 					if( 5000000 < R_time_read(&RTWaitTime) ) {
 						res = ERROR;
 						break;
@@ -3163,7 +3147,7 @@ int		OutputJudge( void )
 		// Lock OFF
 			OutputLockOff();
 
-		// ‚m‚fƒf[ƒ^ƒNƒŠƒA
+		// ï¿½mï¿½fï¿½fï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½A
 			R_CS_Result[0].nCode = 0;
 
 		return(res);
@@ -3195,22 +3179,22 @@ int		OutputJudgeNwt( void )
 		int						i_mode = R_CS_GetInspectMode();
 		int						res = OK;
 outputcounter++;
-// ”»’è“Ç‚İæ‚èŠm”F
+// ï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½mï¿½F
 	//		if((i_mode&INSPECT_AUTO)&&(CheckJudgeRead()==0))	return ERROR2;
 		// Lock ON
 	//		OutputLockOn();
-		// ”»’èo—Í
+		// ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
 
 
 		if(NORMAL == nJudgeMode){
 			switch(R_CS_Result[0].nCode){
-				case OK:					// OK”»’è‚Ì‚Æ‚«
+				case OK:					// OKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 //printf("A %d\n",outputcounter); fflush(stdout);
 					OutputJudgeGoNwt();
 					OutputBinNormalNwt();
 					OutputNoworkOffNwt();    //No work Signal
 					break;
-				case NG_NO_WORK:			// NO WORK”»’è‚Ì‚Æ‚«
+				case NG_NO_WORK:			// NO WORKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					if(!Result_CheckChip){
 //						printf("B %d\n",outputcounter); fflush(stdout);
 						OutputJudgeNgNwt();
@@ -3221,7 +3205,7 @@ outputcounter++;
 					OutputBinNormalNwt();
 					OutputNoworkOnNwt();    //No work Signal
 					break;
-				case NG_CANT_INSP:			// ŒŸ¸•s‰Â
+				case NG_CANT_INSP:			// ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 				case NG_INDEX_POS:			// Index pos. Error
 				case NG_FOCUS:				// Focus Error
 					OutputJudgeNgNwt();
@@ -3235,7 +3219,7 @@ outputcounter++;
 					OutputNoworkOffNwt();                             //No work Signal
 					R_move_gray_memory( InspGrayPn, FAIL_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 					break;
-				default:					// NG”»’è‚Ì‚Æ‚«
+				default:					// NGï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNgNwt();
 					OutputBinNormalNwt();
 					OutputNoworkOffNwt();   //No work Signal
@@ -3247,12 +3231,12 @@ outputcounter++;
 
 //printf("D %d\n",outputcounter); fflush(stdout);
 			switch(nJudgeMode){
-				case ALL_GO:				// OK”»’è‚Ì‚Æ‚«
+				case ALL_GO:				// OKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeGoNwt();
 					OutputBinNormalNwt();
 					OutputNoworkOffNwt();	//No work Signal
 					break;
-				case ALL_NG_NOWORK:			// NO WORK”»’è‚Ì‚Æ‚«
+				case ALL_NG_NOWORK:			// NO WORKï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNgNwt();
 					OutputBinNormalNwt();
 					OutputNoworkOnNwt();    //No work Signal
@@ -3263,7 +3247,7 @@ outputcounter++;
 					OutputNoworkOffNwt();   //No work Signal
 					R_move_gray_memory( InspGrayPn, FAIL_GRAYADDRESS, 0, 0, FxSize-1, FySize-1 );
 					break;
-				default:					// NG”»’è‚Ì‚Æ‚«
+				default:					// NGï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½
 					OutputJudgeNgNwt();
 					OutputBinNormalNwt();
 					OutputNoworkOffNwt();	//No work Signal
@@ -3273,11 +3257,11 @@ outputcounter++;
 
 		}
 
-		// ”»’è“Ç‚İæ‚èŠm”F
+		// ï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½mï¿½F
 	//		if(i_mode&INSPECT_AUTO) {
 	//			R_time_start( &RTWaitTime );
 	//			while( CheckJudgeRead() != 0 ) {
-	//				// --- ƒ^ƒCƒ€ƒAƒEƒg
+	//				// --- ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½
 	//				if( 5000000 < R_time_read(&RTWaitTime) ) {
 	//					res = ERROR;
 	//					break;
@@ -3287,7 +3271,7 @@ outputcounter++;
 		// Lock OFF
 	//		OutputLockOff();
 
-		// ‚m‚fƒf[ƒ^ƒNƒŠƒA Œ‹‰Êo—ÍŒã
+		// ï¿½mï¿½fï¿½fï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½A ï¿½ï¿½ï¿½Êoï¿½ÍŒï¿½
 		R_CS_Result[0].nCode = 0;
 
 		return(res);
@@ -3296,13 +3280,13 @@ outputcounter++;
 
 
 /******************************************************************************
-	ŠÖ”–¼F	‚b‚‚‚”‚•‚’‚…‚l‚‚‚•‚‚Œ
-	‹@  ”\F	ƒ}ƒjƒ…ƒAƒ‹ŒŸ¸—pæ‚è‚İŠÖ”
-	Œ`  ®F	static void CaptureManual(void)
-	ˆø‚«”F	–³‚µ
-	–ß‚è’lF	–³‚µ
-	‰ğ  àF
-	—¯ˆÓ–€F	‰æ‘œ‚ğæ‚İ‚Ü‚·B
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½èï¿½İŠÖï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void CaptureManual(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½æ‘œï¿½ï¿½ï¿½æï¿½İ‚Ü‚ï¿½ï¿½B
 ******************************************************************************/
 
 static int	CaptureManual(void)
@@ -3311,14 +3295,14 @@ static int	CaptureManual(void)
 
 		pLedPara = &LedPara;
 
-		// æ‚è‚İ‰æ‘œ‚Ìİ’è
+		// ï¿½ï¿½èï¿½İ‰æ‘œï¿½Ìİ’ï¿½
 /////			if(OK!=R_CS_SetImagePara(0, 0, 1, BASE_GRAYADDRESS, "?????")){
 /////				printf("Camera ch0 SettingError\n");
 /////			}
 
-		R_LedOn(pLedPara);			// Æ–¾“_“”
-		R_CS_Capture(0, 0, 0);		// æ‚è‚İ(0:–¢[“UŒŸ¸—p 1:ƒŠ[ƒhŒŸ¸—p)
-		R_LedOff(pLedPara);			// Æ–¾Á“”
+		R_LedOn(pLedPara);			// ï¿½Æ–ï¿½ï¿½_ï¿½ï¿½
+		R_CS_Capture(0, 0, 0);		// ï¿½ï¿½èï¿½ï¿½(0:ï¿½ï¿½ï¿½[ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½p 1:ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½p)
+		R_LedOff(pLedPara);			// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
 		R_CS_CaptureWait(0);
 
 		R_time_delay(50*1000);
@@ -3328,13 +3312,13 @@ static int	CaptureManual(void)
 
 
 /******************************************************************************
-	ŠÖ”–¼F	‚b‚‚‚”‚•‚’‚…‚s‚ˆ‚’‚‚•‚‡‚ˆ
-	‹@  ”\F	ƒXƒ‹[‰æ‘œæ“¾—pæ‚è‚İŠÖ”
-	Œ`  ®F	static void CaptureThrough(int capture_nb)
-	ˆø‚«”F	int capture_nb		æ‚İ”Ô†
-	–ß‚è’lF	–³‚µ
-	‰ğ  àF
-	—¯ˆÓ–€F	‰æ‘œ‚ğæ‚İ‚Ü‚·B
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Xï¿½ï¿½ï¿½[ï¿½æ‘œï¿½æ“¾ï¿½pï¿½ï¿½èï¿½İŠÖï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void CaptureThrough(int capture_nb)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int capture_nb		ï¿½æï¿½İ”Ôï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½æ‘œï¿½ï¿½ï¿½æï¿½İ‚Ü‚ï¿½ï¿½B
 ******************************************************************************/
 static void CaptureThrough(int capture_nb)
 {
@@ -3349,21 +3333,21 @@ static void CaptureThrough(int capture_nb)
 
 	pLedPara = &LedPara;
 
-	// æ‚è‚İ‰æ‘œ‚Ìİ’è
+	// ï¿½ï¿½èï¿½İ‰æ‘œï¿½Ìİ’ï¿½
 ////		if(OK!=R_CS_SetImagePara(0, 0, 1, BASE_GRAYADDRESS, "?????")){
 ////			printf("Camera ch0 SettingError\n");
 ////		}
 
-	// Æ–¾“_“”
+	// ï¿½Æ–ï¿½ï¿½_ï¿½ï¿½
 	if(!bIsNitto)	R_LedOn(pLedPara);
 
-	// æ‚è‚İ
+	// ï¿½ï¿½èï¿½ï¿½
 	ret=R_CS_Capture(0, capture_nb, 0);
 
 	// Bright level check
 	TP_CheckBright();
 
-	// Æ–¾Á“”
+	// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(!bIsNitto)	R_LedOff(pLedPara);
 
     // Bright level check
@@ -3447,13 +3431,13 @@ static int	Counter_cls(int nMenuNumber)
 	}
 */
 /**********************************************************
-	ŠÖ”–¼F	‚o‚‚’‚‚‚…‚”‚…‚’‚h‚‚“‚‚r‚…‚”
-	‹@  ”\F	ŒŸ¸İ’è
-	Œ`  ®F	static void ParameterInspSet(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	‚È‚µ
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void ParameterInspSet(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½È‚ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static int	ParameterInspSet(int nMenuNumber)
@@ -3467,13 +3451,13 @@ static int	ParameterInspSet(int nMenuNumber)
 		}
 
 		if(Option & ADMIN_MODE){
-			res = R_DrawWinbParameterWithMess( WinbmParaInspect, "ŒŸ¸ƒpƒ‰ƒ[ƒ^İ’è", "Setting Inspect Parameter");
+			res = R_DrawWinbParameterWithMess( WinbmParaInspect, "ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½İ’ï¿½", "Setting Inspect Parameter");
 		} else {
-			res = R_DrawWinbParameterWithMess( WinbmParaInspectUser, "ŒŸ¸ƒpƒ‰ƒ[ƒ^İ’è", "Setting Inspect Parameter");
+			res = R_DrawWinbParameterWithMess( WinbmParaInspectUser, "ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½İ’ï¿½", "Setting Inspect Parameter");
 		}
 
 		if( res == 1 ) {
-			// --- ƒVƒƒƒbƒ^ƒXƒs[ƒh‚Ìİ’è
+			// --- ï¿½Vï¿½ï¿½ï¿½bï¿½^ï¿½Xï¿½sï¿½[ï¿½hï¿½Ìİ’ï¿½
 			R_CS_SetShutterSpeed(0, 0, SystemPara.nShutterSpeed);
 			if(0 == (Option&NO_DRX124) && (LedControllMode == LED_CONTROLL_DRX124 )){
 				R_drx124_set_time(HandleDrx124, 1, SystemPara.nShutterSpeed);
@@ -3482,7 +3466,7 @@ static int	ParameterInspSet(int nMenuNumber)
 			//for(i=0;i<2;i++){
 			//	if( OK!=ExchangeData( &MoldSurfacePara[i], i) ){
 			//		if(R_get_language()) R_DrawPopupMessage( 1000000,"Data Error!!"  );
-			//		else R_DrawPopupMessage( 1000000,"ƒf[ƒ^‚ª•s³‚Å‚·"  );
+			//		else R_DrawPopupMessage( 1000000,"ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Å‚ï¿½"  );
 			//		return;
 			//	}
 			//}
@@ -3495,9 +3479,9 @@ static int	ParameterInspSet(int nMenuNumber)
 			R_CS_DispTitle(INSPECT_MANUAL);
 
 //			R_CS_CommandDisplayStatusMode(CommandStatus);
-			R_datafile_save( JudgeFileData, JudgeFilename );			// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
-			R_datafile_save( SystemFileData, SystemFileName );			// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
-			R_datafile_save( TypeFileData, TypeFileName );				// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+			R_datafile_save( JudgeFileData, JudgeFilename );			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
+			R_datafile_save( SystemFileData, SystemFileName );			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
+			R_datafile_save( TypeFileData, TypeFileName );				// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 			PkgParaSaveLog();											// ver3.02 saito
 		}
 
@@ -3506,7 +3490,7 @@ static int	ParameterInspSet(int nMenuNumber)
 
 
 //================================================
-//	”»’è’l•\¦
+//	ï¿½ï¿½ï¿½ï¿½lï¿½\ï¿½ï¿½
 //================================================
 
 static int	JudgeValueDisp(int nMenuNumber)
@@ -3526,13 +3510,13 @@ static int	JudgeValueDisp(int nMenuNumber)
 
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "No.  : Item              = X um( X bit)   Y um( Y bit)" );
 		dl++;
-		// G2 Insp. ”»’è’l
-		// --- G2 X size Å¬’l
+		// G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+		// --- G2 X size ï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 X size min     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2Xmin[i].nCode,
 																					InspParaM.G2Xmin[i].nXsize, InspPara.G2Xmin[i].nXsize,
 																					InspParaM.G2Xmin[i].nYsize, InspPara.G2Xmin[i].nYsize );
 		dl++;
-		// --- G2 X size Å‘å’l
+		// --- G2 X size ï¿½Å‘ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 X size max     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2Xmax[i].nCode,
 																					InspParaM.G2Xmax[i].nXsize, InspPara.G2Xmax[i].nXsize,
 																					InspParaM.G2Xmax[i].nYsize, InspPara.G2Xmax[i].nYsize );
@@ -3542,27 +3526,27 @@ static int	JudgeValueDisp(int nMenuNumber)
 																					InspParaM.G2Xrange[i].nXsize, InspPara.G2Xrange[i].nXsize,
 																					InspParaM.G2Xrange[i].nYsize, InspPara.G2Xrange[i].nYsize );
 		dl++;
-		// --- G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+		// --- G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 X edge         =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2Xedge[i].nCode,
 																					InspParaM.G2Xedge[i].nXsize, InspPara.G2Xedge[i].nXsize,
 																					InspParaM.G2Xedge[i].nYsize, InspPara.G2Xedge[i].nYsize );
 		dl++;
-		// --- G2 X Zure ŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 X Zure ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Zure X min     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2ZureXmin[i].nCode,
 																					InspParaM.G2ZureXmin[i].nXsize, InspPara.G2ZureXmin[i].nXsize,
 																					InspParaM.G2ZureXmin[i].nYsize, InspPara.G2ZureXmin[i].nYsize );
 		dl++;
-		// --- G2 X Zure ŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 X Zure ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Zure X max     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2ZureXmax[i].nCode,
 																					InspParaM.G2ZureXmax[i].nXsize, InspPara.G2ZureXmax[i].nXsize,
 																					InspParaM.G2ZureXmax[i].nYsize, InspPara.G2ZureXmax[i].nYsize );
 		dl++;
-		// --- G2 Y size Å¬’l
+		// --- G2 Y size ï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Y size min     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2Ymin[i].nCode,
 																					InspParaM.G2Ymin[i].nXsize, InspPara.G2Ymin[i].nXsize,
 																					InspParaM.G2Ymin[i].nYsize, InspPara.G2Ymin[i].nYsize );
 		dl++;
-		// --- G2 Y size Å‘å’l[X,Y]
+		// --- G2 Y size ï¿½Å‘ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Y size max     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2Ymax[i].nCode,
 																					InspParaM.G2Ymax[i].nXsize, InspPara.G2Ymax[i].nXsize,
 																					InspParaM.G2Ymax[i].nYsize, InspPara.G2Ymax[i].nYsize );
@@ -3572,42 +3556,42 @@ static int	JudgeValueDisp(int nMenuNumber)
 																					InspParaM.G2Yrange[i].nXsize, InspPara.G2Yrange[i].nXsize,
 																					InspParaM.G2Yrange[i].nYsize, InspPara.G2Yrange[i].nYsize );
 		dl++;
-		// --- G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Y edge         =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2Yedge[i].nCode,
 																					InspParaM.G2Yedge[i].nXsize, InspPara.G2Yedge[i].nXsize,
 																					InspParaM.G2Yedge[i].nYsize, InspPara.G2Yedge[i].nYsize );
 		dl++;
-		// --- G2 Y Zure ŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 Y Zure ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Zure Y min     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2ZureYmin[i].nCode,
 																					InspParaM.G2ZureYmin[i].nXsize, InspPara.G2ZureYmin[i].nXsize,
 																					InspParaM.G2ZureYmin[i].nYsize, InspPara.G2ZureYmin[i].nYsize );
 		dl++;
-		// --- G2 Y Zure ŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 Y Zure ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Zure Y max     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2ZureYmax[i].nCode,
 																					InspParaM.G2ZureYmax[i].nXsize, InspPara.G2ZureYmax[i].nXsize,
 																					InspParaM.G2ZureYmax[i].nYsize, InspPara.G2ZureYmax[i].nYsize );
 		dl++;
-		// --- G2 Y Sdl ŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 Y Sdl ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Y SDtoG2       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2YSdl[i].nCode,
 																					InspParaM.G2YSdl[i].nXsize, InspPara.G2YSdl[i].nXsize,
 																					InspParaM.G2YSdl[i].nYsize, InspPara.G2YSdl[i].nYsize );
 		dl++;
-		// --- G2 Y Apl ŒŸ¸ ”»’è’l[X,Y]
+		// --- G2 Y Apl ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: G2 Y SDtoAp       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.G2YApl[i].nCode,
 																					InspParaM.G2YApl[i].nXsize, InspPara.G2YApl[i].nXsize,
 																					InspParaM.G2YApl[i].nYsize, InspPara.G2YApl[i].nYsize );
 		dl++;
-		// --- Overcoat X ƒJƒPŒŸ¸ ”»’è’l[X,Y]
+		// --- Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Overcoat X size   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.OCoatXsize[i].nCode,
 																					InspParaM.OCoatXsize[i].nXsize, InspPara.OCoatXsize[i].nXsize,
 																					InspParaM.OCoatXsize[i].nYsize, InspPara.OCoatXsize[i].nYsize );
 		dl++;
-		// --- Overcoat Y ƒJƒPŒŸ¸ ”»’è’l[X,Y]
+		// --- Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Overcoat Y size   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.OCoatYsize[i].nCode,
 																					InspParaM.OCoatYsize[i].nXsize, InspPara.OCoatYsize[i].nXsize,
 																					InspParaM.OCoatYsize[i].nYsize, InspPara.OCoatYsize[i].nYsize );
 		dl++;
-		// --- Overcoat XYƒJƒPŒŸ¸ ”»’è’l[X,Y]
+		// --- Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Overcoat XYsize   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.OCoatXYsize[i].nCode,
 																					InspParaM.OCoatXYsize[i].nXsize, InspPara.OCoatXYsize[i].nXsize,
 																					InspParaM.OCoatXYsize[i].nYsize, InspPara.OCoatXYsize[i].nYsize );
@@ -3639,13 +3623,13 @@ static int	JudgeValueDisp(int nMenuNumber)
 																					InspParaM.Plating[i].nXsize, InspPara.Plating[i].nXsize,
 																					InspParaM.Plating[i].nYsize, InspPara.Plating[i].nYsize );
 		dl++;
-		// Chip(Appearence) Insp. ”»’è’l
-		// --- Chip X size Å¬’l
+		// Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+		// --- Chip X size ï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Chip X size min   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ChipXmin[i].nCode,
 																					InspParaM.ChipXmin[i].nXsize, InspPara.ChipXmin[i].nXsize,
 																					InspParaM.ChipXmin[i].nYsize, InspPara.ChipXmin[i].nYsize );
 		dl++;
-		// --- Chip X size Å‘å’l
+		// --- Chip X size ï¿½Å‘ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Chip X size max   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ChipXmax[i].nCode,
 																					InspParaM.ChipXmax[i].nXsize, InspPara.ChipXmax[i].nXsize,
 																					InspParaM.ChipXmax[i].nYsize, InspPara.ChipXmax[i].nYsize );
@@ -3655,17 +3639,17 @@ static int	JudgeValueDisp(int nMenuNumber)
 																					InspParaM.ChipXrange[i].nXsize, InspPara.ChipXrange[i].nXsize,
 																					InspParaM.ChipXrange[i].nYsize, InspPara.ChipXrange[i].nYsize );
 		dl++;
-		// --- Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+		// --- Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Chip X edge       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ChipXedge[i].nCode,
 																					InspParaM.ChipXedge[i].nXsize, InspPara.ChipXedge[i].nXsize,
 																					InspParaM.ChipXedge[i].nYsize, InspPara.ChipXedge[i].nYsize );
 		dl++;
-		// --- Chip Y size Å¬’l
+		// --- Chip Y size ï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Chip Y min        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ChipYmin[i].nCode,
 																					InspParaM.ChipYmin[i].nXsize, InspPara.ChipYmin[i].nXsize,
 																					InspParaM.ChipYmin[i].nYsize, InspPara.ChipYmin[i].nYsize );
 		dl++;
-		// --- Chip Y size Å‘å’l
+		// --- Chip Y size ï¿½Å‘ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Chip Y max        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ChipYmax[i].nCode,
 																					InspParaM.ChipYmax[i].nXsize, InspPara.ChipYmax[i].nXsize,
 																					InspParaM.ChipYmax[i].nYsize, InspPara.ChipYmax[i].nYsize );
@@ -3675,58 +3659,58 @@ static int	JudgeValueDisp(int nMenuNumber)
 																					InspParaM.ChipYrange[i].nXsize, InspPara.ChipYrange[i].nXsize,
 																					InspParaM.ChipYrange[i].nYsize, InspPara.ChipYrange[i].nYsize );
 		dl++;
-		// --- Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+		// --- Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Chip Y edge       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ChipYedge[i].nCode,
 																					InspParaM.ChipYedge[i].nXsize, InspPara.ChipYedge[i].nXsize,
 																					InspParaM.ChipYedge[i].nYsize, InspPara.ChipYedge[i].nYsize );
 		dl++;
 		// Electrode Insp.
-		// --- “d‹É¡–@ XÅ¬’l
+		// --- ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec X min        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecXmin[i].nCode,
 																					InspParaM.ElecXmin[i].nXsize, InspPara.ElecXmin[i].nXsize,
 																					InspParaM.ElecXmin[i].nYsize, InspPara.ElecXmin[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ XÅ‘å’l
+		// --- ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec X max        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecXmax[i].nCode,
 																					InspParaM.ElecXmax[i].nXsize, InspPara.ElecXmax[i].nXsize,
 																					InspParaM.ElecXmax[i].nYsize, InspPara.ElecXmax[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ X max-min
+		// --- ï¿½dï¿½Éï¿½ï¿½@ X max-min
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec X max-min    =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecXrange[i].nCode,
 																					InspParaM.ElecXrange[i].nXsize, InspPara.ElecXrange[i].nXsize,
 																					InspParaM.ElecXrange[i].nYsize, InspPara.ElecXrange[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+		// --- ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec X edge       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecXedge[i].nCode,
 																					InspParaM.ElecXedge[i].nXsize, InspPara.ElecXedge[i].nXsize,
 																					InspParaM.ElecXedge[i].nYsize, InspPara.ElecXedge[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ YÅ¬’l
+		// --- ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec Y min        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecYmin[i].nCode,
 																					InspParaM.ElecYmin[i].nXsize, InspPara.ElecYmin[i].nXsize,
 																					InspParaM.ElecYmin[i].nYsize, InspPara.ElecYmin[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ YÅ‘å’l
+		// --- ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec Y max        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecYmax[i].nCode,
 																					InspParaM.ElecYmax[i].nXsize, InspPara.ElecYmax[i].nXsize,
 																					InspParaM.ElecYmax[i].nYsize, InspPara.ElecYmax[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ Y max-min
+		// --- ï¿½dï¿½Éï¿½ï¿½@ Y max-min
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec Y max-min    =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecYrange[i].nCode,
 																					InspParaM.ElecYrange[i].nXsize, InspPara.ElecYrange[i].nXsize,
 																					InspParaM.ElecYrange[i].nYsize, InspPara.ElecYrange[i].nYsize );
 		dl++;
-		// --- “d‹É¡–@ Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+		// --- ï¿½dï¿½Éï¿½ï¿½@ Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec Y edge       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecYedge[i].nCode,
 																					InspParaM.ElecYedge[i].nXsize, InspPara.ElecYedge[i].nXsize,
 																					InspParaM.ElecYedge[i].nYsize, InspPara.ElecYedge[i].nYsize );
 		dl++;
-		// --- “d‹É•¶‰E¡–@·
+		// --- ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec X sub        =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecXsub[i].nCode,
 																					InspParaM.ElecXsub[i].nXsize, InspPara.ElecXsub[i].nXsize,
 																					InspParaM.ElecXsub[i].nYsize, InspPara.ElecXsub[i].nYsize );
 		dl++;
-		// --- “d‹ÉƒJƒPŒŸ¸”»’è’l(%)
+		// --- ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l(%)
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec X kake       =%5d(%3dbit)  %5d(%3dbit)", InspParaM.ElecKake[i].nCode,
 																					InspParaM.ElecKake[i].nXsize, InspPara.ElecKake[i].nXsize,
 																					InspParaM.ElecKake[i].nYsize, InspPara.ElecKake[i].nYsize );
@@ -3736,27 +3720,27 @@ static int	JudgeValueDisp(int nMenuNumber)
                                                                                     InspParaM.ElecKasure[i].nXsize, InspPara.ElecKasure[i].nXsize,
                                                                                     InspParaM.ElecKasure[i].nYsize, InspPara.ElecKasure[i].nYsize );
         dl++;
-		// --- “d‹É•ÏF”»’è’l(%)
-		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec black   (“) =%5d(%3d)     %5d(%3d)", InspParaM.ElecBlack[i].nCode,
+		// --- ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l(%)
+		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Elec black   (ï¿½ï¿½) =%5d(%3d)     %5d(%3d)", InspParaM.ElecBlack[i].nCode,
 																					InspParaM.ElecBlack[i].nData1, InspPara.ElecBlack[i].nData1,
 																					InspParaM.ElecBlack[i].nData2, InspPara.ElecBlack[i].nData2 );
 		dl++;
-		// --- ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l
+		// --- ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: Side Elec min     =%5d(%3dbit)  %5d(%3dbit)", InspParaM.SideElecXmin[i].nCode,
 																					InspParaM.SideElecXmin[i].nXsize, InspPara.SideElecXmin[i].nXsize,
 																					InspParaM.SideElecXmin[i].nYsize, InspPara.SideElecXmin[i].nYsize );
 		dl++;
-		// --- Ibutsu X ŒŸ¸ ”»’è’l[X,Y]  2021-04-20<shio>
+		// --- Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]  2021-04-20<shio>
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: IBUTSU X size   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.IbutsuXsize[i].nCode,
 																					InspParaM.IbutsuXsize[i].nXsize, InspPara.IbutsuXsize[i].nXsize,
 																					InspParaM.IbutsuXsize[i].nYsize, InspPara.IbutsuXsize[i].nYsize );
 		dl++;
-		// --- Ibutsu Y ŒŸ¸ ”»’è’l[X,Y]
+		// --- Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l[X,Y]
 		R_DrawPrintf( DRAW_WHITE, DISP_NORMAL, dc, dl, "NG %2d: IBUTSU Y size   =%5d(%3dbit)  %5d(%3dbit)", InspParaM.IbutsuYsize[i].nCode,
 																					InspParaM.IbutsuYsize[i].nXsize, InspPara.IbutsuYsize[i].nXsize,
 																					InspParaM.IbutsuYsize[i].nYsize, InspPara.IbutsuYsize[i].nYsize );
 		dl++;
-		// --- “ü—Í‘Ò‚¿
+		// --- ï¿½ï¿½ï¿½Í‘Ò‚ï¿½
 		R_DrawMouseDeYesnoWithKeyboard();
 
 	}
@@ -3767,13 +3751,13 @@ static int	JudgeValueDisp(int nMenuNumber)
 }	// JudgeValueDisp(int nMenuNumber) end
 
 /**********************************************************
-	ŠÖ”–¼F	‚o‚‚’‚‚‚…‚”‚…‚’‚r‚™‚“‚r‚…‚”
-	‹@  ”\F	ƒVƒXƒeƒ€İ’è
-	Œ`  ®F	static void ParameterSysSet(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	‚È‚µ
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½İ’ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void ParameterSysSet(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½È‚ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static int	ParameterSysSet(int nMenuNumber)
@@ -3790,19 +3774,19 @@ static int	ParameterSysSet(int nMenuNumber)
 			if( 0==(Option & NO_USBKEY) && OK!=UsbKeyCertification_rist( &UsbKeyInfo ) ) return ERROR;	//2017.06.13
 		}
 		if( Option & ADMIN_MODE ){
-			res = R_DrawWinbParameterWithMess( WinbmParaSystem, "ƒVƒXƒeƒ€ƒpƒ‰ƒ[ƒ^İ’è", "Setting System Parameter");
+			res = R_DrawWinbParameterWithMess( WinbmParaSystem, "ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½İ’ï¿½", "Setting System Parameter");
 		} else {
-			res = R_DrawWinbParameterWithMess( WinbmParaSystemUser, "ƒVƒXƒeƒ€ƒpƒ‰ƒ[ƒ^İ’è", "Setting System Parameter");
+			res = R_DrawWinbParameterWithMess( WinbmParaSystemUser, "ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½İ’ï¿½", "Setting System Parameter");
 		}
 
 
 		if( res == 1 ) {
-			// --- ƒVƒƒƒbƒ^ƒXƒs[ƒh‚Ìİ’è
+			// --- ï¿½Vï¿½ï¿½ï¿½bï¿½^ï¿½Xï¿½sï¿½[ï¿½hï¿½Ìİ’ï¿½
 			R_CS_SetShutterSpeed(0, 0, SystemPara.nShutterSpeed);
 			if(0 == (Option&NO_DRX124) && (LedControllMode == LED_CONTROLL_DRX124 )){
 				R_drx124_set_time(HandleDrx124, 1, SystemPara.nShutterSpeed);
 			}
-			// --- ŒŸ¸ƒpƒ‰ƒ[ƒ^‰Šú‰»
+			// --- ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			InitialInspectionData();
 
 
@@ -3816,10 +3800,10 @@ SystemPara.nRateY = ratey;
 		}		//9499-END
 
 
-//			R_datafile_save(JudgeFileData, JudgeFilename);			// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+//			R_datafile_save(JudgeFileData, JudgeFilename);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 else{
-			R_datafile_save(SystemFileData, SystemFileName);			// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
-			R_datafile_save( TypeFileData, TypeFileName );				// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+			R_datafile_save(SystemFileData, SystemFileName);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
+			R_datafile_save( TypeFileData, TypeFileName );				// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 			PkgParaSaveLog();											// ver1.04
 		}
 	}
@@ -3869,14 +3853,14 @@ break;
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚k‚…‚„‚`‚„‚Š‚•‚“‚”
-	‹@  ”\F	Æ–¾’²®
-	Œ`  ®F	static int LedAdjust(void)
-	ˆø‚«”F
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int LedAdjust(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 
 **********************************************************/
 static int LedAdjust(int nMenuNumber)
@@ -3917,8 +3901,8 @@ static int LedAdjust(int nMenuNumber)
 	}
 //	if( LedAdjustPara != pLedAdjust ) nChangeOrNot = ON;
 	if(result==YES){
-//		R_datafile_save(JudgeFileData, JudgeFilename);			// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
-		R_datafile_save(SystemFileData, SystemFileName);			// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+//		R_datafile_save(JudgeFileData, JudgeFilename);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
+		R_datafile_save(SystemFileData, SystemFileName);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 		PkgParaSaveLog();											// ver3.02 saito
 	}
 
@@ -3926,14 +3910,14 @@ static int LedAdjust(int nMenuNumber)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚k‚…‚„‚k‚…‚–‚…
-	‹@  ”\F	Æ–¾’²®
-	Œ`  ®F	static int Led(void)
-	ˆø‚«”F
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int Led(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 
 **********************************************************/
 static int LedLevel(int nMenuNumber) //std led set
@@ -3957,7 +3941,7 @@ static int LedLevel(int nMenuNumber) //std led set
 
 	if(result==0){
 		//LedCurrent[0]=
-		R_datafile_save(SystemFileData, SystemFileName);			// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+		R_datafile_save(SystemFileData, SystemFileName);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 		PkgParaSaveLog();
 	} else {
 		LedCurrent[0]=val;
@@ -3966,7 +3950,7 @@ static int LedLevel(int nMenuNumber) //std led set
 	return OK;
 }
 //================================================
-//	Fail ‰æ‘œ•\¦
+//	Fail ï¿½æ‘œï¿½\ï¿½ï¿½
 //================================================
 
 static int	DispFailImage(int nMenuNumber)
@@ -3982,13 +3966,13 @@ static int	DispFailImage(int nMenuNumber)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚b‚‚‚”‚•‚’‚…‚k‚…‚„‚`‚„‚Š‚•‚“‚”
-	‹@  ”\F	LED’²®—p‰æ‘œæ‚è‚İ(LED“_“”‚È‚µA–ß‚è’l‚È‚µ)
-	Œ`  ®F	static void CaptureLedAdjust(void)
-	ˆø‚«”F	–³‚µ
-	–ß‚è’lF	‚È‚µ
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	LEDï¿½ï¿½ï¿½ï¿½ï¿½pï¿½æ‘œï¿½ï¿½èï¿½ï¿½(LEDï¿½_ï¿½ï¿½ï¿½È‚ï¿½ï¿½Aï¿½ß‚ï¿½lï¿½È‚ï¿½)
+	ï¿½`  ï¿½ï¿½ï¿½F	static void CaptureLedAdjust(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½È‚ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static void CaptureLedAdjust(int mode)
 {
@@ -4003,13 +3987,13 @@ static void CaptureLedAdjust(int mode)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚h‚‚‰‚”‚‰‚‚Œ‚h‚‚“‚‚…‚ƒ‚”‚‰‚‚‚c‚‚”‚
-	‹@  ”\F
-	Œ`  ®F	static int InitialInspectionData(void)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	static int InitialInspectionData(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int	InitialInspectionData(void)
 {
@@ -4024,14 +4008,14 @@ static int	InitialInspectionData(void)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚d‚˜‚ƒ‚ˆ‚‚‚‡‚…‚t‚‚‰‚”
-	‹@  ”\F
-	Œ`  ®F	static int ExchangeUnit(INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPara)
-	ˆø‚«”F	INSPECT_PARAMETER *pSrcPara
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	static int ExchangeUnit(INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPara)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	INSPECT_PARAMETER *pSrcPara
 				INSPECT_PARAMETER *pDstPara
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPara )
@@ -4061,12 +4045,12 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 			InspPlOffsetSize[DataYbit]		= (InspPlOffsetSize[DataYum]		*1000+500)/SystemPara.nRateY;
 
 	for(i=0;i<5;i++){
-		// G2 Insp. ”»’è’l
-			// --- G2 X size Å¬’l
+		// G2 Insp. ï¿½ï¿½ï¿½ï¿½l
+			// --- G2 X size ï¿½Åï¿½ï¿½l
 			pDstPara->G2Xmin[i].nCode		= pSrcPara->G2Xmin[i].nCode			= NG_G2_X_SIZE;
 			pDstPara->G2Xmin[i].nXsize		= (pSrcPara->G2Xmin[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Xmin[i].nYsize		= (pSrcPara->G2Xmin[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 X size Å‘å’l
+			// --- G2 X size ï¿½Å‘ï¿½l
 			pDstPara->G2Xmax[i].nCode		= pSrcPara->G2Xmax[i].nCode			= NG_G2_X_SIZE;
 			pDstPara->G2Xmax[i].nXsize		= (pSrcPara->G2Xmax[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Xmax[i].nYsize		= (pSrcPara->G2Xmax[i].nYsize		*1000+500)/SystemPara.nRateY;
@@ -4074,23 +4058,23 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 			pDstPara->G2Xrange[i].nCode		= pSrcPara->G2Xrange[i].nCode		= NG_G2_X_SIZE;
 			pDstPara->G2Xrange[i].nXsize	= (pSrcPara->G2Xrange[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Xrange[i].nYsize	= (pSrcPara->G2Xrange[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+			// --- G2 X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2Xedge[i].nCode		= pSrcPara->G2Xedge[i].nCode		= NG_G2_KAKE_X;
 			pDstPara->G2Xedge[i].nXsize		= (pSrcPara->G2Xedge[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Xedge[i].nYsize		= (pSrcPara->G2Xedge[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 X ƒYƒŒŒŸ¸ ”»’è’l
+			// --- G2 X ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2ZureXmin[i].nCode   = pSrcPara->G2ZureXmin[i].nCode		= NG_G2_X_SIZE;
 			pDstPara->G2ZureXmin[i].nXsize  = (pSrcPara->G2ZureXmin[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->G2ZureXmin[i].nYsize  = (pSrcPara->G2ZureXmin[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- G2 X ƒYƒŒŒŸ¸ ”»’è’l
+			// --- G2 X ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2ZureXmax[i].nCode   = pSrcPara->G2ZureXmax[i].nCode		= NG_G2_X_SIZE;
 			pDstPara->G2ZureXmax[i].nXsize  = (pSrcPara->G2ZureXmax[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->G2ZureXmax[i].nYsize  = (pSrcPara->G2ZureXmax[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- G2 Y size Å¬’l
+			// --- G2 Y size ï¿½Åï¿½ï¿½l
 			pDstPara->G2Ymin[i].nCode		= pSrcPara->G2Ymin[i].nCode			= NG_G2_Y_SIZE;
 			pDstPara->G2Ymin[i].nXsize		= (pSrcPara->G2Ymin[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Ymin[i].nYsize		= (pSrcPara->G2Ymin[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 Y size Å‘å’l
+			// --- G2 Y size ï¿½Å‘ï¿½l
 			pDstPara->G2Ymax[i].nCode		= pSrcPara->G2Ymax[i].nCode			= NG_G2_Y_SIZE;
 			pDstPara->G2Ymax[i].nXsize		= (pSrcPara->G2Ymax[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Ymax[i].nYsize		= (pSrcPara->G2Ymax[i].nYsize		*1000+500)/SystemPara.nRateY;
@@ -4098,35 +4082,35 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 			pDstPara->G2Yrange[i].nCode		= pSrcPara->G2Yrange[i].nCode		= NG_G2_Y_SIZE;
 			pDstPara->G2Yrange[i].nXsize	= (pSrcPara->G2Yrange[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Yrange[i].nYsize	= (pSrcPara->G2Yrange[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+			// --- G2 Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2Yedge[i].nCode		= pSrcPara->G2Yedge[i].nCode		= NG_G2_KAKE_Y;
 			pDstPara->G2Yedge[i].nXsize		= (pSrcPara->G2Yedge[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2Yedge[i].nYsize		= (pSrcPara->G2Yedge[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 Y ƒYƒŒŒŸ¸ ”»’è’l
+			// --- G2 Y ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2ZureYmin[i].nCode   = pSrcPara->G2ZureYmin[i].nCode		= NG_G2_Y_SIZE;
 			pDstPara->G2ZureYmin[i].nXsize  = (pSrcPara->G2ZureYmin[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->G2ZureYmin[i].nYsize  = (pSrcPara->G2ZureYmin[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- G2 Y ƒYƒŒŒŸ¸ ”»’è’l
+			// --- G2 Y ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2ZureYmax[i].nCode   = pSrcPara->G2ZureYmax[i].nCode		= NG_G2_Y_SIZE;
 			pDstPara->G2ZureYmax[i].nXsize  = (pSrcPara->G2ZureYmax[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->G2ZureYmax[i].nYsize  = (pSrcPara->G2ZureYmax[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- G2 Y SdlŒŸ¸ ”»’è’l
+			// --- G2 Y Sdlï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2YSdl[i].nCode       = pSrcPara->G2YSdl[i].nCode		    = NG_G2_Y_SIZE;
 			pDstPara->G2YSdl[i].nXsize      = (pSrcPara->G2YSdl[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2YSdl[i].nYsize      = (pSrcPara->G2YSdl[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- G2 Y AplŒŸ¸ ”»’è’l
+			// --- G2 Y Aplï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->G2YApl[i].nCode       = pSrcPara->G2YApl[i].nCode		    = NG_G2_Y_SIZE;
 			pDstPara->G2YApl[i].nXsize      = (pSrcPara->G2YApl[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->G2YApl[i].nYsize      = (pSrcPara->G2YApl[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- Overcoat X ƒJƒPŒŸ¸ ”»’è’l
+			// --- Overcoat X ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->OCoatXsize[i].nCode	= pSrcPara->OCoatXsize[i].nCode		= NG_OCOAT_X;
 			pDstPara->OCoatXsize[i].nXsize	= (pSrcPara->OCoatXsize[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->OCoatXsize[i].nYsize	= (pSrcPara->OCoatXsize[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- Overcoat Y ƒJƒPŒŸ¸ ”»’è’l
+			// --- Overcoat Y ï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->OCoatYsize[i].nCode	= pSrcPara->OCoatYsize[i].nCode		= NG_OCOAT_Y;
 			pDstPara->OCoatYsize[i].nXsize	= (pSrcPara->OCoatYsize[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->OCoatYsize[i].nYsize	= (pSrcPara->OCoatYsize[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- Overcoat XYƒJƒPŒŸ¸ ”»’è’l
+			// --- Overcoat XYï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->OCoatXYsize[i].nCode	= pSrcPara->OCoatXYsize[i].nCode	= NG_OCOAT_XY;
 			pDstPara->OCoatXYsize[i].nXsize	= (pSrcPara->OCoatXYsize[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->OCoatXYsize[i].nYsize	= (pSrcPara->OCoatXYsize[i].nYsize	*1000+500)/SystemPara.nRateY;
@@ -4152,12 +4136,12 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 			pDstPara->Plating[i].nCode		= pSrcPara->Plating[i].nCode		= NG_PL_ADHESION;
 			pDstPara->Plating[i].nXsize		= (pSrcPara->Plating[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->Plating[i].nYsize		= (pSrcPara->Plating[i].nYsize		*1000+500)/SystemPara.nRateY;
-		// Chip(Appearence) Insp. ”»’è’l
-			// --- Chip X size Å¬’l
+		// Chip(Appearence) Insp. ï¿½ï¿½ï¿½ï¿½l
+			// --- Chip X size ï¿½Åï¿½ï¿½l
 			pDstPara->ChipXmin[i].nCode		= pSrcPara->ChipXmin[i].nCode		= NG_CHIP_X_SIZE;
 			pDstPara->ChipXmin[i].nXsize	= (pSrcPara->ChipXmin[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipXmin[i].nYsize	= (pSrcPara->ChipXmin[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- Chip X size Å‘å’l
+			// --- Chip X size ï¿½Å‘ï¿½l
 			pDstPara->ChipXmax[i].nCode		= pSrcPara->ChipXmax[i].nCode		= NG_CHIP_X_SIZE;
 			pDstPara->ChipXmax[i].nXsize	= (pSrcPara->ChipXmax[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipXmax[i].nYsize	= (pSrcPara->ChipXmax[i].nYsize		*1000+500)/SystemPara.nRateY;
@@ -4165,15 +4149,15 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 			pDstPara->ChipXrange[i].nCode	= pSrcPara->ChipXrange[i].nCode		= NG_CHIP_X_SIZE;
 			pDstPara->ChipXrange[i].nXsize	= (pSrcPara->ChipXrange[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipXrange[i].nYsize	= (pSrcPara->ChipXrange[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- Chip X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+			// --- Chip X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->ChipXedge[i].nCode	= pSrcPara->ChipXedge[i].nCode		= NG_CHIP_KAKE_X;
 			pDstPara->ChipXedge[i].nXsize	= (pSrcPara->ChipXedge[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipXedge[i].nYsize	= (pSrcPara->ChipXedge[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- Chip Y size Å¬’l
+			// --- Chip Y size ï¿½Åï¿½ï¿½l
 			pDstPara->ChipYmin[i].nCode		= pSrcPara->ChipYmin[i].nCode		= NG_CHIP_Y_SIZE;
 			pDstPara->ChipYmin[i].nXsize	= (pSrcPara->ChipYmin[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipYmin[i].nYsize	= (pSrcPara->ChipYmin[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- Chip Y size Å‘å’l
+			// --- Chip Y size ï¿½Å‘ï¿½l
 			pDstPara->ChipYmax[i].nCode		= pSrcPara->ChipYmax[i].nCode		= NG_CHIP_Y_SIZE;
 			pDstPara->ChipYmax[i].nXsize	= (pSrcPara->ChipYmax[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipYmax[i].nYsize	= (pSrcPara->ChipYmax[i].nYsize		*1000+500)/SystemPara.nRateY;
@@ -4181,91 +4165,91 @@ static int	ExchangeUnit( INSPECT_PARAMETER *pSrcPara, INSPECT_PARAMETER *pDstPar
 			pDstPara->ChipYrange[i].nCode	= pSrcPara->ChipYrange[i].nCode		= NG_CHIP_Y_SIZE;
 			pDstPara->ChipYrange[i].nXsize	= (pSrcPara->ChipYrange[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipYrange[i].nYsize	= (pSrcPara->ChipYrange[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- Chip Y ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+			// --- Chip Y ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->ChipYedge[i].nCode	= pSrcPara->ChipYedge[i].nCode		= NG_CHIP_KAKE_Y;
 			pDstPara->ChipYedge[i].nXsize	= (pSrcPara->ChipYedge[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ChipYedge[i].nYsize	= (pSrcPara->ChipYedge[i].nYsize	*1000+500)/SystemPara.nRateY;
 		// Electrode Insp.
-			// --- “d‹É¡–@ XÅ¬’l
+			// --- ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Åï¿½ï¿½l
 			pDstPara->ElecXmin[i].nCode		= pSrcPara->ElecXmin[i].nCode		= NG_ELEC_X_SIZE;
 			pDstPara->ElecXmin[i].nXsize	= (pSrcPara->ElecXmin[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecXmin[i].nYsize	= (pSrcPara->ElecXmin[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ XÅ‘å’l
+			// --- ï¿½dï¿½Éï¿½ï¿½@ Xï¿½Å‘ï¿½l
 			pDstPara->ElecXmax[i].nCode		= pSrcPara->ElecXmax[i].nCode		= NG_ELEC_X_SIZE;
 			pDstPara->ElecXmax[i].nXsize	= (pSrcPara->ElecXmax[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecXmax[i].nYsize	= (pSrcPara->ElecXmax[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ X max-min
+			// --- ï¿½dï¿½Éï¿½ï¿½@ X max-min
 			pDstPara->ElecXrange[i].nCode	= pSrcPara->ElecXrange[i].nCode		= NG_ELEC_X_SIZE;
 			pDstPara->ElecXrange[i].nXsize	= (pSrcPara->ElecXrange[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecXrange[i].nYsize	= (pSrcPara->ElecXrange[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+			// --- ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->ElecXedge[i].nCode	= pSrcPara->ElecXedge[i].nCode		= NG_ELEC_EDGE_X;
 			pDstPara->ElecXedge[i].nXsize	= (pSrcPara->ElecXedge[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecXedge[i].nYsize	= (pSrcPara->ElecXedge[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ YÅ¬’l
+			// --- ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Åï¿½ï¿½l
 			pDstPara->ElecYmin[i].nCode		= pSrcPara->ElecYmin[i].nCode		= NG_ELEC_Y_SIZE;
 			pDstPara->ElecYmin[i].nXsize	= (pSrcPara->ElecYmin[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecYmin[i].nYsize	= (pSrcPara->ElecYmin[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ YÅ‘å’l
+			// --- ï¿½dï¿½Éï¿½ï¿½@ Yï¿½Å‘ï¿½l
 			pDstPara->ElecYmax[i].nCode		= pSrcPara->ElecYmax[i].nCode		= NG_ELEC_Y_SIZE;
 			pDstPara->ElecYmax[i].nXsize	= (pSrcPara->ElecYmax[i].nXsize		*1000+500)/SystemPara.nRateX;
             pDstPara->ElecYmax[i].nYsize	= (pSrcPara->ElecYmax[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ X max-min
+			// --- ï¿½dï¿½Éï¿½ï¿½@ X max-min
 			pDstPara->ElecYrange[i].nCode	= pSrcPara->ElecYrange[i].nCode		= NG_ELEC_Y_SIZE;
 			pDstPara->ElecYrange[i].nXsize	= (pSrcPara->ElecYrange[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecYrange[i].nYsize	= (pSrcPara->ElecYrange[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- “d‹É¡–@ X ƒGƒbƒWƒJƒPŒŸ¸ ”»’è’l
+			// --- ï¿½dï¿½Éï¿½ï¿½@ X ï¿½Gï¿½bï¿½Wï¿½Jï¿½Pï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->ElecYedge[i].nCode	= pSrcPara->ElecYedge[i].nCode		= NG_ELEC_EDGE_Y;
 			pDstPara->ElecYedge[i].nXsize	= (pSrcPara->ElecYedge[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecYedge[i].nYsize	= (pSrcPara->ElecYedge[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- “d‹É•¶‰E¡–@·
+			// --- ï¿½dï¿½É•ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½@ï¿½ï¿½
 			pDstPara->ElecXsub[i].nCode		= pSrcPara->ElecXsub[i].nCode		= NG_ELEC_X_SIZE;
 			pDstPara->ElecXsub[i].nXsize	= (pSrcPara->ElecXsub[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecXsub[i].nYsize	= (pSrcPara->ElecXsub[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- “d‹ÉƒJƒPŒŸ¸”»’è’l
+			// --- ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->ElecKake[i].nCode		= pSrcPara->ElecKake[i].nCode		= NG_ELEC_KAKE;
 			pDstPara->ElecKake[i].nXsize	= (pSrcPara->ElecKake[i].nXsize		*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecKake[i].nYsize	= (pSrcPara->ElecKake[i].nYsize		*1000+500)/SystemPara.nRateY;
-            // --- “d‹ÉƒJƒPŒŸ¸”»’è’l 11911 Kasure
+            // --- ï¿½dï¿½ÉƒJï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l 11911 Kasure
             pDstPara->ElecKasure[i].nCode		= pSrcPara->ElecKasure[i].nCode		= NG_ELEC_KAKE;
             pDstPara->ElecKasure[i].nXsize	= (pSrcPara->ElecKasure[i].nXsize		*1000+500)/SystemPara.nRateX;
             pDstPara->ElecKasure[i].nYsize	= (pSrcPara->ElecKasure[i].nYsize		*1000+500)/SystemPara.nRateY;
-			// --- “d‹É•ÏF”»’è’l(%)
+			// --- ï¿½dï¿½É•ÏFï¿½ï¿½ï¿½ï¿½l(%)
 			pDstPara->ElecBlack[i].nCode	= pSrcPara->ElecBlack[i].nCode		= NG_ELEC_BLACK;
 			pDstPara->ElecBlack[i].nData1	= pSrcPara->ElecBlack[i].nData1;
 			pDstPara->ElecBlack[i].nData2	= pSrcPara->ElecBlack[i].nData2;
-			// --- ‘¤–Ê“d‹É”í‚è‚İ¡–@ XÅ¬’l
+			// --- ï¿½ï¿½ï¿½Ê“dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l
 			pDstPara->SideElecXmin[i].nCode	= pSrcPara->SideElecXmin[i].nCode	= NG_SIDE_ELEC;
 			pDstPara->SideElecXmin[i].nXsize= (pSrcPara->SideElecXmin[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->SideElecXmin[i].nYsize= (pSrcPara->SideElecXmin[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- C2“d‹É”í‚è‚İ¡–@ XÅ¬’l
+			// --- C2ï¿½dï¿½É”ï¿½èï¿½İï¿½ï¿½@ Xï¿½Åï¿½ï¿½l
 			pDstPara->ElecC2Xmin[i].nCode =	pSrcPara->ElecC2Xmin[i].nCode	= NG_SIDE_ELEC;
 			pDstPara->ElecC2Xmin[i].nXsize= (pSrcPara->ElecC2Xmin[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecC2Xmin[i].nYsize= (pSrcPara->ElecC2Xmin[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- C1–Ú‹l‚Ü‚è¡–@ XÅ¬’l
+			// --- C1ï¿½Ú‹lï¿½Ü‚è¡ï¿½@ Xï¿½Åï¿½ï¿½l
 			pDstPara->ElecC1Mezumari[i].nCode =	pSrcPara->ElecC1Mezumari[i].nCode	= NG_SIDE_ELEC;
 			pDstPara->ElecC1Mezumari[i].nXsize= (pSrcPara->ElecC1Mezumari[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->ElecC1Mezumari[i].nYsize= (pSrcPara->ElecC1Mezumari[i].nYsize	*1000+500)/SystemPara.nRateY;
 
-			// ---“d‹É[•WˆóŠÔ¡–@ XÅ¬’l
+			// ---ï¿½dï¿½É[ï¿½Wï¿½ï¿½Ôï¿½ï¿½@ Xï¿½Åï¿½ï¿½l
 			pDstPara->MarkShift[i].nCode	= pSrcPara->MarkShift[i].nCode	= NG_MARKING;
 			pDstPara->MarkShift[i].nData1	= (pSrcPara->MarkShift[i].nData1	*1000+500)/SystemPara.nRateX;
 			pDstPara->MarkShift[i].nData2	= (pSrcPara->MarkShift[i].nData2 	*1000+500)/SystemPara.nRateX;
 	}
-            // --- ƒŒƒ“ƒYÅ“_”»’è’l
+            // --- ï¿½ï¿½ï¿½ï¿½ï¿½Yï¿½Å“_ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->Focus.nCode			= pSrcPara->Focus.nCode				= NG_FOCUS;
 			pDstPara->Focus.nData1			= pSrcPara->Focus.nData1;
 			pDstPara->Focus.nData2			= pSrcPara->Focus.nData2;
-			// --- Æ“xŠÇ—
+			// --- ï¿½Æ“xï¿½Ç—ï¿½
 			pDstPara->Bright.nCode			= pSrcPara->Bright.nCode			= NG_LIGHTING;
 			pDstPara->Bright.nData1			= pSrcPara->Bright.nData1;
 			pDstPara->Bright.nData2			= pSrcPara->Bright.nData2;
 
-			// --- Ibutsu X ŒŸ¸ ”»’è’l		2021-04-20<shio>
+			// --- Ibutsu X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l		2021-04-20<shio>
 			pDstPara->IbutsuXsize[i].nCode	= pSrcPara->IbutsuXsize[i].nCode		= NG_GLASS_IBUTSU;
 			pDstPara->IbutsuXsize[i].nXsize	= (pSrcPara->IbutsuXsize[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->IbutsuXsize[i].nYsize = (pSrcPara->IbutsuXsize[i].nYsize	*1000+500)/SystemPara.nRateY;
-			// --- Ibutsu Y ŒŸ¸ ”»’è’l
+			// --- Ibutsu Y ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½l
 			pDstPara->IbutsuYsize[i].nCode	= pSrcPara->IbutsuYsize[i].nCode		= NG_GLASS_IBUTSU;
 			pDstPara->IbutsuYsize[i].nXsize	= (pSrcPara->IbutsuYsize[i].nXsize	*1000+500)/SystemPara.nRateX;
 			pDstPara->IbutsuYsize[i].nYsize	= (pSrcPara->IbutsuYsize[i].nYsize	*1000+500)/SystemPara.nRateY;
@@ -4283,26 +4267,26 @@ void	TP_CheckAlarm( void )
 	{
 		int						res		= OK;
 
-		// Æ“xŠÄ‹ƒAƒ‰[ƒ€
+		// ï¿½Æ“xï¿½Äï¿½ï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½
 			if((TP_Bright_Stop==ON)&&(res==OK)) {
-				if( JPN_DISP == R_get_language() )	sprintf( Comment, "Æ–¾ˆÙí\n ”F¯‘‹‚ğ´‘|‚µ‚Ä‚­‚¾‚³‚¢" );
+				if( JPN_DISP == R_get_language() )	sprintf( Comment, "ï¿½Æ–ï¿½ï¿½Ùï¿½\n ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ğ´‘|ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" );
 				else								sprintf( Comment, "Illumination is abnormal\nClean Cover Glass" );
 				res = ERROR2;
 			}
-		// ƒKƒ‰ƒXˆÙ•¨ŠÄ‹ƒAƒ‰[ƒ€   2021.05.14<shio>
+		// ï¿½Kï¿½ï¿½ï¿½Xï¿½Ù•ï¿½ï¿½Äï¿½ï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½   2021.05.14<shio>
 			if((TWA_Ibutsu_Stop==ON)&&(res==OK)) {
-				if( JPN_DISP == R_get_language() )	sprintf( Comment, "ƒKƒ‰ƒXˆÙ•¨\n ”F¯‘‹‚ğ´‘|‚µ‚Ä‚­‚¾‚³‚¢" );
+				if( JPN_DISP == R_get_language() )	sprintf( Comment, "ï¿½Kï¿½ï¿½ï¿½Xï¿½Ù•ï¿½\n ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ğ´‘|ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" );
 				else								sprintf( Comment, "IBUTSU on the Glass \nClean Cover Glass" );
 				res = ERROR2;
 			}
 
-		// ƒAƒ‰[ƒ€M†o—Í
+		// ï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½oï¿½ï¿½
 			if(res!=OK) {
 				if((Option & NO_DRCY80)==0){
 					OutputAlarmOn();
 				}
 				DrawMessage( Comment, DRAW_RED, 2, 0 );
-				// ƒAƒ‰[ƒ€ƒNƒŠƒA
+				// ï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
 				switch( res ) {
 					case ERROR2:
 						TP_Bright_Stop = OFF;
@@ -4320,26 +4304,26 @@ void	TP_CheckAlarm( void )
 
 
 /******************************************************************************
-	ŠÖ”–¼F	‚h‚‚“‚‚…‚ƒ‚”
-	‹@  ”\F
-	Œ`  ®F	int Inspect( int mode, R_CS_RESULT_DATA *Result )
-	ˆø‚«”F	int mode	ŒŸ¸ƒ‚[ƒh
-								INSPECT_AUTO	ƒI[ƒg‰Ò“®
-								INSPECT_MANUAL	ƒ}ƒjƒ…ƒAƒ‹‰Ò“®
-								INSPECT_STEP	ƒXƒeƒbƒv”»’è
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	int Inspect( int mode, R_CS_RESULT_DATA *Result )
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int mode	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½h
+								INSPECT_AUTO	ï¿½Iï¿½[ï¿½gï¿½Ò“ï¿½
+								INSPECT_MANUAL	ï¿½}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ò“ï¿½
+								INSPECT_STEP	ï¿½Xï¿½eï¿½bï¿½vï¿½ï¿½ï¿½ï¿½
 				R_CS_RESULT_DATA *Result
-	–ß‚è’lF	OK		³íI—¹
-				ERROR	ˆÙíI—¹
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+				ERROR	ï¿½Ùï¿½Iï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 
 typedef struct {
-	int		nCode;					//Œ‹‰Êƒtƒ‰ƒO(0‚ªGOA1ˆÈã‚ªNGƒR[ƒh)
-	char	sNgComment[16];			//NGŒ‹‰Ê•\¦ƒRƒƒ“ƒg
-	char	sImageComment[128];		//‰æ‘œƒtƒ@ƒCƒ‹‚É–„‚ß‚ŞƒRƒƒ“ƒg
+	int		nCode;					//ï¿½ï¿½ï¿½Êƒtï¿½ï¿½ï¿½O(0ï¿½ï¿½GOï¿½A1ï¿½Èã‚ªNGï¿½Rï¿½[ï¿½h)
+	char	sNgComment[16];			//NGï¿½ï¿½ï¿½Ê•\ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½g
+	char	sImageComment[128];		//ï¿½æ‘œï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É–ï¿½ï¿½ßï¿½ï¿½ŞƒRï¿½ï¿½ï¿½ï¿½ï¿½g
 }R_CS_RESULT_DATA;
 
-		// ‰æ‘œ‚ªGray_address[BASE_GRAYADDRESS]‚Éæ‚è‚Ü‚ê‚Ä‚¢‚Ü‚·
+		// ï¿½æ‘œï¿½ï¿½Gray_address[BASE_GRAYADDRESS]ï¿½Éï¿½èï¿½Ü‚ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½
 
 ******************************************************************************/
 
@@ -4370,17 +4354,17 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 //			InspGrayPn	= BASE_GRAYADDRESS;
 			InspBinPn	= BinP1;
 
-			//ƒCƒ“ƒfƒbƒNƒXƒe[ƒuƒ‹ƒGƒbƒWŒŸo
-			// Index_pos,IGudePos — –ÊŒŸ¸‚ÅƒCƒ“ƒfƒbƒNƒXƒT[ƒ`‚ğs‚í‚È‚¢ˆ×AŠOŠs‚Ì‰¼‚Ì’l‚ğ‰Šú’l‚Æ‚µ‚Ä‘ã“ü
-			Index_pos[0]=0        +20;  // 20171025  — –ÊŒŸ¸‚Å‚ÌƒGƒŠƒAŠO‚Í‚İo‚µ–h~ tanaka
-			Index_pos[1]=FySize-1 -20;  // 20171025  — –ÊŒŸ¸‚Å‚ÌƒGƒŠƒAŠO‚Í‚İo‚µ–h~ tanaka
+			//ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Gï¿½bï¿½Wï¿½ï¿½ï¿½o
+			// Index_pos,IGudePos ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½ï¿½ÅƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½sï¿½ï¿½È‚ï¿½ï¿½×Aï¿½Oï¿½sï¿½Ì‰ï¿½ï¿½Ì’lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Æ‚ï¿½ï¿½Ä‘ï¿½ï¿½
+			Index_pos[0]=0        +20;  // 20171025  ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½ï¿½Å‚ÌƒGï¿½ï¿½ï¿½Aï¿½Oï¿½Í‚İoï¿½ï¿½ï¿½hï¿½~ tanaka
+			Index_pos[1]=FySize-1 -20;  // 20171025  ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½ï¿½Å‚ÌƒGï¿½ï¿½ï¿½Aï¿½Oï¿½Í‚İoï¿½ï¿½ï¿½hï¿½~ tanaka
 			Index_pos[2]=0;
 			Index_pos[3]=0;
 			Index_pos[4]=0;
 			Index_pos[5]=0;
-			IGuidePos[DataX]=600;	// DataX =0 ¶‘¤ FxSize-1;			// Nitto
+			IGuidePos[DataX]=600;	// DataX =0 ï¿½ï¿½ï¿½ï¿½ FxSize-1;			// Nitto
 			IGuidePos[1]    =0;		// Weld
-			if(bIsNitto && ((Option & BACKINSP_MODE) ==0)){		// •\–ÊŒŸ¸‚Ì‚İƒCƒ“ƒfƒbƒNƒX”F¯‚·‚é
+			if(bIsNitto && ((Option & BACKINSP_MODE) ==0)){		// ï¿½\ï¿½ÊŒï¿½ï¿½ï¿½ï¿½Ì‚İƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				switch( TWA_Index_search() ) {
 					case OK:
 						break;
@@ -4410,7 +4394,7 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 
 			twa_TimeRead( &twaTime[1],0 );
 
-		// Index guide ˆÊ’uƒT[ƒ`
+		// Index guide ï¿½Ê’uï¿½Tï¿½[ï¿½`
 			InspBinPn	= BinP1;
 			if(!bIsNitto){
 				if( (1==bIsLTR50)&&(0!=(Option & BACKINSP_MODE)) ){		// v2.20
@@ -4436,7 +4420,7 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 
 			twa_TimeRead( &twaTime[1],2 );
 
-		// “d‹ÉˆÊ’uŒŸo
+		// ï¿½dï¿½ÉˆÊ’uï¿½ï¿½ï¿½o
 			InspBinPn	= BinP1;
 			switch( TP_SearchElect() ) {
 				case OK:
@@ -4509,14 +4493,14 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 			twa_TimeRead( &twaTime[1],3 );
 
 
-			// ’[q•”AƒZƒ‰ƒ~ƒbƒNiƒI[ƒo[ƒR[ƒg•”j–¾‚é‚³ƒ‚ƒjƒ^
+			// ï¿½[ï¿½qï¿½ï¿½ï¿½Aï¿½Zï¿½ï¿½ï¿½~ï¿½bï¿½Nï¿½iï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½é‚³ï¿½ï¿½ï¿½jï¿½^
 			if(bIsNitto){		//
 				int El_xs,El_xe,El_ys,El_ye;
 				int G2_xs,G2_xe,G2_ys,G2_ye;
 				int El_aveGL,G2_aveG,El_aveGR;
 				int n = light_monitor_count % MAX_LIGHT_MONI;
 				int j;
-				// ¶’[q
+				// ï¿½ï¿½ï¿½[ï¿½q
 				El_xs = ElecPosRough[DataLeft][PosXmin]+5;
 				El_xe = ElecPosRough[DataLeft][PosXmax]-5;
 				if(El_xs < 0)	El_xs = 0;
@@ -4526,7 +4510,7 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 				if(El_ys < 0)		El_ys = 0;
 				if(El_ys > El_ye)	El_ye=El_ys+5;
 				El_aveL[n] = R_get_histgram(El_xs,El_ys,El_xe,El_ye,Gray_address[InspGrayPn]);
-				// ‰E’[q
+				// ï¿½Eï¿½[ï¿½q
 				El_xs = ElecPosRough[DataRight][PosXmin]+5;
 				El_xe = ElecPosRough[DataRight][PosXmax]-5;
 				if(El_xs < 0)	El_xs = 0;
@@ -4536,7 +4520,7 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 				if(El_ys < 0)		El_ys = 0;
 				if(El_ys > El_ye)	El_ye=El_ys+5;
 				El_aveR[n] = R_get_histgram(El_xs,El_ys,El_xe,El_ye,Gray_address[InspGrayPn]);
-				// G2•”•ª
+				// G2ï¿½ï¿½ï¿½ï¿½
 				G2_xs = ElecPosRough[DataLeft][PosXmax]+5;
 				G2_xe = ElecPosRough[DataRight][PosXmin]-5;
 				if(G2_xs < 0)	    G2_xs = 0;
@@ -4572,10 +4556,10 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 				}
 			}
 
-			if(bIsNitto && ((Option & BACKINSP_MODE) !=0)){		// — –ÊŒŸ¸‚Ì‚İƒCƒ“ƒfƒbƒNƒX”F¯‚·‚é
+			if(bIsNitto && ((Option & BACKINSP_MODE) !=0)){		// ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½ï¿½Ì‚İƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Index_pos[0]=ElecPosRough[DataLeft][PosYmin]-50;
 				Index_pos[1]=ElecPosRough[DataLeft][PosYmax]+50;
-				IGuidePos[DataX]=ElecPosRough[DataLR][PosXmax]+20;	// DataX =0 ¶‘¤ FxSize-1;			// Nitto
+				IGuidePos[DataX]=ElecPosRough[DataLR][PosXmax]+20;	// DataX =0 ï¿½ï¿½ï¿½ï¿½ FxSize-1;			// Nitto
 				IGuidePos[1]    =ElecPosRough[DataLR][PosXmin]-20;	// Weld
 				if(Index_pos[0] < 20)	        Index_pos[0]=20;
 				if(Index_pos[1] > FySize-20)    Index_pos[1]=FySize-20;
@@ -4583,8 +4567,8 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 				if(IGuidePos[1] < 0)			IGuidePos[1]=0;
 			}
 
-	//‚f‚Q@ƒGƒbƒWŒŸo
-		//w’èƒGƒŠƒA‚ÌƒqƒXƒgƒOƒ‰ƒ€‚ğæ‚éB
+	//ï¿½fï¿½Qï¿½@ï¿½Gï¿½bï¿½Wï¿½ï¿½ï¿½o
+		//ï¿½wï¿½ï¿½Gï¿½ï¿½ï¿½Aï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 /*
 		if(OK==R_bgray_thresholding_open(THRESH_DEPTH_8BIT))	bgrayflag = 1;
 
@@ -4644,16 +4628,16 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 		}
 		twa_TimeRead( &twaTime[1],4 );
 
-	//‰ñ‹AŒW”ŒvZ
+	//ï¿½ï¿½Aï¿½Wï¿½ï¿½ï¿½vï¿½Z
 		if( KAIKI_keisuu(0) != OK ){
             pCsResult->nCode = NG_CANT_INSP;
             return( NG_CANT_INSP );
 		}
 
-	//•½‹Ï’lE•W€•Î·
+	//ï¿½ï¿½ï¿½Ï’lï¿½Eï¿½Wï¿½ï¿½ï¿½Îï¿½
 		TWA_meansd();
 
-	//‰ñ‹AŒW”ŒvZ
+	//ï¿½ï¿½Aï¿½Wï¿½ï¿½ï¿½vï¿½Z
         if( KAIKI_keisuu(1) != OK ){
             pCsResult->nCode = NG_CANT_INSP;
             return( NG_CANT_INSP );
@@ -4680,7 +4664,7 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 			InspBinPn	= BinP2;
 			TWA_Insp_ApLTR_l18(0);
 		}
-		// ƒ`ƒbƒvˆÊ’uŒŸo
+		// ï¿½`ï¿½bï¿½vï¿½Ê’uï¿½ï¿½ï¿½o
             InspBinPn	= BinP1;
 			switch( SearchChipPos() ) {
 				case OK:
@@ -4702,7 +4686,7 @@ int		Inspect( R_CS_RESULT_DATA *pCsResult )
 
 		twa_TimeRead( &twaTime[1],6 );
 
-		// •\/— Šm”F
+		// ï¿½\/ï¿½ï¿½ï¿½mï¿½F
 			switch( InspReverse() ) {
 				case OK:
 					break;
@@ -4962,7 +4946,7 @@ SKIPplat:
 		//Pinhole insp.
             Pinhole_insp();
 
-		// C2“d‹É”í‚è‚İ•ŒŸ¸
+		// C2ï¿½dï¿½É”ï¿½èï¿½İ•ï¿½ï¿½ï¿½ï¿½ï¿½
 	//		if( Insp_C2_mode != 0 ) {
 				//v2.20 if(!bIsLTR50){	//normal
 				if( (!bIsLTR50) && (!bIsLTR18) ){	//normal
@@ -5003,14 +4987,14 @@ SKIPplat:
 
             TWA_Insp_Ap(1);
 
-			// G2 std. edge position set again  ŠOŒ`ã‰º‚ÌŒX‚«‚ğŠî€‚Æ‚·‚éG2ƒjƒWƒ~‚ª”­¶‚µ‚Ä‚¢‚½ê‡‰ñ‹A’¼ü‚ÍƒAƒe‚É‚È‚ç‚È‚¢ 20170502 tanaka
+			// G2 std. edge position set again  ï¿½Oï¿½`ï¿½ã‰ºï¿½ÌŒXï¿½ï¿½ï¿½ï¿½ï¿½î€ï¿½Æ‚ï¿½ï¿½ï¿½G2ï¿½jï¿½Wï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÍƒAï¿½eï¿½É‚È‚ï¿½È‚ï¿½ 20170502 tanaka
 			w.kaiki_b = (Ap_up.kaiki_b + Ap_lo.kaiki_b) /2;
             if( G2StdEdgeSet() != OK )
                 return( NG_CANT_INSP );
 
 
 
-		//‚f‚QƒGƒbƒWƒf[ƒ^”»’è@‚v•ûŒü
+		//ï¿½fï¿½Qï¿½Gï¿½bï¿½Wï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½@ï¿½vï¿½ï¿½ï¿½ï¿½
 			switch( G2_Judge_w_SDl() ) {
 				case OK:
 					break;
@@ -5056,7 +5040,7 @@ SKIPplat:
 			}
 		}
 		if(bIsESR25 || bIsMCR10 || bIsMCR18 || bIsSFR25 ){	//xxxxx
-		//‚f‚QƒGƒbƒWƒf[ƒ^”»’è@‚v•ûŒü
+		//ï¿½fï¿½Qï¿½Gï¿½bï¿½Wï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½@ï¿½vï¿½ï¿½ï¿½ï¿½
 			switch( G2_Judge_w_APl() ) {
 				case OK:
 					break;
@@ -5074,7 +5058,7 @@ SKIPplat:
 					return ERROR;
 					break;
 			}
-			//‚f‚QƒYƒŒŒŸ¸
+			//ï¿½fï¿½Qï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			res = TWA_kensa_zure_w();
 			switch( res ) {
 				case OK:
@@ -5092,7 +5076,7 @@ SKIPplat:
 					pCsResult->nCode = NG_G2_POS_X;
 					return ERROR;
 			}
-		// C1“d‹ÉŠÔŒŸ¸
+		// C1ï¿½dï¿½ÉŠÔŒï¿½ï¿½ï¿½
 			if(bIsLTR18){
 				res= LTR_Judge_C1Space_l18();								//v2.20
 			}else{
@@ -5158,7 +5142,7 @@ int		TP_CheckBright( void )
 				ymin = ymax-TP_Bright_yl+1;
 			}
 
-		// –¾‚é‚³‚ÌŒv‘ª
+		// ï¿½ï¿½ï¿½é‚³ï¿½ÌŒvï¿½ï¿½
 			TP_Bright_d = R_get_histgram( xmin, ymin, xmax, ymax, Gray_address[grayPn] );
 			res = abs( TP_Bright_d - TP_Bright_st );
 
@@ -5194,7 +5178,7 @@ int		TP_CheckBright( void )
 
 			R_DrawPrintf(DRAW_WHITE, DISP_NORMAL, posi_res_x, posi_res_y ,"Bright Level  :%3d (%d)[limit difer %d]" ,TP_Bright_d,TP_Bright_st,InspPara.Bright.nData1 );
 
-			// Šî€ƒf[ƒ^‚Æ”äŠr
+			// ï¿½î€ï¿½fï¿½[ï¿½^ï¿½Æ”ï¿½r
 			if(((i_mode&INSPECT_AUTO) || (Option&DEBUG_MODE)) && (0<TP_BrightFlag)) {
 //			if((0<TP_BrightFlag)) {
 				if( res > InspPara.Bright.nData1 ) {
@@ -5236,7 +5220,7 @@ int		TP_IndexTableBright( void )
 			area.right	= area.left + xsize - 1;
 			area.bottom	= area.top + ysize - 1;
 
-		// –¾‚é‚³‚ÌŒv‘ª
+		// ï¿½ï¿½ï¿½é‚³ï¿½ÌŒvï¿½ï¿½
             if( 0 > R_get_histgram( area.left, area.top, area.right, area.bottom, Gray_address[grayPn] ) ){
 				// --- Viwe
 				if( i_mode & INSPECT_STEP ) {
@@ -5258,7 +5242,7 @@ int		TP_IndexTableBright( void )
 			if(!bIsNitto){
 				IndexLevel.nUpper	= level + offset_l;
 			} else {
-				IndexLevel.nUpper = 0;		// Index ‚ª”’‚Á‚Û‚­‚İ‚¦‚é‚½‚ß•ÏX
+				IndexLevel.nUpper = 0;		// Index ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‚ï¿½ï¿½İ‚ï¿½ï¿½é‚½ï¿½ß•ÏX
 			}
 			if( 255 < IndexLevel.nUpper )	IndexLevel.nUpper = 255;
 			// --- Viwe
@@ -5331,7 +5315,7 @@ int		TP_SearchGuide( void )
 				trans_mode = TRANS_MODE_BtoW | TRANS_CHOICE_MAX_AMP | TRANS_SMOOTH_MEDIAN;
 			}
 		// Guide search
-			// --- ƒCƒ“ƒfƒbƒNƒXƒe[ƒuƒ‹AƒKƒCƒh‚ÌŒ„ŠÔ•”•ª
+			// --- ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Aï¿½Kï¿½Cï¿½hï¿½ÌŒï¿½ï¿½Ô•ï¿½ï¿½ï¿½
 			// --- projection_y
 			side = 0;
 			R_projection_y( grayPn, xmin, ymin[side], xmax, ymax[side], ProjectBuf1 );
@@ -5345,7 +5329,7 @@ int		TP_SearchGuide( void )
 					rx = xmin+dn;
 				}
 			}
-			// --- ƒCƒ“ƒfƒbƒNƒXƒKƒCƒhˆÊ’uŒŸo
+			// --- ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Kï¿½Cï¿½hï¿½Ê’uï¿½ï¿½ï¿½o
 			for( side=0; side<2; side++ ) {
 				xmin	= rx;//-50;
 				xmax	= rx+50;
@@ -5377,7 +5361,7 @@ int		TP_SearchGuide( void )
 				res = ERROR;
 			}
 
-		// ƒT[ƒ`ˆÊ’u•\¦
+		// ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 			// --- Viwe
 			if( i_mode & INSPECT_STEP ) {
 				BinClsPn( BinP0, 0, 0, FxSize-1, FySize-1 );
@@ -5436,7 +5420,7 @@ int		TP_SearchGuideFmRight( void )										// v2.20
 				trans_mode = TRANS_MODE_BtoW | TRANS_CHOICE_N_END | TRANS_SMOOTH_MEDIAN;
 
 		// Guide search
-			// --- ƒCƒ“ƒfƒbƒNƒXƒe[ƒuƒ‹AƒKƒCƒh‚ÌŒ„ŠÔ•”•ª
+			// --- ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Aï¿½Kï¿½Cï¿½hï¿½ÌŒï¿½ï¿½Ô•ï¿½ï¿½ï¿½
 			// --- projection_y
 		//	side = 0;
 		//	R_projection_y( grayPn, xmin, ymin[side], xmax, ymax[side], ProjectBuf1 );
@@ -5450,7 +5434,7 @@ int		TP_SearchGuideFmRight( void )										// v2.20
 		//			rx = xmin+dn;
 		//		}
 		//	}
-			// --- ƒCƒ“ƒfƒbƒNƒXƒKƒCƒhˆÊ’uŒŸo
+			// --- ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Kï¿½Cï¿½hï¿½Ê’uï¿½ï¿½ï¿½o
 			for( side=0; side<2; side++ ) {
 		//		xmin	= rx;//-50;
 		//		xmax	= rx+50;
@@ -5487,7 +5471,7 @@ int		TP_SearchGuideFmRight( void )										// v2.20
 				res = ERROR;
 			}
 
-		// ƒT[ƒ`ˆÊ’u•\¦
+		// ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 			// --- Viwe
 			if( i_mode & INSPECT_STEP ) {
 				BinClsPn( BinP0, 0, 0, FxSize-1, FySize-1 );
@@ -5545,9 +5529,9 @@ int		ElecEsLevelSet( void )
 				IGuideEsPara.nYmax = FySize-32;
 			}
 			// ---
-			IGuideEsPara.nStartLevel	= IGuideEsLevel.nLower;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-			IGuideEsPara.nEndLevel		= 250;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
-			IGuideEsPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+			IGuideEsPara.nStartLevel	= IGuideEsLevel.nLower;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+			IGuideEsPara.nEndLevel		= 250;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
+			IGuideEsPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 			// --- level set
 			thr = BinLevelSet( &IGuideEsPara );
 			// --- Check level
@@ -5581,7 +5565,7 @@ int		ElecEsLevelSet( void )
 
 //================================================
 //	Search Electrode
-//		Index guide ˆÊ’uŒŸo—p‚Q’l‰»‰æ‘œ‚ğg—p‚µ‚Ä‚¢‚é
+//		Index guide ï¿½Ê’uï¿½ï¿½ï¿½oï¿½pï¿½Qï¿½lï¿½ï¿½ï¿½æ‘œï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 //================================================
 
 int		TP_SearchElect( void )
@@ -5640,7 +5624,7 @@ int		TP_SearchElect( void )
                 while( R_DrawGetCursor());
 
             }
-		// ƒmƒCƒYœ‹
+		// ï¿½mï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½
 			BinFilter.nBinPn = binPn;
 			BinFilter.nXmin = 0;
 			BinFilter.nXmax = FxSize-1;
@@ -5704,7 +5688,7 @@ int		TP_SearchElect( void )
 			int						ymin, ymax, ry;
 			int						mode;
 
-			// ƒT[ƒ`ğŒİ’è
+			// ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 					xmin = FxSize/2 - 40;
 					xmax = FxSize/2 + 40;
 					t_count = (xmax-xmin+1)*2;
@@ -5718,7 +5702,7 @@ int		TP_SearchElect( void )
 							wp = count*100/t_count;
 							if( wp < 20 ) break;
 					}
-					if( ry >= ymax )	return ERROR;		// ‰æ‘œˆÙíi‰æ–Ê@”’Hj
+					if( ry >= ymax )	return ERROR;		// ï¿½æ‘œï¿½Ùï¿½iï¿½ï¿½Ê@ï¿½ï¿½ï¿½Hï¿½j
 					// --- search
 					mode = ES_WHITE;
 					yn = 0;
@@ -5759,7 +5743,7 @@ int		TP_SearchElect( void )
                                     wp = count*100/t_count;
                                     if( wp < 20 ) break;
                             }
-                            if( ry >= ymax )	return ERROR;		// ‰æ‘œˆÙíi‰æ–Ê@”’Hj
+                            if( ry >= ymax )	return ERROR;		// ï¿½æ‘œï¿½Ùï¿½iï¿½ï¿½Ê@ï¿½ï¿½ï¿½Hï¿½j
                             // --- search
                             mode = ES_WHITE;
                             yn = 0;
@@ -6010,7 +5994,7 @@ int		TP_SearchElect( void )
                                             */
 
 
-		// “d‹É¶‰EˆÊ’uƒT[ƒ`
+		// ï¿½dï¿½Éï¿½ï¿½Eï¿½Ê’uï¿½Tï¿½[ï¿½`
 			//v2.20 if(!bIsLTR50){
 			if((!bIsLTR50) && (!bIsLTR18)){
 				switch( TP_SearchElecXrough( binPn ) ){
@@ -6020,21 +6004,21 @@ int		TP_SearchElect( void )
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
                     }
 						break;
-					case ERROR2:	// ƒ[ƒN–³‚µ
+					case ERROR2:	// ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½
                     if( i_mode & INSPECT_STEP ) {
                         sprintf( Comment, "ERROR2 " );
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
                     }
 						return ERROR2;
 						break;
-					case ERROR3:	// •\\— ‹t
+					case ERROR3:	// ï¿½\\ï¿½ï¿½ï¿½t
                     if( i_mode & INSPECT_STEP ) {
                         sprintf( Comment, "ERROR3 " );
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
                     }
 						return ERROR3;
 						break;
-					case ERROR4:	// XƒTƒCƒY
+					case ERROR4:	// Xï¿½Tï¿½Cï¿½Y
                     if( i_mode & INSPECT_STEP ) {
                         sprintf( Comment, "ERROR4 " );
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
@@ -6059,21 +6043,21 @@ int		TP_SearchElect( void )
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
                     }
 						break;
-					case ERROR2:	// ƒ[ƒN–³‚µ
+					case ERROR2:	// ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½
                     if( i_mode & INSPECT_STEP ) {
                         sprintf( Comment, "ERROR2 " );
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
                     }
 						return ERROR2;
 						break;
-					case ERROR3:	// •\\— ‹t
+					case ERROR3:	// ï¿½\\ï¿½ï¿½ï¿½t
                     if( i_mode & INSPECT_STEP ) {
                         sprintf( Comment, "ERROR3 " );
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
                     }
 						return ERROR3;
 						break;
-					case ERROR5:	// YƒTƒCƒY
+					case ERROR5:	// Yï¿½Tï¿½Cï¿½Y
                     if( i_mode & INSPECT_STEP ) {
                         sprintf( Comment, "ERROR5 " );
                         DrawMessage( Comment, DRAW_GREEN, 2, 2 );
@@ -6100,7 +6084,7 @@ int		TP_SearchElect( void )
 				}
 			}
 
-			// MCR01‚Íc¡–@‚ğ•Ê2’l‰»‚ÅŒŸo‚·‚é
+			// MCR01ï¿½Ícï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½2ï¿½lï¿½ï¿½ï¿½ÅŒï¿½ï¿½oï¿½ï¿½ï¿½ï¿½
 			if(bIsMCR01 && ((Option & BACKINSP_MODE) ==0)){
 				// Gray to Bin
 				xsize = IGuidePos[DataX]-IGuidePos[1]+1;
@@ -6128,7 +6112,7 @@ int		TP_SearchElect( void )
 					while( R_DrawGetCursor());
 
 				}
-			// ƒmƒCƒYœ‹
+			// ï¿½mï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½
 				BinFilter.nBinPn = binPn;
 				BinFilter.nXmin = 0;
 				BinFilter.nXmax = FxSize-1;
@@ -6368,13 +6352,13 @@ int		TP_SearchElecXroughLTR( int binPn )
 		if( (1==bIsLTR50)&&(0!=(Option & BACKINSP_MODE)) || (1==bIsLTR18)&&(0!=(Option & BACKINSP_MODE)) ){
 			j_count = 5;
 		}
-		// “à‚©‚çŠOŒü‚«‚ÉƒT[ƒ`‚·‚é
-		// ãƒT[ƒ`ğŒİ’è
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÉƒTï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			ys = ElecPosRough[DataUpper][PosYmin]-15;					//2021.10.25<shio>  0 -> -15
 			ye = ElecPosRough[DataUpper][PosYmax]+15 ;
 			t_count = ye-ys+1;
 
-		//¶ã
+		//ï¿½ï¿½ï¿½ï¿½
 			xs = FxSize/3;
 			xe = 20;
 			for( rx=xs; rx>xe; rx-- ) {
@@ -6384,7 +6368,7 @@ int		TP_SearchElecXroughLTR( int binPn )
 			}
 			if( rx <= xe ) return ERROR;
 			ElecPosRough[DataUpper][PosXmin] = rx;
-		//‰Eã
+		//ï¿½Eï¿½ï¿½
 			xs = FxSize-FxSize/2;
 			xe = FxSize-20;
 			for( rx=xs; rx<xe; rx++ ) {
@@ -6394,7 +6378,7 @@ int		TP_SearchElecXroughLTR( int binPn )
 			}
 			if( rx >= xe ) return ERROR;
 			ElecPosRough[DataUpper][PosXmax] = rx;
-		//ƒT[ƒ`ˆÊ’u•\¦
+		//ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 			// --- Viwe
 			if( i_mode & INSPECT_STEP ) {
 				R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -6406,12 +6390,12 @@ int		TP_SearchElecXroughLTR( int binPn )
 //				R_DrawCls();
 			}
 
-		//‰ºƒT[ƒ`ğŒİ’è
+		//ï¿½ï¿½ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			ys = ElecPosRough[DataLower][PosYmin]-15;			//2021.10.25<shio>  0 -> -15
 			ye = ElecPosRough[DataLower][PosYmax]+15;
 			t_count = ye-ys+1;
 
-		//¶‰º
+		//ï¿½ï¿½ï¿½ï¿½
 			xs = FxSize/3;
 			xe = 20;
 			for( rx=xs; rx>xe; rx-- ) {
@@ -6421,7 +6405,7 @@ int		TP_SearchElecXroughLTR( int binPn )
 			}
 			if( rx <= xe ) return ERROR;
 			ElecPosRough[DataLower][PosXmin] = rx;
-		//‰E‰º
+		//ï¿½Eï¿½ï¿½
 			xs = FxSize-FxSize/3;
 			xe = FxSize-20;
 			for( rx=xs; rx<xe; rx++ ) {
@@ -6432,7 +6416,7 @@ int		TP_SearchElecXroughLTR( int binPn )
 			if( rx >= xe ) return ERROR;
 			ElecPosRough[DataLower][PosXmax] = rx;
 
-		//ƒT[ƒ`ˆÊ’u•\¦
+		//ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 		// --- Viwe
 			if( i_mode & INSPECT_STEP ) {
 				R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -6465,7 +6449,7 @@ int		TP_SearchElecXrough( int binPn )
 		int						xsize;
 		int						mode;
 
-		// ƒT[ƒ`ğŒİ’è
+		// ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			if(bIsSFR25){
 				ymin = FySize/2 - 80;
 				ymax = FySize/2 + 80;
@@ -6483,7 +6467,7 @@ int		TP_SearchElecXrough( int binPn )
 				wp = count*100/t_count;
 				if( wp < 20 ) break;
 			}
-			if( rx >= xmax )	return ERROR;		// ‰æ‘œˆÙíi‰æ–Ê@”’Hj
+			if( rx >= xmax )	return ERROR;		// ï¿½æ‘œï¿½Ùï¿½iï¿½ï¿½Ê@ï¿½ï¿½ï¿½Hï¿½j
 			// --- search
 			mode = ES_WHITE;
 			xn = 0;
@@ -6496,7 +6480,7 @@ int		TP_SearchElecXrough( int binPn )
 						if( xn > 2 ) {
 							ElecPosRough[DataLeft][0] = rx - xn*2;
 							mode = ES_BLACK;
-							if(bIsMCR01)	rx+=10;			// 2017.08.22 ƒCƒ“ƒfƒbƒNƒXŒ©‚¦‚Ìƒ}ƒXƒN
+							if(bIsMCR01)	rx+=10;			// 2017.08.22 ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ}ï¿½Xï¿½N
 							xn = 0;
 						}
 					} else {
@@ -6547,7 +6531,7 @@ int		TP_SearchElecXrough( int binPn )
 						if( xn > 2 ) {
 							ElecPosRough[DataRight][2] = rx + xn*2;
 							mode = ES_BLACK;
-							if(bIsMCR01)	rx-=10;			// 2017.08.22 ƒCƒ“ƒfƒbƒNƒXŒ©‚¦‚Ìƒ}ƒXƒN
+							if(bIsMCR01)	rx-=10;			// 2017.08.22 ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ}ï¿½Xï¿½N
 							xn = 0;
 						}
 					} else {
@@ -6585,8 +6569,8 @@ int		TP_SearchElecXrough( int binPn )
 			}
 
 		// Judge
-			if(( ans_le == ERROR2 )&&( ans_ri == ERROR2 ))	return ERROR3;		// •\\— ‹t
-			if(( ans_le == ERROR )&&( ans_ri == ERROR ))	return ERROR2;		// ƒ[ƒN–³‚µ
+			if(( ans_le == ERROR2 )&&( ans_ri == ERROR2 ))	return ERROR3;		// ï¿½\\ï¿½ï¿½ï¿½t
+			if(( ans_le == ERROR )&&( ans_ri == ERROR ))	return ERROR2;		// ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½
 			xsize = (ElecPosRough[DataRight][2]-ElecPosRough[DataLeft][0]);
 			if((InspPara.ChipXmin[TWA_Spec].nXsize > xsize) || (xsize > InspPara.ChipXmax[TWA_Spec].nXsize ))	return ERROR4;
 			if(( ans_le == OK )&&( ans_ri == OK ))			return OK;
@@ -6611,7 +6595,7 @@ int		TP_SearchElecYroughLTR( int binPn )
 		int						ysize;
 		int						mode;
 
-		// ƒT[ƒ`ğŒİ’è
+		// ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			xmin = FxSize/2 - 40;
 			xmax = FxSize/2 + 40;
 			t_count = (xmax-xmin+1)*2;
@@ -6625,7 +6609,7 @@ int		TP_SearchElecYroughLTR( int binPn )
 				wp = count*100/t_count;
 				if( wp < 20 ) break;
 			}
-			if( ry >= ymax )	return ERROR;		// ‰æ‘œˆÙíi‰æ–Ê@”’Hj
+			if( ry >= ymax )	return ERROR;		// ï¿½æ‘œï¿½Ùï¿½iï¿½ï¿½Ê@ï¿½ï¿½ï¿½Hï¿½j
 			// --- search
 			mode = ES_WHITE;
 			yn = 0;
@@ -6725,13 +6709,13 @@ int		TP_SearchElecYroughLTR( int binPn )
 			}
 
 		// Judge
-			if(( ans_up == ERROR2 )&&( ans_lo == ERROR2 ))	return ERROR3;		// •\\— ‹t
-			if(( ans_up == ERROR  )&&( ans_lo == ERROR )){						// ƒ[ƒN–³‚µ
+			if(( ans_up == ERROR2 )&&( ans_lo == ERROR2 ))	return ERROR3;		// ï¿½\\ï¿½ï¿½ï¿½t
+			if(( ans_up == ERROR  )&&( ans_lo == ERROR )){						// ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½
 				if( OK != Index_Ibutsu_check( grayPn, binPn)) {
                     TWA_Ibutsu_Stop = OFF;//BACKSIDE VER.1.00
 					return ERROR6;									// Index Ibutsu  2021.04.20 <shio>
 				}else{
-					return ERROR2;		// ƒ[ƒN–³‚µ
+					return ERROR2;		// ï¿½ï¿½ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½
 				}
 			}
 			ysize = (ElecPosRough[DataLower][PosYmax]-ElecPosRough[DataUpper][PosYmin]);
@@ -6779,7 +6763,7 @@ int	Index_Ibutsu_check( int grayPn, int binPn )
 printf("Search Elec %d,xs%d,ys%d,xe%d,ye%d \n",__LINE__, xs, ys,xe,ye );
 
 
-		//ƒmƒCƒYœ‹ˆ—
+		//ï¿½mï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			pt[0]=0;	pt[1]=0;	pt[2]=FxSize-1;		pt[3]=FySize-1;
 			TWA_contrct2( binPn, Ap_contrct_x, Ap_contrct_y, pt );
 			TWA_contrct2( binPn, Ap_contrct_x, Ap_contrct_y, pt );
@@ -6841,19 +6825,19 @@ printf("Search Elec %d,xs%d,ys%d,xe%d,ye%d \n",__LINE__, xs, ys,xe,ye );
 void	TWA_Ibutsu_error( void )
 	{
 
-		//ERROR•\¦
+		//ERRORï¿½\ï¿½ï¿½
 	//		TWA_output_Stop( ON, TWA_io_type );
-	//		if( R_language == JPN_DISP )	strcpy( Comment, "Index Ibutsu •t’…ˆÙí" );
+	//		if( R_language == JPN_DISP )	strcpy( Comment, "Index Ibutsu ï¿½tï¿½ï¿½ï¿½Ùï¿½" );
 	//		else							strcpy( Comment, "Ibutsu adhesion on the Glass" );
 			R_chrdisp_system_scale_font( 1,10, Comment );
-			if( R_language == JPN_DISP )	sprintf( Comment, "ƒ}ƒEƒX‚ğƒNƒŠƒbƒN‚µ‚Ä‰º‚³‚¢B" );
+			if( R_language == JPN_DISP )	sprintf( Comment, "ï¿½}ï¿½Eï¿½Xï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" );
 			else							sprintf( Comment, "Cleaning Glass and click mouse" );
 			R_chrdisp_system_scale_font( 1,15, Comment );
 
-		// ƒ}ƒEƒXƒNƒŠƒbƒN‘Ò‚¿
+		// ï¿½}ï¿½Eï¿½Xï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½Ò‚ï¿½
 			WaitMouseClick();
 
-		// ERROR‰ğœ
+		// ERRORï¿½ï¿½ï¿½ï¿½
 	//		TWA_output_Stop( OFF, TWA_io_type );
 			R_gray_fill( 0, 0, FxSize-1, FySize-1, 0 );
 			BinClsPn( 0, 0, 0, FxSize-1, FySize-1 );
@@ -6890,13 +6874,13 @@ int		TP_SearchElecYrough( int binPn )
 		if(!bIsMCR01 || ((Option & BACKINSP_MODE) !=0)){
 			//v2.11 if(bIsMCR01)	j_count = 10;
 			if( (bIsMCR01) || ((Option & BACKINSP_MODE) !=0) )	j_count = 10;
-		// “à‚©‚çŠOŒü‚«‚ÉƒT[ƒ`‚·‚é
-		// ¶ƒT[ƒ`ğŒİ’è
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÉƒTï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			xs = ElecPosRough[DataLeft][0];
 			xe = ElecPosRough[DataLeft][2];
 			t_count = xe-xs+1;
 
-		//¶ã
+		//ï¿½ï¿½ï¿½ï¿½
 			ys = FySize/2;
 			ye = 20;
 			for( ry=ys; ry>ye; ry-- ) {
@@ -6906,7 +6890,7 @@ int		TP_SearchElecYrough( int binPn )
 			}
 			if( ry <= ye ) return ERROR;
 			ElecPosRough[DataLeft][1] = ry;
-		//¶‰º
+		//ï¿½ï¿½ï¿½ï¿½
 			ys = FySize/2;
 			ye = FySize-20;
 			for( ry=ys; ry<ye; ry++ ) {
@@ -6916,7 +6900,7 @@ int		TP_SearchElecYrough( int binPn )
 			}
 			if( ry >= ye ) return ERROR;
 			ElecPosRough[DataLeft][3] = ry;
-		//ƒT[ƒ`ˆÊ’u•\¦
+		//ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 			// --- Viwe
 			if( i_mode & INSPECT_STEP ) {
 				R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -6929,12 +6913,12 @@ int		TP_SearchElecYrough( int binPn )
 //				R_DrawCls();
 			}
 
-		//‰EƒT[ƒ`ğŒİ’è
+		//ï¿½Eï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			xs = ElecPosRough[DataRight][0];
 			xe = ElecPosRough[DataRight][2];
 			t_count = xe-xs+1;
 
-		//‰Eã
+		//ï¿½Eï¿½ï¿½
 			ys = FySize/2;
 			ye = 20;
 			for( ry=ys; ry>ye; ry-- ) {
@@ -6944,7 +6928,7 @@ int		TP_SearchElecYrough( int binPn )
 			}
 			if( ry <= ye ) return ERROR;
 			ElecPosRough[DataRight][1] = ry;
-		//‰E‰º
+		//ï¿½Eï¿½ï¿½
 			ys = FySize/2;
 			ye = FySize-20;
 			for( ry=ys; ry<ye; ry++ ) {
@@ -6955,7 +6939,7 @@ int		TP_SearchElecYrough( int binPn )
 			if( ry >= ye ) return ERROR;
 			ElecPosRough[DataRight][3] = ry;
 
-		//ƒT[ƒ`ˆÊ’u•\¦
+		//ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 		// --- Viwe
 			if( i_mode & INSPECT_STEP ) {
 				R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -6967,13 +6951,13 @@ int		TP_SearchElecYrough( int binPn )
 				R_DrawCls();
 			}
 		} else {   //MCR01
-			// ŠO‚©‚ç“àŒü‚«‚ÉƒT[ƒ`‚·‚é
-			// ¶ƒT[ƒ`ğŒİ’è
+			// ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒTï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½
+			// ï¿½ï¿½ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 				xs = ElecPosRough[DataLeft][0];
 				xe = ElecPosRough[DataLeft][2];
 				t_count = xe-xs+1;
 
-			//¶ã
+			//ï¿½ï¿½ï¿½ï¿½
 				ys = Index_pos[0];
 				ye = FySize/2;
 				for( ry=ys; ry<ye; ry++ ) {
@@ -6983,7 +6967,7 @@ int		TP_SearchElecYrough( int binPn )
 				}
 				if( ry >= ye ) return ERROR;
 				ElecPosRough[DataLeft][1] = ry;
-			//¶‰º
+			//ï¿½ï¿½ï¿½ï¿½
 				ys = Index_pos[1];
 				ye = FySize/2;
 				for( ry=ys; ry>ye; ry-- ) {
@@ -6993,7 +6977,7 @@ int		TP_SearchElecYrough( int binPn )
 				}
 				if( ry <= ye ) return ERROR;
 				ElecPosRough[DataLeft][3] = ry;
-			//ƒT[ƒ`ˆÊ’u•\¦
+			//ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 				// --- Viwe
 				if( i_mode & INSPECT_STEP ) {
 					R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -7006,12 +6990,12 @@ int		TP_SearchElecYrough( int binPn )
 	//				R_DrawCls();
 				}
 
-			//‰EƒT[ƒ`ğŒİ’è
+			//ï¿½Eï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 				xs = ElecPosRough[DataRight][0];
 				xe = ElecPosRough[DataRight][2];
 				t_count = xe-xs+1;
 
-			//‰Eã
+			//ï¿½Eï¿½ï¿½
 				ys = Index_pos[0];
 				ye = FySize/2;
 				for( ry=ys; ry<ye; ry++ ) {
@@ -7021,7 +7005,7 @@ int		TP_SearchElecYrough( int binPn )
 				}
 				if( ry >= ye ) return ERROR;
 				ElecPosRough[DataRight][1] = ry;
-			//‰E‰º
+			//ï¿½Eï¿½ï¿½
 				ys = Index_pos[1];
 				ye = FySize/2;
 				for( ry=ys; ry>ye; ry-- ) {
@@ -7031,7 +7015,7 @@ int		TP_SearchElecYrough( int binPn )
 				}
 				if( ry <= ye ) return ERROR;
 				ElecPosRough[DataRight][3] = ry;
-			//ƒT[ƒ`ˆÊ’u•\¦
+			//ï¿½Tï¿½[ï¿½`ï¿½Ê’uï¿½\ï¿½ï¿½
 				// --- Viwe
 				if( i_mode & INSPECT_STEP ) {
 					R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );
@@ -7116,37 +7100,37 @@ int		ChipEsLevelSet( void )
 				ChipEsLSetPara.nXmax = ElecPosRough[DataLR][PosXmax];
 				ChipEsLSetPara.nYmin = ElecPosRough[DataLR][PosYmin];
 				ChipEsLSetPara.nYmax = ElecPosRough[DataLR][PosYmax];
-				ChipEsLSetPara.nStartLevel	= ChipEsLevel.nLower;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
+				ChipEsLSetPara.nStartLevel	= ChipEsLevel.nLower;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
 			} else if (bIsESR25 != 0 || bIsSFR25 != 0) {
 				ChipEsLSetPara.nXmin = ElecPosRough[DataLR][PosXmin];
 				ChipEsLSetPara.nXmax = ElecPosRough[DataLR][PosXmin]+(ElecPosRough[DataLR][PosXmax]-ElecPosRough[DataLR][PosXmin])/3;
 				ChipEsLSetPara.nYmin = shita.kaiki_ey;	//ElecPosRough[DataLR][PosYmin];
 				ChipEsLSetPara.nYmax = ElecPosRough[DataLR][PosYmax];
-				ChipEsLSetPara.nStartLevel	= ChipEsLevel.nLower;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-			//v2.20 } else if (bIsLTR50 != 0) {					//“d‹É‚Ì‰š‚İ•”•ª‚ğg‚Á‚Ä2’l‰»ƒŒƒxƒ‹‚ğŒvZ‚·‚é
-			} else if ( (bIsLTR50 != 0) || (bIsLTR18 != 0) ) {					//“d‹É‚Ì‰š‚İ•”•ª‚ğg‚Á‚Ä2’l‰»ƒŒƒxƒ‹‚ğŒvZ‚·‚é
+				ChipEsLSetPara.nStartLevel	= ChipEsLevel.nLower;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+			//v2.20 } else if (bIsLTR50 != 0) {					//ï¿½dï¿½É‚Ì‰ï¿½ï¿½İ•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½2ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+			} else if ( (bIsLTR50 != 0) || (bIsLTR18 != 0) ) {					//ï¿½dï¿½É‚Ì‰ï¿½ï¿½İ•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½2ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 				ChipEsLSetPara.nXmin = (ElecPosRough[DataLR][PosXmin]+ElecPosRough[DataLR][PosXmax])/2-40;
 				ChipEsLSetPara.nXmax = ChipEsLSetPara.nXmin+80;
 				ChipEsLSetPara.nYmin = shita.kaiki_ey+3;
 				ChipEsLSetPara.nYmax = ChipEsLSetPara.nYmin+15;
-				ChipEsLSetPara.nStartLevel	= ChipEsLevel.nLower;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-			} else {	// MCR10,MCR18  ‰º‚ÌƒI[ƒo[ƒR[ƒg‚·‚«‚Ü‚ğg‚Á‚Ä’[q2’l‰»ƒŒƒxƒ‹‚ğŒvZ‚·‚é
+				ChipEsLSetPara.nStartLevel	= ChipEsLevel.nLower;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+			} else {	// MCR10,MCR18  ï¿½ï¿½ï¿½ÌƒIï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½gï¿½ï¿½ï¿½Ä’[ï¿½q2ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 				ChipEsLSetPara.nXmin = ElecPosRough[DataLR][PosXmin];
 				ChipEsLSetPara.nXmax = ElecPosRough[DataLR][PosXmax];
 				ChipEsLSetPara.nYmin = shita.kaiki_ey;	//ElecPosRough[DataLR][PosYmin];
 				ChipEsLSetPara.nYmax = ElecPosRough[DataLeft][PosYmax];
 				if(ChipEsLSetPara.nYmax > ElecPosRough[DataRight][PosYmax])		ChipEsLSetPara.nYmax = ElecPosRough[DataRight][PosYmax];
 				ChipEsLSetPara.nYmax-=3;
-				ChipEsLSetPara.nStartLevel	= 40;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
+				ChipEsLSetPara.nStartLevel	= 40;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
 			}
 			if(ChipEsLSetPara.nYmin > ChipEsLSetPara.nYmax)	ChipEsLSetPara.nYmin = ChipEsLSetPara.nYmax-1;
 			// ---
-			ChipEsLSetPara.nEndLevel	= 255;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
-			ChipEsLSetPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+			ChipEsLSetPara.nEndLevel	= 255;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
+			ChipEsLSetPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 			// --- level set
 			thr = BinLevelSet( &ChipEsLSetPara );
 
-			if(bIsMCR10 || bIsMCR18){		// MCR10,MCR18 ã‚ÌƒI[ƒo[ƒR[ƒg‚·‚«‚Ü‚ğg‚Á‚Ä’[q2’l‰»ƒŒƒxƒ‹‚ğŒvZ‚·‚é ã‰º‚Å‘å‚«‚¢•û‚ğÌ—p‚·‚é
+			if(bIsMCR10 || bIsMCR18){		// MCR10,MCR18 ï¿½ï¿½ÌƒIï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½gï¿½ï¿½ï¿½Ä’[ï¿½q2ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½ ï¿½ã‰ºï¿½Å‘å‚«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì—pï¿½ï¿½ï¿½ï¿½
 				if(thr >= 0)	thr = ChipEsLSetPara.nLevel;
 				ChipEsLSetPara.nXmin = ElecPosRough[DataLR][PosXmin];
 				ChipEsLSetPara.nXmax = ElecPosRough[DataLR][PosXmax];
@@ -7154,12 +7138,12 @@ int		ChipEsLevelSet( void )
 				ChipEsLSetPara.nYmin = ElecPosRough[DataLeft][PosYmin];
 				if(ChipEsLSetPara.nYmin < ElecPosRough[DataRight][PosYmin])		ChipEsLSetPara.nYmin = ElecPosRough[DataRight][PosYmin];
 				ChipEsLSetPara.nYmin+=3;
-				ChipEsLSetPara.nStartLevel	= 40;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
+				ChipEsLSetPara.nStartLevel	= 40;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
 
 				if(ChipEsLSetPara.nYmin > ChipEsLSetPara.nYmax)	ChipEsLSetPara.nYmin = ChipEsLSetPara.nYmax-1;
 				// ---
-				ChipEsLSetPara.nEndLevel	= 255;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
-				ChipEsLSetPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+				ChipEsLSetPara.nEndLevel	= 255;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
+				ChipEsLSetPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 				// --- level set
 				thr2 = BinLevelSet( &ChipEsLSetPara );
 				if(thr2 >= 0){
@@ -7205,7 +7189,7 @@ void			ChipGray2Bin( void )
 
 		// Initial
 			BinClsPn( binPn, 0, 0, FxSize-1, FySize-1 );
-		// ƒ`ƒbƒvŒŸo‚Q’l‰»‰æ‘œ
+		// ï¿½`ï¿½bï¿½vï¿½ï¿½ï¿½oï¿½Qï¿½lï¿½ï¿½ï¿½æ‘œ
 			xmin	= IGuidePos[1];
 			xmax	= IGuidePos[DataX];
 			xsize	= xmax-xmin+1;
@@ -7266,7 +7250,7 @@ void			ChipGray2Bin( void )
             //FilterBinContrct( &BinFilter, Ap_contrct_x, Ap_contrct_y );
 
 /*
-            // •Wˆó‚ğÁ‚·
+            // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if(bIsESR25!=0 || bIsSFR25!=0){
                 BinFilter.nBinPn = binPn;
                 BinFilter.nXmin = (G2_pos[0]+G2_pos[1])/2-125;
@@ -7289,7 +7273,7 @@ void			ChipGray2Bin( void )
                 }
             }
 
-			// •Ç–Ê‚Ì’[q•t’…‚ğÁ‚· MCR18
+			// ï¿½Ç–Ê‚Ì’[ï¿½qï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MCR18
 			if(bIsMCR18){
 				BinFilter.nBinPn = binPn;
 				BinFilter.nXmin = ElecPosRough[DataLR][PosXmin];
@@ -7310,7 +7294,7 @@ void			ChipGray2Bin( void )
 
 			}
 
-			// ƒ`ƒbƒvƒuƒŒ[ƒN–Ê‚ªŒ©‚¦‚é‚Ì‚ğÁ‚·
+			// ï¿½`ï¿½bï¿½vï¿½uï¿½ï¿½ï¿½[ï¿½Nï¿½Ê‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½
 			if(bIsMCR01){
 				BinFilter.nBinPn = binPn;
 				BinFilter.nXmin = ElecPosRough[DataLeft][PosXmin];
@@ -7361,7 +7345,7 @@ void			ChipGray2Bin( void )
 			}
 */
 /* orig
-        // ƒmƒCƒYœ‹
+        // ï¿½mï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½
 			BinFilter.nBinPn = binPn;
 			BinFilter.nXmin = 0;
 			BinFilter.nXmax = FxSize-1;
@@ -7429,7 +7413,7 @@ int		ChipBinMeasure( void )
 		//	ymax	= FySize-1;
 		//	ysize	= ymax-ymin+1;
 
-			// 2017.08.21 ”’index•”•ª‚ğÈ‚­
+			// 2017.08.21 ï¿½ï¿½indexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 			xmin	= IGuidePos[1];
 			xmax	= IGuidePos[DataX];
 			xsize	= xmax-xmin+1;
@@ -7444,7 +7428,7 @@ int		ChipBinMeasure( void )
             //2019.04.05 Chip center cut off
            // BinClsPn( binPn, ElecPosRough[DataLeft][PosXmax]+20, Index_pos[0], ElecPosRough[DataRight][PosXmin]-20, Index_pos[1] );
 		// Binary measure
-			// “Á’¥—Ê‰‰Z@‰‰Z•û®w’è
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Zï¿½@ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½
 				R_set_meas_configration( &Mpx, BinMeasChip.nRun, BinMeasChip.nArea, BinMeasChip.nColor, BinMeasChip.nMode );
 			// Measure
                 if( i_mode & INSPECT_STEP ) {//11911
@@ -7461,12 +7445,12 @@ int		ChipBinMeasure( void )
 				sprintf( Comment, "1 " );
 				DrawMessage( Comment, DRAW_GREEN, 2, 2 );
 				}
-			// ”’FA–ÊÏ‚Ì‘å‚«‚¢ãˆÊ‚Q‚Â‚Ìƒuƒ[ƒu‚ğ“d‹É‚Æ”»’f‚·‚éB
+			// ï¿½ï¿½ï¿½Fï¿½Aï¿½ÊÏ‚Ì‘å‚«ï¿½ï¿½ï¿½ï¿½Ê‚Qï¿½Â‚Ìƒuï¿½ï¿½ï¿½[ï¿½uï¿½ï¿½dï¿½É‚Æ”ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½B
 				R_sort_area(&Mpx);
 				for( bn=1; bn<=Mpx.bn; bn++ ) {
 					rbn = Mpx.sortnumb[bn];
 					if( Mpx.color[rbn] == ColorWhite ) {
-						if((Option & BACKINSP_MODE) ==0){		// •\–ÊŒŸ¸
+						if((Option & BACKINSP_MODE) ==0){		// ï¿½\ï¿½ÊŒï¿½ï¿½ï¿½
 							//v2.20 if(!bIsLTR50){	//normal
 							if( (!bIsLTR50) && (!bIsLTR18) ){	//normal
 								if( Mpx.center_x[rbn] < (FxSize/2) ) {
@@ -7485,7 +7469,7 @@ int		ChipBinMeasure( void )
 									Center_Lo = Mpx.center_y[rbn];                                           // GEE V1.02A
 								}
 							}
-						} else {								// — –ÊŒŸ¸ 20171026
+						} else {								// ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½ 20171026
 							//v2.20 if(!bIsLTR50){	//normal
 							if( (!bIsLTR50) && (!bIsLTR18) ){	//normal
 								if( Mpx.center_x[rbn] < ElecPosRough[DataLeft][PosXmax] ) {
@@ -7568,12 +7552,12 @@ int		ChipBinMeasure( void )
 								oy = ( short )( Mpx.ellipse_a[bn]*Mpx.sin[bn] );
 								ox/=2;
 								oy/=2;
-								R_DrawLine( DRAW_GREEN, xc-ox, yc-oy, xc+ox, yc+oy, DRAW_REVERSE, DASHED_LINE );	// ‰¡ Line
+								R_DrawLine( DRAW_GREEN, xc-ox, yc-oy, xc+ox, yc+oy, DRAW_REVERSE, DASHED_LINE );	// ï¿½ï¿½ Line
 								ox = ( short )( Mpx.ellipse_b[bn]*Mpx.cos[bn] );
 								oy = ( short )( Mpx.ellipse_b[bn]*Mpx.sin[bn] );
 								ox/=2;
 								oy/=2;
-								R_DrawLine( DRAW_GREEN, xc-oy, yc+ox, xc+oy, yc-ox, DRAW_REVERSE, DASHED_LINE );	// c Line
+								R_DrawLine( DRAW_GREEN, xc-oy, yc+ox, xc+oy, yc-ox, DRAW_REVERSE, DASHED_LINE );	// ï¿½c Line
 								R_draw_ellipse( DRAW_GREEN, xc, yc, Mpx.ellipse_a[bn]/2, Mpx.ellipse_b[bn]/2, Mpx.sin[bn], DRAW_NORMAL );
 								sprintf( Comment, "Electrode pos. %d", side );
 								DrawMessage( Comment, DRAW_GREEN, 2, 2 );
@@ -7589,7 +7573,7 @@ int		ChipBinMeasure( void )
 			if( Elec[DataLeft].BlobNo == ERROR )	res++;
 			if( Elec[DataRight].BlobNo == ERROR )	res++;
 
-        // ’[q‚Ì¶‰E‚Ì‚‚³‚ª‘å‚«‚­ˆá‚¤ê‡ƒGƒ‰[   2017.04.09 tanaka   ”‚ª‚êŒŸob’è
+        // ï¿½[ï¿½qï¿½Ìï¿½ï¿½Eï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å‚«ï¿½ï¿½ï¿½á‚¤ï¿½ê‡ï¿½Gï¿½ï¿½ï¿½[   2017.04.09 tanaka   ï¿½ï¿½ï¿½ï¿½ï¿½êŒŸï¿½oï¿½bï¿½ï¿½
 			//v2.20 if(!bIsLTR50){
 			if( (!bIsLTR50) && (!bIsLTR18) ){
 				if(bIsMCR01==0){
@@ -7597,22 +7581,22 @@ int		ChipBinMeasure( void )
 				} else if((Option & BACKINSP_MODE)==0) {
 					if( abs((Mpx.ydiff[Elec[DataRight].BlobNo] - Mpx.ydiff[Elec[DataLeft].BlobNo])) > 10 )   res = 1;
 				} else {
-					if( abs((Mpx.ydiff[Elec[DataRight].BlobNo] - Mpx.ydiff[Elec[DataLeft].BlobNo])) > 30 )   res = 1;	// 2017.08.22 MCR01b’è
+					if( abs((Mpx.ydiff[Elec[DataRight].BlobNo] - Mpx.ydiff[Elec[DataLeft].BlobNo])) > 30 )   res = 1;	// 2017.08.22 MCR01ï¿½bï¿½ï¿½
 				}
 			} else {
 				if((Option & BACKINSP_MODE)==0) {
 					if( abs((Mpx.xdiff[Elec[DataLower].BlobNo] - Mpx.xdiff[Elec[DataUpper].BlobNo])) > 40 )   res = 1;
 				} else {
-					if( abs((Mpx.xdiff[Elec[DataLower].BlobNo] - Mpx.xdiff[Elec[DataUpper].BlobNo])) > 40 )   res = 1;	// b’è
+					if( abs((Mpx.xdiff[Elec[DataLower].BlobNo] - Mpx.xdiff[Elec[DataUpper].BlobNo])) > 40 )   res = 1;	// ï¿½bï¿½ï¿½
 				}
 			}
-			//    // G2ƒGƒŠƒA‚ÌC1Œ©‚¦ 2017.04.09 tanaka b’è
+			//    // G2ï¿½Gï¿½ï¿½ï¿½Aï¿½ï¿½C1ï¿½ï¿½ï¿½ï¿½ 2017.04.09 tanaka ï¿½bï¿½ï¿½
 	//		if(bIsESR25){
 	//			if( Mpx.xdiff[Elec[DataRight].BlobNo] > 70 ) res = 1;  //InspPara.ElecXmax[TWA_Spec].nXsize
 	//			if( Mpx.xdiff[Elec[DataLeft].BlobNo]  > 70 ) res = 1;  //InspPara.ElecXmax[TWA_Spec].nXsize
 	//		}
 
-        // ƒ`ƒbƒvŒX‚«
+        // ï¿½`ï¿½bï¿½vï¿½Xï¿½ï¿½
 			ChipAtan = 0;
 			if( res == 0 ){
 				//v2.20 if(!bIsLTR50){
@@ -7656,7 +7640,7 @@ int		ChipBinMeasure( void )
 
 //================================================
 //		Insp. chip reverse
-//		ƒ`ƒbƒv•\\— Šm”F
+//		ï¿½`ï¿½bï¿½vï¿½\\ï¿½ï¿½ï¿½mï¿½F
 //================================================
 
 int		InspReverse( void )
@@ -7672,10 +7656,10 @@ int		InspReverse( void )
 
 		// reverse level
 //			r_level = (ChipEsLevel.nData/2);
-			if((Option & BACKINSP_MODE) ==0){		// •\–ÊŒŸ¸		  20170922 tanaka
-				r_level = IGuideEsLevel.nData -20;  // •\\— ƒŒƒxƒ‹b’è 20170128 tanaka
+			if((Option & BACKINSP_MODE) ==0){		// ï¿½\ï¿½ÊŒï¿½ï¿½ï¿½		  20170922 tanaka
+				r_level = IGuideEsLevel.nData -20;  // ï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½bï¿½ï¿½ 20170128 tanaka
 				if(r_level < ChipEsLevel.nLower)    r_level=ChipEsLevel.nLower;
-			} else {								// — –ÊŒŸ¸		  20170922 tanaka
+			} else {								// ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½		  20170922 tanaka
 				r_level=ChipEsLevel.nLower;
 			}
 
@@ -7719,7 +7703,7 @@ int		InspReverse( void )
 				area.right	= (xmin+xmax+xsize)/2;
 			}
 
-		// –¾‚é‚³‚ÌƒqƒXƒgƒOƒ‰ƒ€
+		// ï¿½ï¿½ï¿½é‚³ï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½
 			level = R_get_histgram( area.left, area.top, area.right, area.bottom, Gray_address[grayPn] );
 			if( level < 0 )	return ERROR;
 			// view
@@ -7731,10 +7715,10 @@ int		InspReverse( void )
 					R_DrawCls();
 				}
 
-		// ƒ`ƒbƒv•\— Šm”F
-			if((Option & BACKINSP_MODE) ==0){		// •\–ÊŒŸ¸
+		// ï¿½`ï¿½bï¿½vï¿½\ï¿½ï¿½ï¿½mï¿½F
+			if((Option & BACKINSP_MODE) ==0){		// ï¿½\ï¿½ÊŒï¿½ï¿½ï¿½
 				if( level > r_level )	return ERROR2;
-			} else {								// — –ÊŒŸ¸
+			} else {								// ï¿½ï¿½ï¿½ÊŒï¿½ï¿½ï¿½
 				if( level < r_level )	return ERROR2;
 			}
 			return OK;
@@ -7755,7 +7739,7 @@ int	KeijoElectrodeInspect(void)
 	int						i_mode = R_CS_GetInspectMode();
 	int						res = OK;
 
-	// C1,C12‚ÌƒR[ƒi[‚ÌˆÊ’u‚ª•ª‚©‚Á‚Ä‚¢‚é‚±‚Æ
+	// C1,C12ï¿½ÌƒRï¿½[ï¿½iï¿½[ï¿½ÌˆÊ’uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚±ï¿½ï¿½
 	//ES Data Clear
 
 	for(ds=0;ds<PosYmax+1;ds++){
@@ -7800,14 +7784,14 @@ int	KeijoElectrodeInspect(void)
 			if(( ElecEdgeY[DataLeft][PosYmax][1][dn]-ElecEdgeY[DataLeft][PosYmin][1][dn] ) > InspPara.ElecYmax[TWA_Spec].nYsize ){
 				fail_max++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 
 			if(( ElecEdgeY[DataLeft][PosYmax][1][dn]-ElecEdgeY[DataLeft][PosYmin][1][dn] ) < InspPara.ElecYmin[TWA_Spec].nYsize ){
 				fail_min++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 		}
@@ -7848,13 +7832,13 @@ int	KeijoElectrodeInspect(void)
 			if(( ElecEdgeY[DataRight][PosYmax][1][dn]-ElecEdgeY[DataRight][PosYmin][1][dn] ) > InspPara.ElecYmax[TWA_Spec].nYsize ){
 				fail_max++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 			if(( ElecEdgeY[DataRight][PosYmax][1][dn]-ElecEdgeY[DataRight][PosYmin][1][dn] ) < InspPara.ElecYmin[TWA_Spec].nYsize ){
 				fail_min++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 		}
@@ -7894,14 +7878,14 @@ int	KeijoElectrodeInspect(void)
 			if(( ElecEdgeX[DataUpper][PosXmax][0][dn]-ElecEdgeX[DataUpper][PosXmin][0][dn] ) > InspPara.ElecXmax[TWA_Spec].nXsize ){
 				fail_max++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeX[DataUpper][PosXmin][0][dn], ElecEdgeX[DataUpper][PosXmin][1][dn], ElecEdgeX[DataUpper][PosXmax][0][dn], ElecEdgeX[DataUpper][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeX[DataUpper][PosXmin][0][dn], ElecEdgeX[DataUpper][PosXmin][1][dn], ElecEdgeX[DataUpper][PosXmax][0][dn], ElecEdgeX[DataUpper][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 
 			if(( ElecEdgeX[DataUpper][PosXmax][0][dn]-ElecEdgeX[DataUpper][PosXmin][0][dn] ) < InspPara.ElecXmin[TWA_Spec].nXsize ){
 				fail_min++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeX[DataUpper][PosXmin][0][dn], ElecEdgeX[DataUpper][PosXmin][1][dn], ElecEdgeX[DataUpper][PosXmax][0][dn], ElecEdgeX[DataUpper][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeX[DataUpper][PosXmin][0][dn], ElecEdgeX[DataUpper][PosXmin][1][dn], ElecEdgeX[DataUpper][PosXmax][0][dn], ElecEdgeX[DataUpper][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 		}
@@ -7940,13 +7924,13 @@ int	KeijoElectrodeInspect(void)
 			if(( ElecEdgeX[DataLower][PosXmax][0][dn]-ElecEdgeX[DataLower][PosXmin][0][dn] ) > InspPara.ElecXmax[TWA_Spec].nXsize ){
 				fail_max++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeX[DataLower][PosXmin][0][dn], ElecEdgeX[DataLower][PosXmin][1][dn], ElecEdgeX[DataLower][PosXmax][0][dn], ElecEdgeX[DataLower][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeX[DataLower][PosXmin][0][dn], ElecEdgeX[DataLower][PosXmin][1][dn], ElecEdgeX[DataLower][PosXmax][0][dn], ElecEdgeX[DataLower][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 			if(( ElecEdgeX[DataLower][PosXmax][0][dn]-ElecEdgeX[DataLower][PosXmin][0][dn] ) < InspPara.ElecXmin[TWA_Spec].nXsize ){
 				fail_min++;
 				if( i_mode & INSPECT_STEP ) {
-					R_DrawLine( DRAW_RED, ElecEdgeX[DataLower][PosXmin][0][dn], ElecEdgeX[DataLower][PosXmin][1][dn], ElecEdgeX[DataLower][PosXmax][0][dn], ElecEdgeX[DataLower][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+					R_DrawLine( DRAW_RED, ElecEdgeX[DataLower][PosXmin][0][dn], ElecEdgeX[DataLower][PosXmin][1][dn], ElecEdgeX[DataLower][PosXmax][0][dn], ElecEdgeX[DataLower][PosXmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 				}
 			}
 		}
@@ -8099,7 +8083,7 @@ int		InspChipSize( void )
                                 ElecEdgeY[DataLeft][side][1][dn] = ElecEdge[DataLeft][side].dataY[rx];
 								dn++;
 						}
-						//for( ; dn<640; dn++ ) {	æ‚Éƒf[ƒ^ƒNƒŠƒA‚µ‚Ä‚¢‚é‚Ì‚Å•s—v
+						//for( ; dn<640; dn++ ) {	ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚Å•sï¿½v
 						//        ElecEdgeY[DataLeft][side][0][dn] = 0xffff;
 						//        ElecEdgeY[DataLeft][side][1][dn] = 0xffff;
 						//}
@@ -8111,7 +8095,7 @@ int		InspChipSize( void )
                                 ElecEdgeY[DataLeft][side][1][dn] = ElecEdge[DataLeft ][side].dataY[rx];
 								dn++;
 						}
-						//for( ; dn<640; dn++ ) {  æ‚Éƒf[ƒ^ƒNƒŠƒA‚µ‚Ä‚¢‚é‚Ì‚Å•s—v
+						//for( ; dn<640; dn++ ) {  ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚Å•sï¿½v
 						//        ElecEdgeY[DataLeft][side][0][dn] = 0xffff;
 						//        ElecEdgeY[DataLeft][side][1][dn] = 0xffff;
 						//}
@@ -8125,7 +8109,7 @@ int		InspChipSize( void )
 									fail_max++;
 //									ans = ERROR;
 									if( i_mode & INSPECT_STEP ) {
-                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 									}
 								}else{
 //									fail_max = 0;
@@ -8134,7 +8118,7 @@ int		InspChipSize( void )
 									fail_min++;
 //									ans = ERROR;
 									if( i_mode & INSPECT_STEP ) {
-                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataLeft][PosYmin][0][dn], ElecEdgeY[DataLeft][PosYmin][1][dn], ElecEdgeY[DataLeft][PosYmax][0][dn], ElecEdgeY[DataLeft][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 									}
 								}else{
 //									fail_min = 0;
@@ -8161,7 +8145,7 @@ int		InspChipSize( void )
                                 ElecEdgeY[DataRight][side][1][dn] = ElecEdge[DataRight][side].dataY[rx];
 								dn++;
 						}
-						//for( ; dn<640; dn++ ) {  æ‚Éƒf[ƒ^ƒNƒŠƒA‚µ‚Ä‚¢‚é‚Ì‚Å•s—v
+						//for( ; dn<640; dn++ ) {  ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚Å•sï¿½v
 						//        ElecEdgeY[DataRight][side][0][dn] = 0xffff;
 						//        ElecEdgeY[DataRight][side][1][dn] = 0xffff;
 						//}
@@ -8173,7 +8157,7 @@ int		InspChipSize( void )
                                 ElecEdgeY[DataRight][side][1][dn] = ElecEdge[DataRight][side].dataY[rx];
 								dn++;
 						}
-						//for( ; dn<500; dn++ ) {  æ‚Éƒf[ƒ^ƒNƒŠƒA‚µ‚Ä‚¢‚é‚Ì‚Å•s—v
+						//for( ; dn<500; dn++ ) {  ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚Å•sï¿½v
 						//        ElecEdgeY[DataRight][side][0][dn] = 0xffff;
 						//        ElecEdgeY[DataRight][side][1][dn] = 0xffff;
 						//}
@@ -8186,7 +8170,7 @@ int		InspChipSize( void )
 									fail_max++;
 //									ans = ERROR;
 									if( i_mode & INSPECT_STEP ) {
-                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 									}
 								}else{
 //									fail_max = 0;
@@ -8195,7 +8179,7 @@ int		InspChipSize( void )
 									fail_min++;
 //									ans = ERROR;
 									if( i_mode & INSPECT_STEP ) {
-                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// c Line
+                                        R_DrawLine( DRAW_RED, ElecEdgeY[DataRight][PosYmin][0][dn], ElecEdgeY[DataRight][PosYmin][1][dn], ElecEdgeY[DataRight][PosYmax][0][dn], ElecEdgeY[DataRight][PosYmax][1][dn], DRAW_NORMAL, SOLID_LINE );	// ï¿½c Line
 									}
 								}else{
 //									fail_min = 0;
@@ -8219,7 +8203,7 @@ int		InspChipSize( void )
 
 
 
-			SetElecEdge( DataLR );			// DataLeft, DataRight ‚Ìˆ—‚ªI—¹‚µ‚Ä‚¢‚é–B
+			SetElecEdge( DataLR );			// DataLeft, DataRight ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é–ï¿½B
             twa_TimeRead( &twaTime[1],10 );
         // Electrode edge data
 			if( CheckElecEdge( DataLR ) != OK )		return ERROR4;
@@ -8272,7 +8256,7 @@ int		InspChipSize( void )
 			if( CheckElecEdge( DataLeft ) != OK )	return ERROR4;
 			if( CheckElecEdge( DataRight ) != OK )	return ERROR4;
 
-			// C2‚ª‚©‚Ô‚Á‚Ä‚¢‚È‚¢¡–@‚ğŒv‘ª‚µ‚Ä‚µ‚Ü‚¤‚½‚ß‚±‚ÌˆÊ’u‚Å”»’è‚·‚é
+			// C2ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ß‚ï¿½ï¿½ÌˆÊ’uï¿½Å”ï¿½ï¿½è‚·ï¿½ï¿½
 			if((res = KeijoElectrodeInspect())!= OK) return (res);
 
 			//v2.20 if(!bIsLTR50){	//normal
@@ -8523,7 +8507,7 @@ void	SetElecEdge( int elec )
 				}else{
 					valid_xs = Mpx.imin[Elec[elec].BlobNo]+elec_offset_outer;
 				}
-				if(bIsMCR01)	valid_xe = ElecPosRough[elec][PosXmax];						// 2017.08.21 Î‚ßƒuƒŒ[ƒN‚Å’[–Ê‚Ì”’‚ªŒ©‚¦‚Ä‚¢‚éê‡‚ª‚ ‚é‚Ì‚Åƒ}ƒXƒN‚·‚é
+				if(bIsMCR01)	valid_xe = ElecPosRough[elec][PosXmax];						// 2017.08.21 ï¿½Î‚ßƒuï¿½ï¿½ï¿½[ï¿½Nï¿½Å’[ï¿½Ê‚Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Åƒ}ï¿½Xï¿½Nï¿½ï¿½ï¿½ï¿½
 				else			valid_xe = Mpx.imax[Elec[elec].BlobNo]-elec_offset_inner;
 				//v2.20 if((1==bIsLTR50)&&(0!=(Option & BACKINSP_MODE))){
                 if( (bIsLTR50 || bIsLTR18)&&(0!=(Option & BACKINSP_MODE)) ){
@@ -8534,7 +8518,7 @@ void	SetElecEdge( int elec )
 					valid_ye = Mpx.jmin[Elec[elec].BlobNo]+((Mpx.jmax[Elec[elec].BlobNo]-Mpx.jmin[Elec[elec].BlobNo])/2)-elec_offset_inner;
 				}
 			} else {
-				if(bIsMCR01)	valid_xs = ElecPosRough[elec][PosXmin];						// 2017.08.21 Î‚ßƒuƒŒ[ƒN‚Å’[–Ê‚Ì”’‚ªŒ©‚¦‚Ä‚¢‚éê‡‚ª‚ ‚é‚Ì‚Åƒ}ƒXƒN‚·‚é
+				if(bIsMCR01)	valid_xs = ElecPosRough[elec][PosXmin];						// 2017.08.21 ï¿½Î‚ßƒuï¿½ï¿½ï¿½[ï¿½Nï¿½Å’[ï¿½Ê‚Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Åƒ}ï¿½Xï¿½Nï¿½ï¿½ï¿½ï¿½
 				else			valid_xs = Mpx.imin[Elec[elec].BlobNo]+elec_offset_inner;
 				//v2.11 valid_xe = Mpx.imax[Elec[elec].BlobNo]-elec_offset_outer;
 				if((bIsSFR25)&&(0!=(Option & BACKINSP_MODE))){
@@ -8600,7 +8584,7 @@ void	SetElecEdge( int elec )
 					side = PosYmin;
 					rx = Mpx.runstrt[dn];
 					for( bn=0; bn<Mpx.runleng[dn]; bn++, rx++ ) {
-						if(valid_xs <= rx && rx <= valid_xe){					// 2017.1.10 tanaka “d‹É’[‚Ìƒ_ƒŒ‚Ä‚¢‚é‚Æ‚±‚ë‚ğ‚İ‚È‚¢
+						if(valid_xs <= rx && rx <= valid_xe){					// 2017.1.10 tanaka ï¿½dï¿½É’[ï¿½Ìƒ_ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½İ‚È‚ï¿½
 							if(( ElecEdge[elec][side].dataY[rx] == 0x0ffff )||
 								( ElecEdge[elec][side].dataY[rx] > Mpx.yaxis[dn] )) {
 									ElecEdge[elec][side].dataY[rx] = Mpx.yaxis[dn];
@@ -8613,7 +8597,7 @@ void	SetElecEdge( int elec )
 					side = PosYmax;
 					rx = Mpx.runstrt[dn];
 					for( bn=0; bn<Mpx.runleng[dn]; bn++, rx++ ) {
-						if(valid_xs <= rx && rx <= valid_xe){					// 2017.1.10 tanaka “d‹É’[‚Ìƒ_ƒŒ‚Ä‚¢‚é‚Æ‚±‚ë‚ğ‚İ‚È‚¢
+						if(valid_xs <= rx && rx <= valid_xe){					// 2017.1.10 tanaka ï¿½dï¿½É’[ï¿½Ìƒ_ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½İ‚È‚ï¿½
 							if(( ElecEdge[elec][side].dataY[rx] == 0x0ffff )||
 								( ElecEdge[elec][side].dataY[rx] < Mpx.yaxis[dn] )) {
 									ElecEdge[elec][side].dataY[rx] = Mpx.yaxis[dn];
@@ -8624,7 +8608,7 @@ void	SetElecEdge( int elec )
 					}
 				}
 			}
-			// Electrode ƒGƒbƒW•\¦
+			// Electrode ï¿½Gï¿½bï¿½Wï¿½\ï¿½ï¿½
 				if( i_mode & INSPECT_STEP ) {
 					R_DrawCls();
 //					BinClsPn( BinP0, 0, 0, FxSize-1, FySize-1 );
@@ -8698,9 +8682,9 @@ int ElecLRInterpolation(int side)
     int			i_mode	= R_CS_GetInspectMode();
     R_DPOINT    pLeft,pRight;
 
-    // ¶‰E‚Ì•½‹ÏÀ•W‚ğŒq‚¢‚ÅŒX‚«‚ğŒvZ‚·‚é
-    // ESR25‚È‚ÇA’[q‚ÌX¡‚ª¬‚³‚¢ƒ`ƒbƒv‚É‘Î‚·‚é’¼ü®‚ğŒvZ‚·‚é
-    // ¶‘¤‚Ì•½‹Ïƒ|ƒCƒ“ƒg
+    // ï¿½ï¿½ï¿½Eï¿½Ì•ï¿½ï¿½Ïï¿½ï¿½Wï¿½ï¿½ï¿½qï¿½ï¿½ï¿½ÅŒXï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+    // ESR25ï¿½È‚ÇAï¿½[ï¿½qï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½bï¿½vï¿½É‘Î‚ï¿½ï¿½é’¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½Ïƒ|ï¿½Cï¿½ï¿½ï¿½g
     xave = 0;
     yave = 0;
     src_n = 0;
@@ -8716,7 +8700,7 @@ int ElecLRInterpolation(int side)
         pLeft.y = (double)yave/(double)src_n;
 	} else return (ERROR);
 
-    // ‰E‘¤‚Ì•½‹Ïƒ|ƒCƒ“ƒg
+    // ï¿½Eï¿½ï¿½ï¿½Ì•ï¿½ï¿½Ïƒ|ï¿½Cï¿½ï¿½ï¿½g
     xave = 0;
     yave = 0;
     src_n = 0;
@@ -8766,7 +8750,7 @@ int ElecLRInterpolation(int side)
                             ElecEdge[DataLR][side].MeanX,
                             ElecEdge[DataLR][side].MeanY,
                             ElecEdge[DataLR][side].Rev );
-        // --- À•W“_ŒQ‚Ì’¼ü‹ß—
+        // --- ï¿½ï¿½ï¿½Wï¿½_ï¿½Qï¿½Ì’ï¿½ï¿½ï¿½ï¿½ßï¿½
         DrawMessage( Comment1, DRAW_GREEN, 2, 2 );
     }
     return OK;
@@ -8774,9 +8758,9 @@ int ElecLRInterpolation(int side)
 
 //------------------------------------------------
 //		Check Electrode edge
-//		‰ñ‹A‰ğÍ	a regression analysis.
-//		‰ñ‹AŒW”	a [the] regression coefficient.
-//		‰ñ‹A‹Èü	a regression curve.
+//		ï¿½ï¿½Aï¿½ï¿½ï¿½	a regression analysis.
+//		ï¿½ï¿½Aï¿½Wï¿½ï¿½	a [the] regression coefficient.
+//		ï¿½ï¿½Aï¿½Èï¿½	a regression curve.
 //------------------------------------------------
 
 int		CheckElecEdge( int elec )
@@ -8784,16 +8768,16 @@ int		CheckElecEdge( int elec )
 //		int						i_mode	= R_CS_GetInspectMode();
 		int						side, dn;
 		int						rd;
-		double					rev_sum;			// ‰ñ‹AŒW”
-		double					rev_av;				// ‰ñ‹AŒW”
-		double					rev_min;			// ‰ñ‹AŒW”
-		double					rev_max;			// ‰ñ‹AŒW”
+		double					rev_sum;			// ï¿½ï¿½Aï¿½Wï¿½ï¿½
+		double					rev_av;				// ï¿½ï¿½Aï¿½Wï¿½ï¿½
+		double					rev_min;			// ï¿½ï¿½Aï¿½Wï¿½ï¿½
+		double					rev_max;			// ï¿½ï¿½Aï¿½Wï¿½ï¿½
 
 
-		// ‰ñ‹A‰ğÍ( regression analysis. )
+		// ï¿½ï¿½Aï¿½ï¿½ï¿½( regression analysis. )
 			// data clear
 //			for( side=0; side<4; side++ ) {
-//				for( dn=0; dn<700; dn++ ) {					2017.1.10 tanaka g‚í‚ê‚Ä‚¢‚È‚¢‚ÌƒRƒƒ“ƒg‰»
+//				for( dn=0; dn<700; dn++ ) {					2017.1.10 tanaka ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½
 //					ElecFreqRate[elec][side][dn].dx	= 0;
 //					ElecFreqRate[elec][side][dn].dy	= 0;
 //					ElecFreqRate[elec][side][dn].dn	= 0;
@@ -8807,7 +8791,7 @@ int		CheckElecEdge( int elec )
 //				if( elec == DataLR )	R_DrawCls();
 //			}
 
-		// ‰ñ‹A‰ğÍ( regression analysis. )
+		// ï¿½ï¿½Aï¿½ï¿½ï¿½( regression analysis. )
 			switch( elec ) {
 				case DataLR:
 					for( side=0; side<4; side++ ) {
@@ -8818,7 +8802,7 @@ int		CheckElecEdge( int elec )
 								if( (! bIsLTR50)||((1==bIsLTR50)&&(0!=(Option & BACKINSP_MODE)))||((1==bIsLTR18)&&(0!=(Option & BACKINSP_MODE))) ){		// normal
 									if( Regression( elec, side ) != OK )	return ERROR;
 								} else {
-									// Ap Search‚Ì’l‚ğg‚¤
+									// Ap Searchï¿½Ì’lï¿½ï¿½ï¿½gï¿½ï¿½
 									for(rd=0;rd<FxSize;rd++){
 										ElecEdge[elec][side].dataR[rd]=0xffff;
 										ElecEdge[elec][side].dataX[rd]=0xffff;
@@ -8839,7 +8823,7 @@ int		CheckElecEdge( int elec )
                                     if( Regression( elec, side ) != OK )	return ERROR;
 								} else {							// ESR25,MCR10,SFR25
 								//    if( ElecLRInterpolation(side) != OK )   return ERROR;
-									// Ap Search‚Ì’l‚ğg‚¤
+									// Ap Searchï¿½Ì’lï¿½ï¿½ï¿½gï¿½ï¿½
 									for(rd=0;rd<FxSize;rd++){
 										ElecEdge[elec][side].dataR[rd]=0xffff;
 										ElecEdge[elec][side].dataX[rd]=0xffff;
@@ -8858,7 +8842,7 @@ int		CheckElecEdge( int elec )
 								if( (! bIsLTR50)||((1==bIsLTR50)&&(0!=(Option & BACKINSP_MODE)))||(! bIsLTR18)||((1==bIsLTR18)&&(0!=(Option & BACKINSP_MODE))) ){		// normal
 									if( Regression( elec, side ) != OK )	return ERROR;
 								} else {
-									// Ap Search‚Ì’l‚ğg‚¤
+									// Ap Searchï¿½Ì’lï¿½ï¿½ï¿½gï¿½ï¿½
 									for(rd=0;rd<FxSize;rd++){
 										ElecEdge[elec][side].dataR[rd]=0xffff;
 										ElecEdge[elec][side].dataX[rd]=0xffff;
@@ -8892,7 +8876,7 @@ int		CheckElecEdge( int elec )
 					if( (!bIsLTR50) && (!bIsLTR18) ){		//normal
 						side = PosXmax;
 						if( Regression( elec, side ) != OK )		return ERROR;
-						if(bIsMCR18){	// ”í‚è‚İü‚Ì’Šo
+						if(bIsMCR18){	// ï¿½ï¿½èï¿½İï¿½ï¿½Ì’ï¿½ï¿½o
 							side = 5;
 							if( Regression( elec, side ) != OK )		return ERROR;
 						}
@@ -8906,7 +8890,7 @@ int		CheckElecEdge( int elec )
 					if( (!bIsLTR50) && (!bIsLTR18) ){		//normal
 						side = PosXmin;
 						if( Regression( elec, side ) != OK )		return ERROR;
-						if(bIsMCR18){	// ”í‚è‚İü‚Ì’Šo
+						if(bIsMCR18){	// ï¿½ï¿½èï¿½İï¿½ï¿½Ì’ï¿½ï¿½o
 							side = 4;
 							if( Regression( elec, side ) != OK )		return ERROR;
 						}
@@ -8932,7 +8916,7 @@ int		CheckElecEdge( int elec )
 
 
 //------------------------------------------------
-//		‰ñ‹A‰ğÍ( regression analysis. )
+//		ï¿½ï¿½Aï¿½ï¿½ï¿½( regression analysis. )
 //------------------------------------------------
 
 int		Regression( int elec, int side )
@@ -8979,8 +8963,8 @@ int		Regression( int elec, int side )
 					}
 				}
 
-			//v2.11 if(bIsMCR03 || bIsMCR10 || bIsMCR18 || bIsMCR01){// C1‚Ì“Ê•”•ª‚ÅƒGƒbƒW‚ğŒvZ‚µ‚Ä‚İ‚é 20170226 tanaka
-			if( (bIsMCR03||bIsMCR10||bIsMCR18||bIsMCR01) || ((1==bIsSFR25)&&(0!=(Option & BACKINSP_MODE))) ){// C1‚Ì“Ê•”•ª‚ÅƒGƒbƒW‚ğŒvZ‚µ‚Ä‚İ‚é 20170226 tanaka
+			//v2.11 if(bIsMCR03 || bIsMCR10 || bIsMCR18 || bIsMCR01){// C1ï¿½Ì“Ê•ï¿½ï¿½ï¿½ï¿½ÅƒGï¿½bï¿½Wï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½Ä‚İ‚ï¿½ 20170226 tanaka
+			if( (bIsMCR03||bIsMCR10||bIsMCR18||bIsMCR01) || ((1==bIsSFR25)&&(0!=(Option & BACKINSP_MODE))) ){// C1ï¿½Ì“Ê•ï¿½ï¿½ï¿½ï¿½ÅƒGï¿½bï¿½Wï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½Ä‚İ‚ï¿½ 20170226 tanaka
 				if( (elec==DataLeft && side==PosXmax)
 				||	(elec==DataRight && side==PosXmin)){
 					if(src_n >=132 ){
@@ -9003,7 +8987,7 @@ int		Regression( int elec, int side )
 			}
 			angle = nm= 0;
 			for(;;){                                       //GEE V1.02A
-			// À•W“_ŒQ‚Ì’¼ü¬•ª‚ÌŒŸo
+			// ï¿½ï¿½ï¿½Wï¿½_ï¿½Qï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½o
 				if((side==PosYmin)||(side==PosYmax)||(side==6)||(side==7)) {
 					RobustCond.deg_min = ChipAtan+angle-RobustDegWidth;
 					RobustCond.deg_max = ChipAtan+angle+RobustDegWidth;
@@ -9019,7 +9003,7 @@ int		Regression( int elec, int side )
 					}
 					dst_n=src_n;
 				} else {
-					R_robust_sampling_line( src_n, &Src_point[st], &dst_n, Dst_point, RobustCond, 0 );	// Å•p’l‘Š“–‚Ì¬•ª‚Ì‚İ’Šo
+					R_robust_sampling_line( src_n, &Src_point[st], &dst_n, Dst_point, RobustCond, 0 );	// ï¿½Å•pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Ì‚İ’ï¿½ï¿½o
 				}
 				if( dst_n == 0 )	return ERROR;
 
@@ -9058,14 +9042,14 @@ int		Regression( int elec, int side )
 				if((nm==50)&&(((side==PosYmin)||(side==PosYmax)))){
 					RobustCond.deg_min = ChipAtan-RobustDegWidth;
 					RobustCond.deg_max = ChipAtan+RobustDegWidth;
-					R_robust_sampling_line( src_n, Src_point, &dst_n, Dst_point, RobustCond, 0 );	// Å•p’l‘Š“–‚Ì¬•ª‚Ì‚İ’Šo
+					R_robust_sampling_line( src_n, Src_point, &dst_n, Dst_point, RobustCond, 0 );	// ï¿½Å•pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Ì‚İ’ï¿½ï¿½o
 					if( dst_n == 0 )	return ERROR;
 				}
 			} else {		// LTR
 				if((nm==50)&&(((side==PosXmin)||(side==PosXmax)))){
 					RobustCond.deg_min = ChipAtan-RobustDegWidth;
 					RobustCond.deg_max = ChipAtan+RobustDegWidth;
-					R_robust_sampling_line( src_n, Src_point, &dst_n, Dst_point, RobustCond, 0 );	// Å•p’l‘Š“–‚Ì¬•ª‚Ì‚İ’Šo
+					R_robust_sampling_line( src_n, Src_point, &dst_n, Dst_point, RobustCond, 0 );	// ï¿½Å•pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Ì‚İ’ï¿½ï¿½o
 					if( dst_n == 0 )	return ERROR;
 				}
 			}
@@ -9076,8 +9060,8 @@ int		Regression( int elec, int side )
 				sumx += Dst_point[dn].x;
 				sumy += Dst_point[dn].y;
 			}
-			ex = sumx/dst_n;		//•½‹Ï‚w
-			ey = sumy/dst_n;		//•½‹Ï‚x
+			ex = sumx/dst_n;		//ï¿½ï¿½ï¿½Ï‚w
+			ey = sumy/dst_n;		//ï¿½ï¿½ï¿½Ï‚x
 			sum = sumx = sumy = 0;
 			for( dn=0; dn<dst_n; dn++ ) {
 				//v2.20 if(!bIsLTR50){	// normal
@@ -9173,7 +9157,7 @@ int		Regression( int elec, int side )
 				if( i_mode & INSPECT_STEP ) {
 					for( dn=0; dn<dst_n; dn++ )	R_DrawPset( DRAW_RED, Dst_point[dn].x, Dst_point[dn].y, DRAW_NORMAL );
 
-					sprintf( Comment, " Before src_n:%d \n After  dst_n:%d ", src_n, dst_n );		//’¼ü¬•ª’Šo‘OŒã‚ÌÀ•W“_”
+					sprintf( Comment, " Before src_n:%d \n After  dst_n:%d ", src_n, dst_n );		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Oï¿½ï¿½Ìï¿½ï¿½Wï¿½_ï¿½ï¿½
 					DrawMessage( Comment, DRAW_GREEN, 2, 2 );
 
 
@@ -9211,9 +9195,9 @@ int		Regression( int elec, int side )
 										ElecEdge[elec][side].MeanX,
 										ElecEdge[elec][side].MeanY,
 										ElecEdge[elec][side].Rev );
-					// --- À•W“_ŒQ‚Ì’¼ü‹ß—
-					R_robust_get_line( src_n, Src_point, RobustCond, &ApproxLine );							// ’¼ü‹ß—
-					sprintf( Comment2, " a=%d  b=%d  c=%d ", ApproxLine.a, ApproxLine.b, ApproxLine.c );		// ’¼ü‚ÌŒW”•\¦
+					// --- ï¿½ï¿½ï¿½Wï¿½_ï¿½Qï¿½Ì’ï¿½ï¿½ï¿½ï¿½ßï¿½
+					R_robust_get_line( src_n, Src_point, RobustCond, &ApproxLine );							// ï¿½ï¿½ï¿½ï¿½ï¿½ßï¿½
+					sprintf( Comment2, " a=%d  b=%d  c=%d ", ApproxLine.a, ApproxLine.b, ApproxLine.c );		// ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒWï¿½ï¿½ï¿½\ï¿½ï¿½
 					// --- comment
 					sprintf( Comment, "%s \n %s", Comment1, Comment2 );
 					DrawMessage( Comment, DRAW_GREEN, 2, 2 );
@@ -9585,7 +9569,7 @@ void	ElecC1CornerPosSet1st( int elec )
 		switch(elec){
 			case DataLeft:
 				if(ElecC12[elec].CornerPosX[2] == 0xffff || ElecC12[elec].CornerPosX[3] == 0xffff)	return;
-				// ¶ C1“d‹Éã
+				// ï¿½ï¿½ C1ï¿½dï¿½Éï¿½
 				side = 6;
 				for(ix=0;ix<700;ix++){
 					if(ElecEdge[elec][PosYmin].dataR[ix]!=OK)	continue;
@@ -9597,7 +9581,7 @@ void	ElecC1CornerPosSet1st( int elec )
 				}
 				if( Regression( elec, side ) != OK )		return; // ERROR;
 
-				// ¶ C1“d‹É‰º
+				// ï¿½ï¿½ C1ï¿½dï¿½É‰ï¿½
 				side = 7;
 				for(ix=0;ix<700;ix++){
 					if(ElecEdge[elec][PosYmax].dataR[ix]!=OK)	continue;
@@ -9693,7 +9677,7 @@ void	ElecC1CornerPosSet1st( int elec )
 				break;
 			case DataRight:
 				if(ElecC12[elec].CornerPosX[0] == 0xffff || ElecC12[elec].CornerPosX[1] == 0xffff)	return;
-				// ‰E C1“d‹Éã
+				// ï¿½E C1ï¿½dï¿½Éï¿½
 				side = 6;
 				for(ix=0;ix<700;ix++){
 					if(ElecEdge[elec][PosYmin].dataR[ix]!=OK)	continue;
@@ -9705,7 +9689,7 @@ void	ElecC1CornerPosSet1st( int elec )
 				}
 				if( Regression( elec, side ) != OK )		return; // ERROR;
 
-				// ‰E C1“d‹É‰º
+				// ï¿½E C1ï¿½dï¿½É‰ï¿½
 				side = 7;
 				for(ix=0;ix<700;ix++){
 					if(ElecEdge[elec][PosYmax].dataR[ix]!=OK)	continue;
@@ -10149,7 +10133,7 @@ void	ElecCornerPosSet( void )
 
 
 //================================================
-//		“d‹ÉŒŸ¸
+//		ï¿½dï¿½ÉŒï¿½ï¿½ï¿½
 //================================================
 
 int		InspElectrode( void )
@@ -10207,7 +10191,7 @@ int		InspElectrode( void )
 			if( i_mode & INSPECT_STEP ) {
 				R_move_bin_memory(binPn,0,0,0,FxSize-1,FySize-1);
 			}
-			// “Á’¥—Ê‰‰Z@‰‰Z•û®w’è
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Zï¿½@ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½
 				R_set_meas_configration( &Mpx, BinMeasElec.nRun, BinMeasElec.nArea, BinMeasElec.nColor, BinMeasElec.nMode );
 			// Elec side
                 for( elec=DataLeft; elec<=DataRight; elec++ ) {
@@ -10269,14 +10253,14 @@ int		InspElectrode( void )
                             if(res!=OK) return res;
                         }
                 }
-		// •\¦Á‹
+		// ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if( i_mode & INSPECT_STEP )	R_DrawCls();
 
 		return OK;
 
 	}	// InspElectrode( void ) end
 //================================================
-//	“d‹ÉŒŸ¸ƒŒƒxƒ‹İ’è
+//	ï¿½dï¿½ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 //	Elec. Insp. level set
 //================================================
 
@@ -10528,7 +10512,7 @@ int		InspElecKasure( void )
                                         if(res!=OK) return res;
                                     }
 
-        // •\¦Á‹
+        // ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if( i_mode & INSPECT_STEP )	R_DrawCls();
 
         return OK;
@@ -10658,7 +10642,7 @@ int		InspElecSize( void )
 
 
 //================================================
-//	“d‹ÉŒ‡‚¯”»’è
+//	ï¿½dï¿½ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //================================================
 
 int		InspElecEdge( void )
@@ -10674,7 +10658,7 @@ int		InspElecEdge( void )
 		// View
 			if( i_mode & INSPECT_STEP ) {
 				R_DrawCls();
-				R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );		// Œ´‰æ‚Ì•\¦
+				R_move_gray_memory( grayPn, GrayP0, 0, 0, FxSize-1, FySize-1 );		// ï¿½ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
 				for( elec=DataLeft; elec<=DataRight; elec++ ) {
 					// --- Top
 					xmin = Elec[elec].CornerPosX[PosLup];	ymin = Elec[elec].CornerPosY[PosLup];
@@ -10738,7 +10722,7 @@ int		InspElecEdge( void )
 
 
 //================================================
-//	“d‹É‰ñ‹A’¼ü‚©‚ç“d‹ÉƒGƒbƒW‚Ü‚Å‚Ì¡–@”»’è
+//	ï¿½dï¿½É‰ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ÉƒGï¿½bï¿½Wï¿½Ü‚Å‚Ìï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½
 //================================================
 
 int		JudgeElecEdge( int elec, int side )
@@ -10833,19 +10817,19 @@ int		JudgeElecEdge( int elec, int side )
 				cls_c = ChipCornerSize[DataYbit];
 			}
 
-		// Chip edge kake ŒŸ¸”ÍˆÍw’è
+		// Chip edge kake ï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÍwï¿½ï¿½
 			switch( side ) {
 				case PosXmin:	// --- Left
 					//v2.20 if(!bIsLTR50){	// normal
 					if( ((bIsLTR50)&&(0==(Option & BACKINSP_MODE))) || ((bIsLTR18)&&(0==(Option & BACKINSP_MODE)))  ){	// LTR
 						if(elec == DataUpper){
 							dns = Elec[elec].CornerPosY[PosLup];	// Ymin
-							//180522 dne = dns+10;							// Ymax “ÊŒ`ó
-							dne = dns+20;							// Ymax “ÊŒ`ó
+							//180522 dne = dns+10;							// Ymax ï¿½ÊŒ`ï¿½ï¿½
+							dne = dns+20;							// Ymax ï¿½ÊŒ`ï¿½ï¿½
 						} else {
 							dne = Elec[elec].CornerPosY[PosLlo];	// Ymax
-							//180522 dns = dne-10;							// Ymin “ÊŒ`ó
-							dns = dne-20;							// Ymin “ÊŒ`ó
+							//180522 dns = dne-10;							// Ymin ï¿½ÊŒ`ï¿½ï¿½
+							dns = dne-20;							// Ymin ï¿½ÊŒ`ï¿½ï¿½
 						}
 					} else {	// nomal
 						dns = Elec[elec].CornerPosY[PosLup];	// Ymin
@@ -10855,7 +10839,7 @@ int		JudgeElecEdge( int elec, int side )
 				case PosYmin:	// --- Top
 					dns = Elec[elec].CornerPosX[PosLup];	// Xmin
 					dne = Elec[elec].CornerPosX[PosRup];	// Xmax
-					if(bIsMCR18){							// “ÊŒ`ó
+					if(bIsMCR18){							// ï¿½ÊŒ`ï¿½ï¿½
 						if(elec == 0){
 							if(ElecC12[elec].CornerPosX[PosRup] != 0xffff){
 								dne = ElecC12[elec].CornerPosX[PosRup];
@@ -10872,12 +10856,12 @@ int		JudgeElecEdge( int elec, int side )
 					if( ((bIsLTR50)&&(0==(Option & BACKINSP_MODE))) || ((bIsLTR18)&&(0==(Option & BACKINSP_MODE)))  ){	// LTR
 						if(elec == DataUpper){
 							dns = Elec[elec].CornerPosY[PosRup];	// Ymin
-							//180522 dne = dns+10;							// Ymax “ÊŒ`ó
-							dne = dns+20;							// Ymax “ÊŒ`ó
+							//180522 dne = dns+10;							// Ymax ï¿½ÊŒ`ï¿½ï¿½
+							dne = dns+20;							// Ymax ï¿½ÊŒ`ï¿½ï¿½
 						} else {
 							dne = Elec[elec].CornerPosY[PosRlo];	// Ymax
-							//180522 dns = dne-10;							// Ymin “ÊŒ`ó
-							dns = dne-20;							// Ymin “ÊŒ`ó
+							//180522 dns = dne-10;							// Ymin ï¿½ÊŒ`ï¿½ï¿½
+							dns = dne-20;							// Ymin ï¿½ÊŒ`ï¿½ï¿½
 						}
 					} else {	// normal
 						dns = Elec[elec].CornerPosY[PosRup];	// Ymin
@@ -10887,7 +10871,7 @@ int		JudgeElecEdge( int elec, int side )
 				case PosYmax:	// --- Bottom
 					dns = Elec[elec].CornerPosX[PosLlo];	// Xmin
 					dne = Elec[elec].CornerPosX[PosRlo];	// Xmax
-					if(bIsMCR18){							// “ÊŒ`ó
+					if(bIsMCR18){							// ï¿½ÊŒ`ï¿½ï¿½
 						if(elec == 0){
 							if(ElecC12[elec].CornerPosX[PosRlo] != 0xffff){
 								dne = ElecC12[elec].CornerPosX[PosRlo];
@@ -10900,15 +10884,15 @@ int		JudgeElecEdge( int elec, int side )
 					}
 					break;
 			}
-			//v2.20 if(bIsLTR50){		//Šp‚ÌˆÊ’u‚Ì•â³‚ğ‚·‚é‘O‚ÌcornerˆÊ’u‚Ìî•ñ‚ğg—p‚·‚é
-			if( (bIsLTR50) || (bIsLTR18) ){		//Šp‚ÌˆÊ’u‚Ì•â³‚ğ‚·‚é‘O‚ÌcornerˆÊ’u‚Ìî•ñ‚ğg—p‚·‚é
+			//v2.20 if(bIsLTR50){		//ï¿½pï¿½ÌˆÊ’uï¿½Ì•â³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½cornerï¿½Ê’uï¿½Ìï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½
+			if( (bIsLTR50) || (bIsLTR18) ){		//ï¿½pï¿½ÌˆÊ’uï¿½Ì•â³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½cornerï¿½Ê’uï¿½Ìï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½
 				masks=dns;
 				maske=dne;
 			}
-			// --- ƒR[ƒi[•”•ª‚ÌŒŸ¸”ÍˆÍ‚©‚çœŠO
+			// --- ï¿½Rï¿½[ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ÍˆÍ‚ï¿½ï¿½çœï¿½O
 				dns += cls_c;
 				if(dns > 700)	return ERROR;
-				// dns,dne‚ÌˆÊ’u‚ª–³Œøƒf[ƒ^‚Ìê‡‚Í“àŠñ‚è‚ğ‘I‘ğ‚·‚é 20170529 tanaka
+				// dns,dneï¿½ÌˆÊ’uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Ìê‡ï¿½Í“ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 20170529 tanaka
 				while(ElecEdge[elec][side].dataX[dns] ==0xffff || ElecEdge[elec][side].dataY[dns] == 0xffff){
 					dns++;
 					if(dns > 700)	return ERROR;
@@ -10928,7 +10912,7 @@ int		JudgeElecEdge( int elec, int side )
 			for( dn=dns; dn<=dne; dn++ ) {
 				rx = ElecEdge[elec][side].dataX[dn];
 				ry = ElecEdge[elec][side].dataY[dn];
-				if(rx == 0xffff || ry == 0xffff)    continue;   //20170204b’è tanaka
+				if(rx == 0xffff || ry == 0xffff)    continue;   //20170204ï¿½bï¿½ï¿½ tanaka
 				if((side==PosYmin)||(side==PosYmax)) {
 					stdy = ElecEdge[elec][side].MeanY-ElecEdge[elec][side].Rev*(ElecEdge[elec][side].MeanX-rx);
 					//v2.20 if(bIsLTR50){
@@ -11207,8 +11191,8 @@ int		JudgeElecEdge( int elec, int side )
 
 
 //================================================
-//		“d‹ÉŒŸ¸
-//			ŒŸ¸‚Q’l‰æ‘œAŒŸ¸”ÍˆÍİ’è
+//		ï¿½dï¿½ÉŒï¿½ï¿½ï¿½
+//			ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½lï¿½æ‘œï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÍİ’ï¿½
 //================================================
 
 void	InspBinSetElectrode( void )
@@ -11388,7 +11372,7 @@ void	InspBinSetElectrode( void )
 							}
 						}
 
-						if(bIsMCR01 && elec ==DataLeft){   // “d‹É•‚¸‚İƒ}ƒXƒN 20171004 tanaka
+						if(bIsMCR01 && elec ==DataLeft){   // ï¿½dï¿½Éï¿½ï¿½ï¿½ï¿½İƒ}ï¿½Xï¿½N 20171004 tanaka
 							ymin2 = (area.top+area.bottom)/2 - 45;
 							ymax2 = (area.top+area.bottom)/2 + 45;
 							xs = ElecEdge[elec][side].MeanX-ElecEdge[elec][side].Rev*(ElecEdge[elec][side].MeanY-ymin2);
@@ -11442,7 +11426,7 @@ void	InspBinSetElectrode( void )
 								if( xe >= FxSize ) xe = FxSize-1;
 							}
 						}
-						if(bIsMCR01 && elec ==DataRight){   // “d‹É•‚¸‚İƒ}ƒXƒN 20171004 tanaka
+						if(bIsMCR01 && elec ==DataRight){   // ï¿½dï¿½Éï¿½ï¿½ï¿½ï¿½İƒ}ï¿½Xï¿½N 20171004 tanaka
 							ymin2 = (area.top+area.bottom)/2 - 45;
 							ymax2 = (area.top+area.bottom)/2 + 45;
 							xs = ElecEdge[elec][side].MeanX-ElecEdge[elec][side].Rev*(ElecEdge[elec][side].MeanY-ymin2);
@@ -12011,7 +11995,7 @@ void	InspBinSetElecKasure( void )
                             }
                         }
 
-                        if(bIsMCR01 && elec ==DataLeft){   // “d‹É•‚¸‚İƒ}ƒXƒN 20171004 tanaka
+                        if(bIsMCR01 && elec ==DataLeft){   // ï¿½dï¿½Éï¿½ï¿½ï¿½ï¿½İƒ}ï¿½Xï¿½N 20171004 tanaka
                             ymin2 = (area.top+area.bottom)/2 - 45;
                             ymax2 = (area.top+area.bottom)/2 + 45;
                             xs = ElecEdge[elec][side].MeanX-ElecEdge[elec][side].Rev*(ElecEdge[elec][side].MeanY-ymin2);
@@ -12065,7 +12049,7 @@ void	InspBinSetElecKasure( void )
                                 if( xe >= FxSize ) xe = FxSize-1;
                             }
                         }
-                        if(bIsMCR01 && elec ==DataRight){   // “d‹É•‚¸‚İƒ}ƒXƒN 20171004 tanaka
+                        if(bIsMCR01 && elec ==DataRight){   // ï¿½dï¿½Éï¿½ï¿½ï¿½ï¿½İƒ}ï¿½Xï¿½N 20171004 tanaka
                             ymin2 = (area.top+area.bottom)/2 - 45;
                             ymax2 = (area.top+area.bottom)/2 + 45;
                             xs = ElecEdge[elec][side].MeanX-ElecEdge[elec][side].Rev*(ElecEdge[elec][side].MeanY-ymin2);
@@ -12582,7 +12566,7 @@ int	InspBinBl( void )
 		int                     color;
 		R_RECT					area;
         R_RECT                  area_b[8];
-static	int				C1_Insp_area[10][4];								// C1“d‹ÉŒŸ¸”ÍˆÍ[area No.][xs,ys,xe,ye]
+static	int				C1_Insp_area[10][4];								// C1ï¿½dï¿½ÉŒï¿½ï¿½ï¿½ï¿½Íˆï¿½[area No.][xs,ys,xe,ye]
 static	int				C1_Insp_Result[10];
 		int				x_offset = 10;
 		int				y_offset_in = 4;
@@ -12694,7 +12678,7 @@ static	int				C1_Insp_Result[10];
 					}
 
 				for( n=0; n<4; n++ ) {
-					//‚Q’l‰»iƒOƒŒ[ƒvƒŒ[ƒ“‚©‚ç‚Q’lƒvƒŒ[ƒ“‚Öj
+					//ï¿½Qï¿½lï¿½ï¿½ï¿½iï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½lï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Öj
 					if(area_b[n].left   < 0       )	area_b[n].left   = 0;
 					if(area_b[n].right  > FxSize-1)	area_b[n].right  = FxSize-1;
 					if(area_b[n].top    < 0       )	area_b[n].top    = 0;
@@ -12727,7 +12711,7 @@ static	int				C1_Insp_Result[10];
 				}
 			} else {	//LTR
 //2021.10.15<shio>  from ver9.02(TWA6903)///////////
-// •ÏFƒ`ƒbƒvŒŸ¸  KURO AREA setting 2-> 4area separate
+// ï¿½ÏFï¿½`ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½  KURO AREA setting 2-> 4area separate
 			// Upper X position
 				x1 = Elec[0].CornerPosX[PosXmin] + x_offset;
 				x5 = Elec[0].CornerPosX[PosXmax] - x_offset;
@@ -12895,7 +12879,7 @@ static	int				C1_Insp_Result[10];
                 }
 
             for( n=0; n<8; n++ ) {								// area 4-> 8 2021.10.19<shio>
-                //‚Q’l‰»iƒOƒŒ[ƒvƒŒ[ƒ“‚©‚ç‚Q’lƒvƒŒ[ƒ“‚Öj
+                //ï¿½Qï¿½lï¿½ï¿½ï¿½iï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½lï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Öj
                 if(area_b[n].left   < 0       )	area_b[n].left   = 0;
                 if(area_b[n].right  > FxSize-1)	area_b[n].right  = FxSize-1;
                 if(area_b[n].top    < 0       )	area_b[n].top    = 0;
@@ -12940,9 +12924,9 @@ static	int				C1_Insp_Result[10];
 
 //------------------------------------------------
 //	BlbinSet
-//	–ß‚è’l
-//		-1 < 	³íI—¹
-//		ERROR	ƒƒ‚ƒŠ[ERROR
+//	ï¿½ß‚ï¿½l
+//		-1 < 	ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+//		ERROR	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ERROR
 //------------------------------------------------  kuro 2011.06.24
 
 int		BlbinSet( int xs,int ys,int xe,int ye,int grayPn )
@@ -12951,19 +12935,19 @@ int		BlbinSet( int xs,int ys,int xe,int ye,int grayPn )
 		int						flag = 0;
 		// Initialze
 			if( OK == R_bgray_thresholding_open( THRESH_DEPTH_8BIT ))	flag = 1;
-		// –¾‚é‚³‚ÌƒqƒXƒgƒOƒ‰ƒ€
+		// ï¿½ï¿½ï¿½é‚³ï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½
 			if( ERROR == R_get_histgram( xs, ys, xe, ye, Gray_address[grayPn] ) )	return ERROR;
-		// ‚Q’l‰»ƒŒƒxƒ‹‚Ìæ“¾
+		// ï¿½Qï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Ìæ“¾
 			Bin = R_bgray_thresholding( Bright, 150, 200,THRESH_OTSU);
 			if(flag)	R_bgray_thresholding_close();
 			if( Bin < 0 )	return( ERROR );
-		// ‚Q’l‰»ƒŒƒxƒ‹İ’è
+		// ï¿½Qï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 		// result
 			return Bin;
 
 	}	// BinLevelSet( THRESHOLD_PARAMETER *pThresh ) end
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½
 //================================================
 
 int		InspOvercoat( void )
@@ -13065,7 +13049,7 @@ int		InspOvercoat( void )
 			// Type check
 				gap_x = InspOcOffsetSize[DataXbit] + 2;
 				gap_y = InspOcOffsetSize[DataYbit] + 2;
-			// “Á’¥—Ê‰‰Z@‰‰Z•û®w’è
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Zï¿½@ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½
 				R_set_meas_configration( &Mpx, BinMeasOcoat.nRun, BinMeasOcoat.nArea, BinMeasOcoat.nColor, BinMeasOcoat.nMode );
 			// Measure area
 				xmin = Overcoat.Pos[PosXmin];		ymin = Overcoat.Pos[PosYmin];
@@ -13215,7 +13199,7 @@ int		InspOvercoat( void )
 	}	// InspOvercoat( void ) end
 
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸				v2.11
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½				v2.11
 //================================================
 
 int		InspOvercoatBlack( void )
@@ -13318,7 +13302,7 @@ int		InspOvercoatBlack( void )
 			// Type check
 				gap_x = InspOcOffsetSizeBlack[DataXbit] + 2;
 				gap_y = InspOcOffsetSizeBlack[DataYbit] + 2;
-			// “Á’¥—Ê‰‰Z@‰‰Z•û®w’è
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Zï¿½@ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½
 				R_set_meas_configration( &Mpx, BinMeasOcoat.nRun, BinMeasOcoat.nArea, BinMeasOcoat.nColor, BinMeasOcoat.nMode );
 			// Measure area
 				xmin = Overcoat.Pos[PosXmin];		ymin = Overcoat.Pos[PosYmin];
@@ -13475,7 +13459,7 @@ int		InspOvercoatBlack( void )
 
 
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸ŒŸ¸ƒŒƒxƒ‹İ’è
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 //================================================
 
 int		OvercoatInspLevelSet( void )
@@ -13553,12 +13537,12 @@ int		OvercoatInspLevelSet( void )
 			InspOcLSetPara.nYmax = Overcoat.Pos[PosYmax]-offset_l;
 *******************/
 			// ---
-			InspOcLSetPara.nStartLevel	= 10;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-			InspOcLSetPara.nEndLevel	= 250;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
-            InspOcLSetPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+			InspOcLSetPara.nStartLevel	= 10;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+			InspOcLSetPara.nEndLevel	= 250;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
+            InspOcLSetPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 			// --- level set
-			//•WˆóŒŸ¸—L‚è–³‚µ
-			if( Ma_pos[0] < 0 || TWA_Mark_Insp != 0 || (TWA_Spec!=SpecJPW)&&(TWA_Insp_mode==Insp_Pinhole)){ 		//ƒƒbƒL•t’…ŒŸ¸
+			//ï¿½Wï¿½óŒŸï¿½ï¿½Lï¿½è–³ï¿½ï¿½
+			if( Ma_pos[0] < 0 || TWA_Mark_Insp != 0 || (TWA_Spec!=SpecJPW)&&(TWA_Insp_mode==Insp_Pinhole)){ 		//ï¿½ï¿½ï¿½bï¿½Lï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				thr = BinLevelSet( &InspOcLSetPara );
 			} else {
 
@@ -13605,7 +13589,7 @@ int		OvercoatInspLevelSet( void )
 	}	// OvercoatInspLevelSet( void ) end
 
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸ŒŸ¸ƒŒƒxƒ‹İ’è
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 //================================================
 
 int		OvercoatInspLevelSetBlack( void )
@@ -13683,12 +13667,12 @@ int		OvercoatInspLevelSetBlack( void )
 			InspOcLSetPara.nYmax = Overcoat.Pos[PosYmax]-offset_l;
 *******************/
 			// ---
-			InspOcLSetPara.nStartLevel	= 10;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-			InspOcLSetPara.nEndLevel	= 250;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
-			InspOcLSetPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+			InspOcLSetPara.nStartLevel	= 10;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+			InspOcLSetPara.nEndLevel	= 250;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
+			InspOcLSetPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 			// --- level set
-			//•WˆóŒŸ¸—L‚è–³‚µ
-			if( Ma_pos[0] < 0 || TWA_Mark_Insp != 0 || (TWA_Spec!=SpecJPW)&&(TWA_Insp_mode==Insp_Pinhole)){ 		//ƒƒbƒL•t’…ŒŸ¸
+			//ï¿½Wï¿½óŒŸï¿½ï¿½Lï¿½è–³ï¿½ï¿½
+			if( Ma_pos[0] < 0 || TWA_Mark_Insp != 0 || (TWA_Spec!=SpecJPW)&&(TWA_Insp_mode==Insp_Pinhole)){ 		//ï¿½ï¿½ï¿½bï¿½Lï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				thr = BinLevelSet( &InspOcLSetPara );
 			} else {
 
@@ -13737,8 +13721,8 @@ int		OvercoatInspLevelSetBlack( void )
 
 
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸
-//			ŒŸ¸‚Q’l‰æ‘œAŒŸ¸”ÍˆÍİ’è
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½
+//			ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½lï¿½æ‘œï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÍİ’ï¿½
 //================================================
 
 void	InspBinSetOvercoat( void )
@@ -13775,7 +13759,7 @@ void	InspBinSetOvercoat( void )
 		//	ymin	= 0;
 		//	ysize	= FySize;
 
-			// 2017.08.21 ”’index•”•ª‚ğÈ‚­
+			// 2017.08.21 ï¿½ï¿½indexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 			xmin	= IGuidePos[1];
 			xmax	= IGuidePos[DataX];
 			xsize	= xmax-xmin+1;
@@ -13795,7 +13779,7 @@ void	InspBinSetOvercoat( void )
 				BinClsPn( BinP0, 0, 0, FxSize-1, FySize-1 );
 			}
 
-		//•Wˆó•¶š‚ğÁ‚·B
+		//ï¿½Wï¿½ó•¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 			//v2.11 if(!bIsMCR01){
 			if( (!bIsMCR01) && (0==(Option & BACKINSP_MODE)) ){
 				if(Ma_pos[0] >= 0 || TWA_Mark_Insp == 0 && (TWA_Insp_level==Insp_Low)&&(TWA_Insp_mode!=Insp_Pinhole)) {
@@ -13805,7 +13789,7 @@ void	InspBinSetOvercoat( void )
 					BinFilter.nYmin = Ma_pos[2]-4;
 					BinFilter.nYmax = Ma_pos[3]+4;
 					if((bIsMCR03 || bIsMCR10 || bIsMCR18 ) && TWA_R_n > 1){
-						//•¡”•¶š‚Ìê‡‚Í‰ñ“]‚ğl‚¦‚ÄÁ‚·
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½Í‰ï¿½]ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½
 						MaskMarkingMCR03(binPn);
 					} else {
 						BinClsPn( binPn, BinFilter.nXmin, BinFilter.nYmin, BinFilter.nXmax, BinFilter.nYmax ); //9499-NOTE
@@ -14527,8 +14511,8 @@ void	InspBinSetOvercoat( void )
 
 
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸					v2.11
-//			ŒŸ¸‚Q’l‰æ‘œAŒŸ¸”ÍˆÍİ’è
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½					v2.11
+//			ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½lï¿½æ‘œï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÍİ’ï¿½
 //================================================
 
 void	InspBinSetOvercoatBlack( void )
@@ -14565,7 +14549,7 @@ void	InspBinSetOvercoatBlack( void )
 		//	ymin	= 0;
 		//	ysize	= FySize;
 
-			// 2017.08.21 ”’index•”•ª‚ğÈ‚­
+			// 2017.08.21 ï¿½ï¿½indexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 			xmin	= IGuidePos[1];
 			xmax	= IGuidePos[DataX];
 			xsize	= xmax-xmin+1;
@@ -14585,7 +14569,7 @@ void	InspBinSetOvercoatBlack( void )
 				BinClsPn( BinP0, 0, 0, FxSize-1, FySize-1 );
 			}
 
-		//•Wˆó•¶š‚ğÁ‚·B
+		//ï¿½Wï¿½ó•¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 			//v2.11 if(!bIsMCR01){
 			if( (!bIsMCR01) && (0==(Option & BACKINSP_MODE)) ){
 				if(Ma_pos[0] >= 0 || TWA_Mark_Insp == 0 && (TWA_Insp_level==Insp_Low)&&(TWA_Insp_mode!=Insp_Pinhole)) {
@@ -14595,7 +14579,7 @@ void	InspBinSetOvercoatBlack( void )
 					BinFilter.nYmin = Ma_pos[2]-4;
 					BinFilter.nYmax = Ma_pos[3]+4;
 					if((bIsMCR03 || bIsMCR10 || bIsMCR18 ) && TWA_R_n > 1){
-						//•¡”•¶š‚Ìê‡‚Í‰ñ“]‚ğl‚¦‚ÄÁ‚·
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½Í‰ï¿½]ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½
 						MaskMarkingMCR03(binPn);
 					} else {
 						BinClsPn( binPn, BinFilter.nXmin, BinFilter.nYmin, BinFilter.nXmax, BinFilter.nYmax );
@@ -15315,7 +15299,7 @@ void	InspBinSetOvercoatBlack( void )
 
 
 //================================================
-//		ƒƒbƒL•t’…ŒŸ¸i‘¤–Êj
+//		ï¿½ï¿½ï¿½bï¿½Lï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½Êj
 //================================================
 
 int		InspPlating( void )
@@ -15429,7 +15413,7 @@ int		InspPlating( void )
 			}
 
 		// Binary measure
-		// “Á’¥—Ê‰‰Z@‰‰Z•û®w’è
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Zï¿½@ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½
 			R_set_meas_configration( &Mpx, BinMeasPlating.nRun, BinMeasPlating.nArea, BinMeasPlating.nColor, BinMeasPlating.nMode );
 		// Plating measure
 			res = OK;
@@ -15493,7 +15477,7 @@ int		InspPlating( void )
 
 
 //================================================
-//		ƒƒbƒL•t’…ŒŸ¸ƒŒƒxƒ‹İ’è
+//		ï¿½ï¿½ï¿½bï¿½Lï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 //================================================
 
 int		PlatingInspLevelSet( void )
@@ -15567,9 +15551,9 @@ int		PlatingInspLevelSet( void )
 				InspPlLSetPara.nYmin = InspPlatingArea[side][PosYmin];
 				InspPlLSetPara.nYmax = InspPlatingArea[side][PosYmax];
 				// ---
-				InspPlLSetPara.nStartLevel	= OcoatInspLevel.nData/2;				// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-				InspPlLSetPara.nEndLevel	= 250;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
-				InspPlLSetPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+				InspPlLSetPara.nStartLevel	= OcoatInspLevel.nData/2;				// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+				InspPlLSetPara.nEndLevel	= 250;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
+				InspPlLSetPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 				// --- level set
 				thr[side] = BinLevelSet( &InspPlLSetPara );
 				if( OK == thr[side] ) {
@@ -15621,8 +15605,8 @@ int		PlatingInspLevelSet( void )
 
 
 //================================================
-//		ƒI[ƒo[ƒR[ƒgŒŸ¸
-//			ŒŸ¸‚Q’l‰æ‘œAŒŸ¸”ÍˆÍİ’è
+//		ï¿½Iï¿½[ï¿½oï¿½[ï¿½Rï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½
+//			ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½lï¿½æ‘œï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÍİ’ï¿½
 //================================================
 
 void	InspBinSetPlating( void )
@@ -15790,9 +15774,9 @@ void	InspBinSetPlating( void )
 
 //------------------------------------------------
 //	BinLevelSet
-//	–ß‚è’l
-//		-1 < 	³íI—¹
-//		ERROR	ƒƒ‚ƒŠ[ERROR
+//	ï¿½ß‚ï¿½l
+//		-1 < 	ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+//		ERROR	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ERROR
 //------------------------------------------------
 
 int		BinLevelSet( THRESHOLD_PARAMETER *pThresh )
@@ -15806,13 +15790,13 @@ int		BinLevelSet( THRESHOLD_PARAMETER *pThresh )
 		// Initialze
 			if( OK == R_bgray_thresholding_open( THRESH_DEPTH_8BIT ))	flag = 1;
 
-		// –¾‚é‚³‚ÌƒqƒXƒgƒOƒ‰ƒ€
+		// ï¿½ï¿½ï¿½é‚³ï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½
 			if( ERROR == R_get_histgram( pThresh->nXmin, pThresh->nYmin, pThresh->nXmax, pThresh->nYmax, Gray_address[grayPn] ) )	return ERROR;
-		// ‚Q’l‰»ƒŒƒxƒ‹‚Ìæ“¾
+		// ï¿½Qï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Ìæ“¾
 			thr = R_bgray_thresholding( Bright, pThresh->nStartLevel, pThresh->nEndLevel, pThresh->nMethod );
 			if(flag)	R_bgray_thresholding_close();
 			if( thr < 0 )	return( thr );
-		// ‚Q’l‰»ƒŒƒxƒ‹İ’è
+		// ï¿½Qï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 			pThresh->nLevel = thr;
 			if( i_mode & INSPECT_STEP ) {
                 R_rect_init_by_point(&area,pThresh->nXmin, pThresh->nYmin , pThresh->nXmax, pThresh->nYmax );
@@ -15840,7 +15824,7 @@ int		BinLevelSet_WithMask( THRESHOLD_PARAMETER *pThresh ,R_RECT *aMask)
 		// Initialze
 			if( OK == R_bgray_thresholding_open( THRESH_DEPTH_8BIT ))	flag = 1;
 
-		// –¾‚é‚³‚ÌƒqƒXƒgƒOƒ‰ƒ€
+		// ï¿½ï¿½ï¿½é‚³ï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½
 			//if( ERROR == R_get_histgram( pThresh->nXmin, pThresh->nYmin, pThresh->nXmax, pThresh->nYmax, Gray_address[grayPn] ) )	return ERROR;
 			if( ERROR == R_get_histgram( pThresh->nXmin, pThresh->nYmin , aMask->left-1 , pThresh->nYmax, Gray_address[grayPn] ) )	return ERROR;
 			for(i=0;i<256;i++)	sBright[i]=Bright[i];
@@ -15872,11 +15856,11 @@ int		BinLevelSet_WithMask( THRESHOLD_PARAMETER *pThresh ,R_RECT *aMask)
 
 
 
-		// ‚Q’l‰»ƒŒƒxƒ‹‚Ìæ“¾
+		// ï¿½Qï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Ìæ“¾
 			thr = R_bgray_thresholding( sBright, pThresh->nStartLevel, pThresh->nEndLevel, pThresh->nMethod );
 			if(flag)	R_bgray_thresholding_close();
 			if( thr < 0 )	return( thr );
-		// ‚Q’l‰»ƒŒƒxƒ‹İ’è
+		// ï¿½Qï¿½lï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½İ’ï¿½
 			pThresh->nLevel = thr;
 
 		// result
@@ -15886,13 +15870,13 @@ int		BinLevelSet_WithMask( THRESHOLD_PARAMETER *pThresh ,R_RECT *aMask)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚r‚‚…‚ƒ‚r‚…‚”‚a‚‚ƒ‚‹‚r‚‰‚„‚…
-	‹@  ”\F
-	Œ`  ®F	int SpecSetBackSide( int nMenuNumber )
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	int SpecSetBackSide( int nMenuNumber )
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 
 int		SpecSetBackSide( int nMenuNumber )
@@ -15911,7 +15895,7 @@ int		SpecSetBackSide( int nMenuNumber )
 int		Data_Lot_count( void )
 	{
 		int						n, m, dn; //2012.03.14
-		R_CS_COUNTER_DATA		*pCounter	= R_CS_GetCounterDataStruct(0);			// ƒJƒEƒ“ƒ^\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^æ“¾
+		R_CS_COUNTER_DATA		*pCounter	= R_CS_GetCounterDataStruct(0);			// ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½\ï¿½ï¿½ï¿½Ì‚Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½æ“¾
 
 		// Clear flag check
                 if( Clear_flag == 1 ){
@@ -16055,17 +16039,17 @@ int		NGLimitDataLoadfile( void )
 		while( R_get_cursor() );
 
 		for(dn=0; dn<100 ; dn++) NG_Limit_OnOff[dn] = 1;
-		if( NULL!=(fin1=fopen( "LIMITNGI.csv", "r" ))) {		//NG Limit ƒf[ƒ^ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“
+		if( NULL!=(fin1=fopen( "LIMITNGI.csv", "r" ))) {		//NG Limit ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½
 			data_read();
 			dn = 0;
 			//
 			NG_Limit[0][dn] = data_read();					//Interval
 			NG_Limit[1][dn] = 0;
-			//NG€–Ú•Êdata
+			//NGï¿½ï¿½ï¿½Ú•ï¿½data
 			for( dn=1; dn<100; dn++ ) {
 				NG_Limit[0][dn] = data_read2();
 			}
-			fclose( fin1 );									//NG Limit ƒf[ƒ^ƒtƒ@ƒCƒ‹ƒNƒ[ƒY
+			fclose( fin1 );									//NG Limit ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
 
 			for( dn=1; dn<100; dn++ ) {
 				NG_Limit[1][dn] = 0;
@@ -16080,9 +16064,9 @@ int		NGLimitDataLoadfile( void )
 		} else {
 			R_display_control( BIN_MEMORY | GRAY_THROUGH );
             R_bin_cls( 0, 0, FxSize-1, FySize-1 );
-			sprintf( Comment, "ERR. Read Out NG Limit." );		//NG Limit data “Ç‚İ‚İƒGƒ‰[
+			sprintf( Comment, "ERR. Read Out NG Limit." );		//NG Limit data ï¿½Ç‚İï¿½ï¿½İƒGï¿½ï¿½ï¿½[
 			DrawMessage( Comment, DRAW_RED, 2, 0 );
-			fclose( fin1 );									//NG Limit ƒf[ƒ^ƒtƒ@ƒCƒ‹ƒNƒ[ƒY
+			fclose( fin1 );									//NG Limit ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
 
 			ans = ERROR;
 		}
@@ -16147,13 +16131,13 @@ int		CanclePok_sig( void )
 	}	// CheckInspStart( void ) end
 
 /**********************************************************
-	ŠÖ”–¼F	‚o‚‹‚‡‚o‚‚’‚‚r‚‚–‚…‚k‚‚‡
-	‹@  ”\F	ƒpƒ‰ƒ[ƒ^•ÏXƒƒO‚ğ•Û‘¶‚·‚é
-	Œ`  ®F	void PkgParaSaveLog( void )
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½kï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ÏXï¿½ï¿½ï¿½Oï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	void PkgParaSaveLog( void )
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static void PkgParaSaveLog( void )
 {
@@ -16163,7 +16147,7 @@ static void PkgParaSaveLog( void )
 	char	ParameterChangeDate[128];
 	R_TIME_INFO RTimeInfo;
 
-	//ƒfƒoƒCƒXƒ`ƒFƒbƒNÀ{“ú‚Ìæ“¾
+	//ï¿½fï¿½oï¿½Cï¿½Xï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½Ìæ“¾
 	R_TimeInfoGetNow(&RTimeInfo);
 	sprintf( ParameterChangeDate, "%4d-%02d-%02d_%02d%02d%02d",RTimeInfo.year,RTimeInfo.month,RTimeInfo.day,RTimeInfo.hour,RTimeInfo.minute,RTimeInfo.second );
 
@@ -16171,8 +16155,8 @@ static void PkgParaSaveLog( void )
 	system( ComMkdir );
 	sprintf( ComCpParameter,"cp TP-*.csv ./Parameter/Log/%s",ParameterChangeDate );
 	system( ComCpParameter );
-	//ver1.10 USBƒL[‚Ö‚Ì•Û‘¶‚ğ’Ç‰Á
-	//‚t‚r‚a‚Ö“¯ƒAƒNƒZƒX‚·‚é‚½‚ßAÀ‹@‚Å‚Í‚¤‚Ü‚­“®‚©‚¸B
+	//ver1.10 USBï¿½Lï¿½[ï¿½Ö‚Ì•Û‘ï¿½ï¿½ï¿½Ç‰ï¿½
+	//ï¿½tï¿½rï¿½aï¿½Ö“ï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½é‚½ï¿½ßAï¿½ï¿½ï¿½@ï¿½Å‚Í‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 	/*if( OK == MountUSB()){
 		sprintf( ComMkdir, "mkdir /mnt/usb/%s",MachineName );
 		system( ComMkdir );
@@ -16229,16 +16213,16 @@ static void	FileInspSet(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	ManualInspectFileAllReady
-	‹@  ”\F	˜A‘±ƒtƒ@ƒCƒ‹ƒ‚[ƒh‚Ì€”õŠÖ”
-	Œ`  ®F
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ManualInspectFileAllReady
+	ï¿½@  ï¿½\ï¿½F	ï¿½Aï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Öï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 int ManualInspectFileAllReady(int nMenuNumber){
-	if(Option & ADMIN_MODE) R_pfile_sequential_set_menu( PFILE_SEQ_MENU3, "ŒŸ¸İ’è",     "InspectSetting", FileInspSet );
+	if(Option & ADMIN_MODE) R_pfile_sequential_set_menu( PFILE_SEQ_MENU3, "ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½",     "InspectSetting", FileInspSet );
 
    return OK;
 }
@@ -16250,7 +16234,7 @@ int	GetBinG2Rough(int GrayPn)
 	int						i_mode	= R_CS_GetInspectMode();
 	R_RECT					area;
 
-	//w’èƒGƒŠƒA‚ÌƒqƒXƒgƒOƒ‰ƒ€‚ğæ‚éB
+	//ï¿½wï¿½ï¿½Gï¿½ï¿½ï¿½Aï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 	if(OK==R_bgray_thresholding_open(THRESH_DEPTH_8BIT))	flag = 1;
 
 	R_get_histgram( (G2_pos[0]+G2_pos[1])/2-(G2_pos[1]-G2_pos[0])/4, G2_pos[2]-20, (G2_pos[0]+G2_pos[1])/2+(G2_pos[1]-G2_pos[0])/4, G2_pos[3]+20, Gray_address[GrayPn] );
@@ -16313,13 +16297,13 @@ int		G2EsLevelSet( int side )
 			// ---
 			//v2.20 if(!bIsLTR50){
 			if( (!bIsLTR50) && (!bIsLTR18) ){
-				G2EsLSetPara.nStartLevel	= 10;// ChipEsLevel.nLower;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-				G2EsLSetPara.nEndLevel		= 250;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
+				G2EsLSetPara.nStartLevel	= 10;// ChipEsLevel.nLower;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+				G2EsLSetPara.nEndLevel		= 250;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
 			} else {
-				G2EsLSetPara.nStartLevel	= 25;// ChipEsLevel.nLower;			// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌŠJn“_(start>=0)
-				G2EsLSetPara.nEndLevel		= 200;									// ƒqƒXƒgƒOƒ‰ƒ€‚ÌŒvZ”ÍˆÍ‚ÌI—¹“_
+				G2EsLSetPara.nStartLevel	= 25;// ChipEsLevel.nLower;			// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌŠJï¿½nï¿½_(start>=0)
+				G2EsLSetPara.nEndLevel		= 200;									// ï¿½qï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½ÍˆÍ‚ÌIï¿½ï¿½ï¿½_
 			}
-			G2EsLSetPara.nMethod		= THRESH_OTSU;							// ‚µ‚«‚¢’l‘I’è‚Ì•û–@
+			G2EsLSetPara.nMethod		= THRESH_OTSU;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Iï¿½ï¿½Ì•ï¿½ï¿½@
 			// --- level set
 			thr = BinLevelSet( &G2EsLSetPara );
 			// --- Check level
@@ -16353,48 +16337,48 @@ int		G2EsLevelSet( int side )
 	}	// G2EsLevelSet( void ) end
 
 /**********************************************************
-	ŠÖ”–¼F	‚t‚“‚‚‚j‚…‚™‚b‚…‚’‚”‚‰‚†‚‰‚ƒ‚‚”‚‰‚‚
-	‹@  ”\F	‚t‚r‚aƒƒ‚ƒŠƒL[”FØ
-	Œ`  ®F	static int UsbKeyCertification( char *UsbKeyInformation )
-	ˆø‚«”F	char *UsbKeyInformation
-					”FØ¬Œ÷‚µ‚½ê‡‚ÉAg—p‚³‚ê‚½‚t‚r‚aƒL[‚Ìî•ñ‚ğŠi”[‚µ‚Ü‚·B
-					—áj
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½Fï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int UsbKeyCertification( char *UsbKeyInformation )
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	char *UsbKeyInformation
+					ï¿½Fï¿½Øï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉAï¿½gï¿½pï¿½ï¿½ï¿½ê‚½ï¿½tï¿½rï¿½aï¿½Lï¿½[ï¿½Ìï¿½ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+					ï¿½ï¿½j
 					 -- CERTIFICATION PASS --
 					S:  SerialNumber=07740D954E1B
 					P:  Vendor=13fe ProdID=1d20 Rev= 1.00
 
-	–ß‚è’lF	OK		”FØ‚n‚j
-				ERROR	”FØ‚m‚f
+	ï¿½ß‚ï¿½lï¿½F	OK		ï¿½Fï¿½Ø‚nï¿½j
+				ERROR	ï¿½Fï¿½Ø‚mï¿½f
 
-	‰ğ  àF	‚t‚r‚aƒƒ‚ƒŠ‚Ì”FØ‚ğs‚¢‚Ü‚·B
-				”FØ‚Í‚t‚r‚aƒƒ‚ƒŠ‚Ì‚u‚…‚‚„‚‚’‚h‚cC‚o‚’‚‚„‚•‚ƒ‚”‚h‚cC‚r‚…‚’‚‰‚‚Œ‚m‚•‚‚‚‚…‚’‚ğ—p‚¢‚Ü‚·B
-				“o˜^‚³‚ê‚½‚t‚r‚aƒƒ‚ƒŠ‚ªÚ‘±‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŠm”F‚µAÚ‘±‚³‚ê‚Ä‚¢‚ê‚Î‚n‚jC‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚d‚q‚q‚n‚q‚ğ•Ô‚µ‚Ü‚·B
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”Fï¿½Ø‚ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+				ï¿½Fï¿½Ø‚Í‚tï¿½rï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½cï¿½Cï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½cï¿½Cï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+				ï¿½oï¿½^ï¿½ï¿½ï¿½ê‚½ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Aï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Î‚nï¿½jï¿½Cï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚dï¿½qï¿½qï¿½nï¿½qï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
 
-	—¯ˆÓ–€F	‚ ‚ç‚©‚¶‚ß‚t‚r‚aƒƒ‚ƒŠƒL[‚Ì“o˜^ƒtƒ@ƒCƒ‹‚Ìì¬‚ª•K—v‚Å‚·B
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½ï¿½ç‚©ï¿½ï¿½ï¿½ß‚tï¿½rï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½Ì“oï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìì¬ï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B
 
-				“o˜^‚·‚é‚t‚r‚aƒƒ‚ƒŠ‚Í
+				ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					VendorID
 					ProductID
 					SerialNumber
-				‚ª³‚µ‚­İ’è‚³‚ê‚Ä‚¢‚é‚à‚Ì‚ğ—˜—p‚µ‚Ä‚­‚¾‚³‚¢B
-				i’†‚É‚ÍSerialNumber=0123456789ABCDEF ‚È‚Ç‚Æ‚«‚¿‚ñ‚Æİ’è‚µ‚Ä‚¢‚È‚¢ƒ[ƒJ‚à‚ ‚è‚Ü‚·j
-				VendorID“™‚Ìî•ñ‚Ìæ“¾‚Íusbview‚Æ‚¢‚¤ƒ\ƒtƒg‚ğg—p‚µ‚ÄŠm”Fo—ˆ‚Ü‚·B
+				ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ğ—˜—pï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+				ï¿½iï¿½ï¿½ï¿½É‚ï¿½SerialNumber=0123456789ABCDEF ï¿½È‚Ç‚Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½Æİ’è‚µï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½[ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½j
+				VendorIDï¿½ï¿½ï¿½Ìï¿½ï¿½Ìæ“¾ï¿½ï¿½usbviewï¿½Æ‚ï¿½ï¿½ï¿½ï¿½\ï¿½tï¿½gï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ÄŠmï¿½Fï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 
-				“o˜^ƒtƒ@ƒCƒ‹‚Í
-				ƒSerialNumber‚Ì“o˜^ƒtƒ@ƒCƒ‹„
+				ï¿½oï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½
+				ï¿½ï¿½SerialNumberï¿½Ì“oï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½
 				usbserial.dat
 				S:  SerialNumber=07740D954E1B
 				S:  SerialNumber=07740D954E1C
 				S:  SerialNumber=07740D954E1D
-				ƒVendorID, ProductID‚Ì“o˜^ƒtƒ@ƒCƒ‹„
+				ï¿½ï¿½VendorID, ProductIDï¿½Ì“oï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½
 				usbvendor.dat
 				P:  Vendor=13fe ProdID=1d20 Rev= 1.00
 
-				‚X‚R‚O‚P‚k‚‰‚˜‚•‚˜ƒ}ƒVƒ“‚Å‚t‚r‚aî•ñ‚Ìæ“¾•û–@
-				ƒ^[ƒ~ƒiƒ‹ã‚ÅˆÈ‰º‚ÌƒRƒ}ƒ“ƒh‚ğ“ü—Í
+				ï¿½Xï¿½Rï¿½Oï¿½Pï¿½kï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½Vï¿½ï¿½ï¿½Å‚tï¿½rï¿½aï¿½ï¿½ï¿½Ìæ“¾ï¿½ï¿½ï¿½@
+				ï¿½^ï¿½[ï¿½~ï¿½iï¿½ï¿½ï¿½ï¿½ÅˆÈ‰ï¿½ï¿½ÌƒRï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½
 		Fedora11>cat /proc/bus/usb/devices | grep Serial
 		UBUNTU	>cat /sys/kernel/debug/usb/devices | grep Serial
-				ËÚ‘±’†‚ÌSerialNumber‚Ìî•ñ‚ª•\\¦
+				ï¿½ËÚ‘ï¿½ï¿½ï¿½ï¿½ï¿½SerialNumberï¿½Ìï¿½ñ‚ª•\\ï¿½ï¿½
 				S:  SerialNumber=0000:00:1d.2
 				S:  SerialNumber=0000:00:1d.1
 				S:  SerialNumber=0000:00:1d.0
@@ -16402,7 +16386,7 @@ int		G2EsLevelSet( int side )
 				S:  SerialNumber=0000:00:1a.1
 				S:  SerialNumber=0000:00:1a.0
 				S:  SerialNumber=0000:00:1d.7
-				S:  SerialNumber=07740D954E1B ->‚±‚Ìs‚ğƒRƒs[‚µAusbserial.dat‚É’£‚è•t‚¯‚é
+				S:  SerialNumber=07740D954E1B ->ï¿½ï¿½ï¿½Ìsï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½Ausbserial.datï¿½É’ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½
 				S:  SerialNumber=0000:00:1a.7
 
 		Fedora11>cat /proc/bus/usb/devices | grep Vendor
@@ -16415,11 +16399,11 @@ int		G2EsLevelSet( int side )
 				P:  Vendor=1d6b ProdID=0001 Rev= 2.06
 				P:  Vendor=1d6b ProdID=0001 Rev= 2.06
 				P:  Vendor=1d6b ProdID=0002 Rev= 2.06
-				P:  Vendor=13fe ProdID=1d20 Rev= 1.00 ->‚±‚Ìs‚ğƒRƒs[‚µAusbserial.dat‚É’£‚è•t‚¯‚é
+				P:  Vendor=13fe ProdID=1d20 Rev= 1.00 ->ï¿½ï¿½ï¿½Ìsï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½Ausbserial.datï¿½É’ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½
 				P:  Vendor=1d6b ProdID=0002 Rev= 2.06
 		Fedora11>cat /proc/bus/usb/devices | grep Vendor
 		UBUNTU	>cat /sys/kernel/debug/usb/devices | grep Vendor
-				ËÚ‘±’†‚ÌSerialNumber‚Ìî•ñ‚ª•\\¦
+				ï¿½ËÚ‘ï¿½ï¿½ï¿½ï¿½ï¿½SerialNumberï¿½Ìï¿½ñ‚ª•\\ï¿½ï¿½
 
 **********************************************************/							// 2017.06.13
 /*
@@ -16473,7 +16457,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 
 //    return OK;
 
-	//USB Serial Number‚Ì”FØ
+	//USB Serial Numberï¿½Ì”Fï¿½ï¿½
 	if( NULL == (fpListSerial=fopen("./usb/usbserial.dat","rt")) ){
 		R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (can not open usbserial.dat)" );
 		system( ComUnMount );
@@ -16484,14 +16468,14 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 		while(NULL != fgets(buffer, 128, fpListSerial )){
 			if( list_no > USBKEY_MAX ){
 				fclose( fpListSerial );
-				//“o˜^List‚ª‘½‚·‚¬‚éê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (too many list of usbserial.dat)" );
 				fclose( fpListSerial );
 				system( ComUnMount );
 				return ERROR;
 			}
 			if( 1>=strlen(buffer) ){
-				//“o˜^List‚ªƒ[ƒ‚Ìê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				if( 0 == list_no ){
 					R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (no list of usbserial.dat)" );
 					fclose( fpListSerial );
@@ -16501,7 +16485,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 
 			if( 10 < strlen(buffer) ){
 				buffer[strlen(buffer)-1] = '\0';
-				printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				strcpy( ListSerial[list_no], buffer );
 				printf("ListSerial[%d]:[%s]\n",list_no,ListSerial[list_no] );
 				list_no++;
@@ -16510,13 +16494,13 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 		fclose( fpListSerial );
 		list_count = list_no;
 
-		//List‚Ì•\\¦
+		//Listï¿½Ì•\\ï¿½ï¿½
 		printf("--- USB KEY LIST ---\n");
 		for( i=0; i<list_count; i++){
 			printf("LIST SERIAL[%2d]:[%s]\n",i, ListSerial[i] );
 		}
 
-		//Ú‘±‚³‚ê‚Ä‚¢‚é‚t‚r‚aî•ñ‚Ìæ“¾Ëusbserial.txt‚Ö
+		//ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½Ìæ“¾ï¿½ï¿½usbserial.txtï¿½ï¿½
 		system ( ComSerial );
 
 		if( NULL == (fpTmpSerial=fopen("usbserial.txt","rt")) ){
@@ -16527,7 +16511,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 		else{
 			list_no = 0;
 			while(NULL != fgets(buffer, 128, fpTmpSerial )){
-				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				for( i=0; i<list_count; i++){
 					if( 0==strcmp( buffer, ListSerial[i] ) ){ //success certification of usb key. //list_no //<z2>
 						//R_draw_popup_message( DRAW_GREEN, DISP_4, POPUP_WAIT_CLICK, "-- CERTIFICATION PASS --\nUSB KEY[%s]\nLIST   [%s]",buffer,ListSerial[list_no] );
@@ -16549,7 +16533,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 	}
 SERIAL_SUCCESS:
 
-	//USB VendorID, ProductID‚Ì”FØ
+	//USB VendorID, ProductIDï¿½Ì”Fï¿½ï¿½
 	if( NULL == (fpListVendor=fopen("./usb/usbvendor.dat","rt")) ){
 		R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (can not open usbvendor.dat)" );
 		system( ComUnMount );
@@ -16560,14 +16544,14 @@ SERIAL_SUCCESS:
 		while(NULL != fgets(buffer, 128, fpListVendor )){
 			if( list_no > USBKEY_MAX ){
 				fclose( fpListVendor );
-				//“o˜^List‚ª‘½‚·‚¬‚éê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (too many list of usbvendor.dat)" );
 				fclose( fpListVendor );
 				system( ComUnMount );
 				return ERROR;
 			}
 			if( 1>=strlen(buffer) ){
-				//“o˜^List‚ªƒ[ƒ‚Ìê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				if( 0 == list_no ){
 					R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (no list of usbvendor.dat)" );
 					fclose( fpListVendor );
@@ -16578,7 +16562,7 @@ SERIAL_SUCCESS:
 
 			if( 10 < strlen(buffer) ){
 				buffer[strlen(buffer)-1] = '\0';
-				printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				strcpy( ListVendor[list_no], buffer );
 				printf("ListVendor[%d]:[%s]\n",list_no,ListVendor[list_no] );
 				list_no++;
@@ -16587,13 +16571,13 @@ SERIAL_SUCCESS:
 		fclose( fpListVendor );
 		list_count = list_no;
 
-		//List‚Ì•\\¦
+		//Listï¿½Ì•\\ï¿½ï¿½
 		printf("--- USB KEY LIST ---\n");
 		for( i=0; i<list_count; i++){
 			printf("LIST VENDOR [%2d]:[%s]\n",i, ListVendor[i] );
 		}
 
-		//Ú‘±‚³‚ê‚Ä‚¢‚é‚t‚r‚aî•ñ‚Ìæ“¾Ëusbserial.txt‚Ö
+		//ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½Ìæ“¾ï¿½ï¿½usbserial.txtï¿½ï¿½
 		system ( ComVendor );
 
 		if( NULL == (fpTmpVendor=fopen("usbvendor.txt","rt")) ){
@@ -16604,7 +16588,7 @@ SERIAL_SUCCESS:
 		else{
 			list_no = 0;
 			while(NULL != fgets(buffer, 128, fpTmpVendor )){
-				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				for( i=0; i<list_count; i++){
 					if( 0==strcmp( buffer, ListVendor[i] ) ){ //success certification of usb key. //list_no //<z2>
 						//R_draw_popup_message( DRAW_GREEN, DISP_4, POPUP_WAIT_CLICK, "-- CERTIFICATION PASS --\nUSB KEY[%s]\nLIST   [%s]",buffer,ListVendor[list_no] );
@@ -16648,8 +16632,8 @@ VENDOR_SUCCESS:
 */
 
 
-// w’èˆÊ’u‚Ìƒrƒbƒg‚ğƒZƒbƒgorƒŠƒZƒbƒg‚·‚éŠÖ”BnBit:ˆÊ’u(0-)AnFlag:1=off ‚ğw’è
-// IN-CY-122ƒJƒXƒ^ƒ€ƒrƒbƒg‘Î‰	2016/04/09	komatsu
+// ï¿½wï¿½ï¿½Ê’uï¿½Ìƒrï¿½bï¿½gï¿½ï¿½ï¿½Zï¿½bï¿½gorï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Öï¿½ï¿½BnBit:ï¿½Ê’u(0-)ï¿½AnFlag:1=off ï¿½ï¿½ï¿½wï¿½ï¿½
+// IN-CY-122ï¿½Jï¿½Xï¿½^ï¿½ï¿½ï¿½rï¿½bï¿½gï¿½Î‰ï¿½	2016/04/09	komatsu
 static int SetBit(int nBit, int nFlag)
 {
 	int data = 0x01;
@@ -16767,7 +16751,7 @@ int		CheckInspStartNwt( void )
 	}	// CheckInspStart( void ) end
 
 
-// w’èˆÊ’u‚Ìƒrƒbƒg‚ğ“¾‚éŠÖ”
+// ï¿½wï¿½ï¿½Ê’uï¿½Ìƒrï¿½bï¿½gï¿½ğ“¾‚ï¿½Öï¿½
 static int nMaxBitNumber = 64;
 static long long int GetBit(long long int nData, int nBit, int nSize)
 {
@@ -16775,9 +16759,9 @@ static long long int GetBit(long long int nData, int nBit, int nSize)
 	long long int data;
 	long long int mask = 0x01ll;
 
-	if((nBit<0)||nMaxBitNumber<nBit)			return -1;		// ƒrƒbƒg”ƒGƒ‰[
-	if((nSize<0)||nMaxBitNumber<nSize)			return -1;		// ƒTƒCƒYƒGƒ‰[
-	if((nSize==0)||(nBit==0))					return -2;		// •Ğ•û‚ª0‚Ìê‡‚Íg—p‚µ‚È‚¢
+	if((nBit<0)||nMaxBitNumber<nBit)			return -1;		// ï¿½rï¿½bï¿½gï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½[
+	if((nSize<0)||nMaxBitNumber<nSize)			return -1;		// ï¿½Tï¿½Cï¿½Yï¿½Gï¿½ï¿½ï¿½[
+	if((nSize==0)||(nBit==0))					return -2;		// ï¿½Ğ•ï¿½ï¿½ï¿½0ï¿½Ìê‡ï¿½Ígï¿½pï¿½ï¿½ï¿½È‚ï¿½
 
 	data = (long long int)((nData >> (nBit-1)) & 0xffffffffffffffff);
 
@@ -16789,34 +16773,34 @@ static long long int GetBit(long long int nData, int nBit, int nSize)
 	return (mask & data);
 }
 
-// ƒXƒ^[ƒgƒrƒbƒg‚ğ“¾‚éŠÖ”BnData“à‚ÌSystemPara.tInputPara.nStartBitStartƒrƒbƒg‚ğ“¾‚é
+// ï¿½Xï¿½^ï¿½[ï¿½gï¿½rï¿½bï¿½gï¿½ğ“¾‚ï¿½Öï¿½ï¿½BnDataï¿½ï¿½ï¿½ï¿½SystemPara.tInputPara.nStartBitStartï¿½rï¿½bï¿½gï¿½ğ“¾‚ï¿½
 static long long int GetStartBit(long long int nData)
 {
 	return GetBit(nData, 16, 1);
 }
-// ƒŠƒgƒ‰ƒCƒrƒbƒg‚ğ“¾‚éŠÖ”B
+// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½rï¿½bï¿½gï¿½ğ“¾‚ï¿½Öï¿½ï¿½B
 //static long long int GetRetryStartBit(long long int nData)
 //{
 //	return GetBit(nData, SystemPara.tInputPara.nRetryStartBitStart, 1);
 //}
 
-// ƒRƒŒƒbƒg”Ô†‚ğ“¾‚éŠÖ”BnData“à‚ÌSystemPara.nColletNumberBitStart‚©‚çSystemPara.nColletNumberBitSize•ª‚ğ“¾‚éB
+// ï¿½Rï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½ï¿½ğ“¾‚ï¿½Öï¿½ï¿½BnDataï¿½ï¿½ï¿½ï¿½SystemPara.nColletNumberBitStartï¿½ï¿½ï¿½ï¿½SystemPara.nColletNumberBitSizeï¿½ï¿½ï¿½ğ“¾‚ï¿½B
 static long long int GetColletNumber(long long int nData)
 {
-	return GetBit(nData, 1, 8);		// §Œä‚©‚ç‚à‚ç‚¤ƒRƒŒƒbƒg”Ô†‚Í‚O‚©‚çA”F¯‚Åg—p‚·‚é”Ô†‚Í‚P‚©‚ç
+	return GetBit(nData, 1, 8);		// ï¿½ï¿½ï¿½ä‚©ï¿½ï¿½ï¿½ï¿½ç‚¤ï¿½Rï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½ï¿½Í‚Oï¿½ï¿½ï¿½ï¿½Aï¿½Fï¿½ï¿½ï¿½Ågï¿½pï¿½ï¿½ï¿½ï¿½Ôï¿½ï¿½Í‚Pï¿½ï¿½ï¿½ï¿½
 }
-// ƒ[ƒN‚Ìó‘Ô‚ÌŠm”FBNormalWork or NGWork or NoWork
+// ï¿½ï¿½ï¿½[ï¿½Nï¿½Ìï¿½Ô‚ÌŠmï¿½Fï¿½BNormalWork or NGWork or NoWork
 static long long int GetWorkState(long long int nData)
 {
 	return GetBit(nData, 14, 2);
 }
 
-// ƒJƒEƒ“ƒ^ƒNƒŠƒAƒtƒ‰ƒO‚ÌŠm”F
+// ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½Nï¿½ï¿½ï¿½Aï¿½tï¿½ï¿½ï¿½Oï¿½ÌŠmï¿½F
 static long long int GetCounterClear(long long int nData)
 {
 	return GetBit(nData, 1, 16);
 }
-// ƒƒbƒgƒXƒ^[ƒgƒtƒ‰ƒO‚ÌŠm”F
+// ï¿½ï¿½ï¿½bï¿½gï¿½Xï¿½^ï¿½[ï¿½gï¿½tï¿½ï¿½ï¿½Oï¿½ÌŠmï¿½F
 //static long long int GetLotStart(long long int nData)
 //{
 //	return GetBit(nData, SystemPara.tInputPara.nLotStartBitStart, SystemPara.tInputPara.nLotStartBitSize);
@@ -16827,7 +16811,7 @@ static int GetOutputStatus(void)
 	int port,bit,mask;
 	unsigned int ret;
 
-	if(CommunicationDeviceShareId == 999){		// 2016.05.30 10bito—Í‚É‘Î‰ by tanaka
+	if(CommunicationDeviceShareId == 999){		// 2016.05.30 10bitï¿½oï¿½Í‚É‘Î‰ï¿½ by tanaka
 		port = DrCy83Ch | (CNa_OUT_port_1 + (CommunicationDeviceStartBit) / 8);
 		bit = CommunicationDeviceStartBit  % 8;
 		mask = (1 << CommunicationDeviceUseLen)-1;
@@ -16839,13 +16823,13 @@ static int GetOutputStatus(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚c‚’‚w‚P‚Q‚S‚b‚‚‚„‚‰‚”‚‰‚‚‚r‚…‚”
-	‹@  ”\F	DR-X-124ğŒİ’è
-	Œ`  ®F	static int DrX124ConditionSet(void)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½cï¿½ï¿½ï¿½wï¿½Pï¿½Qï¿½Sï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	DR-X-124ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int DrX124ConditionSet(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int DrX124ConditionSet(void)
 {
@@ -16855,7 +16839,7 @@ static int DrX124ConditionSet(void)
 	int nTotalBoard;
 	int nTotalPattern;
 
-	if(LedControllMode == LED_CONTROLL_DRX124){		// 1–‡‚Ìê‡
+	if(LedControllMode == LED_CONTROLL_DRX124){		// 1ï¿½ï¿½ï¿½Ìê‡
 		nTotalBoard			= 1;
 		nTotalPattern		= _Drx124_Setting->nPatternNumber;
 	}else{
@@ -16863,25 +16847,25 @@ static int DrX124ConditionSet(void)
 		return ERROR;
 	}
 
-	// “_“”ƒpƒ^[ƒ“”‚ğİ’èB’ÊMI—¹‚Ü‚Å‘Ò‚ÂB
+	// ï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½Bï¿½ÊMï¿½Iï¿½ï¿½ï¿½Ü‚Å‘Ò‚ÂB
 	if(OK != R_drx124_set_turn(HandleDrx124, nTotalPattern, 1)){
 		printf("R_drx124_set_turn Error!    number %d\n", 0);
 		return ERROR;
 	}
 
-	// ‘SCH‚ğ“_“”‚³‚¹‚é
+	// ï¿½SCHï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(OK != R_drx124_set_pattern(HandleDrx124, 1, _DRX124_CH_0 | _DRX124_CH_1 | _DRX124_CH_2 | _DRX124_CH_3 | _DRX124_CH_4 | _DRX124_CH_5)){
 		printf("R_drx124_set_pattern Error!    number %d\n", 0);
 		return ERROR;
 	}
 
-	// “_“”ŠÔ‚ğİ’è‚·‚é
+	// ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½İ’è‚·ï¿½ï¿½
 	if(OK != R_drx124_set_time(HandleDrx124, 1, SystemPara.nShutterSpeed)){
 		printf("R_drx124_set_time Error!    number %d\n", 0);
 		return ERROR;
 	}
 
-	// “d—¬’l‚ğİ’è‚·‚é
+	// ï¿½dï¿½ï¿½ï¿½lï¿½ï¿½İ’è‚·ï¿½ï¿½
 	for(nLedChNumber=0 ; nLedChNumber<USER_DRX124_CH_NUMBER ; nLedChNumber++){
 		if(OK != R_drx124_set_current(HandleDrx124, nLedChNumber, 1, LedCurrent[nLedChNumber])){
 			printf("R_drx124_set_current Error!    number %d\n", 0);
@@ -16889,7 +16873,7 @@ static int DrX124ConditionSet(void)
 		}
 	}
 
-	// ƒpƒ^[ƒ“0‚Íƒeƒ“ƒ|ƒ‰ƒŠ‚È‚Ì‚ÅA“_“”ŠÔ‚Æ“d—¬’l‚Íİ’è‚µ‚È‚¢‚ªA“_“”ƒpƒ^[ƒ“‚¾‚¯‚Íİ’è‚·‚é
+	// ï¿½pï¿½^ï¿½[ï¿½ï¿½0ï¿½Íƒeï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½È‚Ì‚ÅAï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚Æ“dï¿½ï¿½ï¿½lï¿½Íİ’è‚µï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íİ’è‚·ï¿½ï¿½
 	if(OK != R_drx124_set_pattern(HandleDrx124, 0, _DRX124_CH_0 | _DRX124_CH_1 | _DRX124_CH_2 | _DRX124_CH_3 | _DRX124_CH_4 | _DRX124_CH_5)){
 		printf("R_drx124_set_pattern Error!\n");
 		return ERROR;
@@ -16899,13 +16883,13 @@ static int DrX124ConditionSet(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚c‚’‚w‚P‚Q‚S‚q‚…‚“‚…‚”‚s‚•‚’‚
-	‹@  ”\F	DR-X-124‚Ìƒ^[ƒ“”‚ğƒŠƒZƒbƒg‚·‚é
-	Œ`  ®F	static int DrX124ResetTurn(void)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½cï¿½ï¿½ï¿½wï¿½Pï¿½Qï¿½Sï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	DR-X-124ï¿½Ìƒ^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int DrX124ResetTurn(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int DrX124ResetTurn(void)
 {
@@ -16914,14 +16898,14 @@ static int DrX124ResetTurn(void)
 
 	if(Option&NO_DRX124)	return OK;
 
-	// “_“”ƒpƒ^[ƒ“‚ğƒŠƒZƒbƒg‚·‚é
+	// ï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½
 	if(LedControllMode == LED_CONTROLL_DRX124){
 		res_light = R_drx124_set_turn(HandleDrx124, 1, 1);
-		if(OK != res_light){		// DR-X-124‚Æ‚Ì’ÊM‚É¸”s‚µ‚½ê‡‚ÍÄƒI[ƒvƒ“‚µ‚ÄA’ÊM‚µ‚È‚¨‚·
+		if(OK != res_light){		// DR-X-124ï¿½Æ‚Ì’ÊMï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍÄƒIï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ÄAï¿½ÊMï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½
 			int res_restart;
 			res_restart = R_drx124_restart(HandleDrx124);
 			if(OK == res_restart){
-				res_light = R_drx124_set_turn(HandleDrx124, 1, 1);		// ÄƒI[ƒvƒ“‚É¬Œ÷‚µ‚½‚ç’ÊM‚·‚é
+				res_light = R_drx124_set_turn(HandleDrx124, 1, 1);		// ï¿½ÄƒIï¿½[ï¿½vï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÊMï¿½ï¿½ï¿½ï¿½
 			}
 		}
 	}
@@ -16931,20 +16915,20 @@ static int DrX124ResetTurn(void)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚b‚‚‚”‚•‚’‚…‚k‚…‚„‚`‚„‚Š‚•‚“‚”‚b‚‚‚O
-	‹@  ”\F	LED’²®—p@‰æ‘œæ‚è‚İ
-	Œ`  ®F	static void CaptureLedAdjustCap0(int nMode)
-	ˆø‚«”F	int nMode
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F	æ‚è‚İ”Ô†0ê—p
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½O
+	ï¿½@  ï¿½\ï¿½F	LEDï¿½ï¿½ï¿½ï¿½ï¿½pï¿½@ï¿½æ‘œï¿½ï¿½èï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void CaptureLedAdjustCap0(int nMode)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int nMode
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½èï¿½İ”Ôï¿½0ï¿½ï¿½p
 **********************************************************/
 static void CaptureLedAdjustCap0(int nMode)
 {
 	int nCameraNumber = R_CS_GetCurrentCameraNumber();
 	int nCaptureNumber = 0;
 
-	nMode = nMode;	// ˆø”‚ğ–¢g—p‚Ì‚Æ‚«‚É‚Å‚éƒ[ƒjƒ“ƒO‘Îô
+	nMode = nMode;	// ï¿½ï¿½ï¿½ï¿½ï¿½ğ–¢gï¿½pï¿½Ì‚Æ‚ï¿½ï¿½É‚Å‚éƒï¿½[ï¿½jï¿½ï¿½ï¿½Oï¿½Îï¿½
 
 //	if(SystemPara.nExternalLightMode){
 //		if(nCameraNumber==SystemPara.nExternalLightUsingCameraNumber && nCaptureNumber==SystemPara.nExternalLightUsingCaptureNumber) ExternalLedOn();
@@ -16952,46 +16936,46 @@ static void CaptureLedAdjustCap0(int nMode)
 
 	R_CS_Capture(nCameraNumber, nCaptureNumber, GV_NO_VRAM);
 
-	// ‰æ‘œ“]‘—‘Ò‚¿A•\¦‚ÍI—¹ˆ—‚ÌCaptureLedAdjustEndCap0‚ÉˆÚ“®		2010/08/24 by sassa
+	// ï¿½æ‘œï¿½]ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½Aï¿½\ï¿½ï¿½ï¿½ÍIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CaptureLedAdjustEndCap0ï¿½ÉˆÚ“ï¿½		2010/08/24 by sassa
 	//R_CS_CaptureWait(nCameraNumber);
 
-	//R_CS_CaptureDisplayImage(nCameraNumber, nCaptureNumber);		// æ‚è‚ñ‚¾‰æ‘œ‚ğƒ‚ƒjƒ^[‚É•\¦
-	//R_CS_CaptureChangeDisplayId();									// ‰æ‘œƒ{[ƒh‚ÌID‚ğƒ‚ƒjƒ^[‚Éo—Í‚µ‚Ä‚¢‚é”Ô†‚ÉØ‚è‘Ö‚¦‚é
+	//R_CS_CaptureDisplayImage(nCameraNumber, nCaptureNumber);		// ï¿½ï¿½èï¿½ñ‚¾‰æ‘œï¿½ï¿½ï¿½ï¿½ï¿½jï¿½^ï¿½[ï¿½É•\ï¿½ï¿½
+	//R_CS_CaptureChangeDisplayId();									// ï¿½æ‘œï¿½{ï¿½[ï¿½hï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½jï¿½^ï¿½[ï¿½Éoï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ôï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½ï¿½ï¿½
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚b‚‚‚”‚•‚’‚…‚k‚…‚„‚`‚„‚Š‚•‚“‚”‚d‚‚„‚b‚‚‚O
-	‹@  ”\F	LED’²®—p@‰æ‘œæ‚è‚İ‚ÌI—¹ˆ—
-	Œ`  ®F	static void CaptureLedAdjustEndCap0(int nMode)
-	ˆø‚«”F	int nMode
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F	æ‚è‚İ”Ô†0ê—p
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½O
+	ï¿½@  ï¿½\ï¿½F	LEDï¿½ï¿½ï¿½ï¿½ï¿½pï¿½@ï¿½æ‘œï¿½ï¿½èï¿½İ‚ÌIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static void CaptureLedAdjustEndCap0(int nMode)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int nMode
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½ï¿½èï¿½İ”Ôï¿½0ï¿½ï¿½p
 **********************************************************/
 static void CaptureLedAdjustEndCap0(int nMode)
 {
 	int nCameraNumber = R_CS_GetCurrentCameraNumber();
 	int nCaptureNumber = 0;
 
-	nMode = nMode;	// ˆø”‚ğ–¢g—p‚Ì‚Æ‚«‚É‚Å‚éƒ[ƒjƒ“ƒO‘Îô
+	nMode = nMode;	// ï¿½ï¿½ï¿½ï¿½ï¿½ğ–¢gï¿½pï¿½Ì‚Æ‚ï¿½ï¿½É‚Å‚éƒï¿½[ï¿½jï¿½ï¿½ï¿½Oï¿½Îï¿½
 
 //	if(nCameraNumber==SystemPara.nExternalLightUsingCameraNumber && nCaptureNumber==SystemPara.nExternalLightUsingCaptureNumber) ExternalLedOff();
 
 	R_CS_CaptureWait(nCameraNumber);
-	R_CS_CaptureChangeDisplayId();									// ‰æ‘œƒ{[ƒh‚ÌID‚ğƒ‚ƒjƒ^[‚Éo—Í‚µ‚Ä‚¢‚é”Ô†‚ÉØ‚è‘Ö‚¦‚é
-	// ‰æ‘œ•\¦
-	// ‚»‚Ì‚Ü‚Ü•\¦
+	R_CS_CaptureChangeDisplayId();									// ï¿½æ‘œï¿½{ï¿½[ï¿½hï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½jï¿½^ï¿½[ï¿½Éoï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ôï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½ï¿½ï¿½
+	// ï¿½æ‘œï¿½\ï¿½ï¿½
+	// ï¿½ï¿½ï¿½Ì‚Ü‚Ü•\ï¿½ï¿½
 	R_move_gray_memory(  MANUAL_GRAYADDRESS, 0, 0, 0, FxSize-1, FySize-1 );
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚l‚…‚‚•‚k‚‰‚‡‚ˆ‚”‚r‚…‚”
-	‹@  ”\F	Æ–¾’²®
-	Œ`  ®F	static int MenuLightSet(int nMenuNumber)
-	ˆø‚«”F	int nCaptureNumber
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int MenuLightSet(int nMenuNumber)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	int nCaptureNumber
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int MenuLightSet(int nMenuNumber)
 {
@@ -16999,23 +16983,23 @@ static int MenuLightSet(int nMenuNumber)
 	int res;
 	int i;
 
-	nMenuNumber = nMenuNumber;	// ˆø”‚ğ–¢g—p‚Ì‚Æ‚«‚É‚Å‚éƒ[ƒjƒ“ƒO‘Îô
+	nMenuNumber = nMenuNumber;	// ï¿½ï¿½ï¿½ï¿½ï¿½ğ–¢gï¿½pï¿½Ì‚Æ‚ï¿½ï¿½É‚Å‚éƒï¿½[ï¿½jï¿½ï¿½ï¿½Oï¿½Îï¿½
 
 	R_DrawCls();
-	// Æ–¾’²®ƒ‚[ƒh‚Åê‡•ª‚¯‚·‚é		2012/03/29 by sassa
+	// ï¿½Æ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½Åê‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½		2012/03/29 by sassa
 	if((LedControllMode == LED_CONTROLL_DR_CY_80)){
-		// ‰æ‘œæ‚è‚İƒy[ƒW”Ô†‚ğİ’è
+		// ï¿½æ‘œï¿½ï¿½èï¿½İƒyï¿½[ï¿½Wï¿½Ôï¿½ï¿½ï¿½İ’ï¿½
 //		R_LedAdjustInitiatorPageSet( MANUAL_GRAYADDRESS );
 //		res = R_LedAdjust( DrCy83Ch, _LedAdjustParameter);
-//		if( YES == res )	R_datafile_save(SystemFileData,  SystemFileName);			// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+//		if( YES == res )	R_datafile_save(SystemFileData,  SystemFileName);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 		res = TWA_LED_set(MANUAL_GRAYADDRESS,TP_Bright_SetLevel,TP_Bright_SetPercent,&LedPara);
 	}else {
 		MenuLightSet_DrX124_Single();
 	}
 
 //	if(ON == SystemPara.nLedCurrentEachMode){
-//		CopyCurrent_System_to_Package();		// ‹@‘äƒf[ƒ^‚ÌÆ–¾“d—¬’l‚ğA‹@íƒf[ƒ^‚ÉƒRƒs[‚·‚é
-//		R_datafile_save(PackageFileData, SystemPara.sPackageFileName);		// ‹@íƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+//		CopyCurrent_System_to_Package();		// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½ÌÆ–ï¿½ï¿½dï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Aï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½ÉƒRï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½
+//		R_datafile_save(PackageFileData, SystemPara.sPackageFileName);		// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 //	}
 
 	return OK;
@@ -17023,13 +17007,13 @@ static int MenuLightSet(int nMenuNumber)
 
 
 /**********************************************************
-	ŠÖ”–¼F	‚h‚‚ƒ‚’‚…‚‚…‚‚”‚u‚‚Œ‚•‚…
-	‹@  ”\F
-	Œ`  ®F	static void IncrementValue(int *value, int step, int max)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	static void IncrementValue(int *value, int step, int max)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 void IncrementValue(int *value, int step, int max)
 {
@@ -17038,13 +17022,13 @@ void IncrementValue(int *value, int step, int max)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚c‚…‚ƒ‚’‚…‚‚…‚‚”‚u‚‚Œ‚•‚…
-	‹@  ”\F
-	Œ`  ®F	static void DecrementValue(int *value, int step, int min)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	static void DecrementValue(int *value, int step, int min)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 void DecrementValue(int *value, int step, int min)
 {
@@ -17053,13 +17037,13 @@ void DecrementValue(int *value, int step, int min)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚q‚‚”‚‚”‚…‚u‚‚Œ‚•‚…
-	‹@  ”\F
-	Œ`  ®F	static void RotateValue(int *value, int min, int max)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	static void RotateValue(int *value, int min, int max)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 void RotateValue(int *value, int min, int max)
 {
@@ -17068,36 +17052,36 @@ void RotateValue(int *value, int min, int max)
 }
 
 /**********************************************************
-	ŠÖ”–¼F
-	‹@  ”\F
-	Œ`  ®F
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
-#define USER_DRAW_WINDOW_NUMBER			0					// R_DrawWindowŒnŠÖ”‚Ìˆø”int win(ƒEƒBƒ“ƒhƒE”Ô†)‚É“ü‚ê‚é’l
+#define USER_DRAW_WINDOW_NUMBER			0					// R_DrawWindowï¿½nï¿½Öï¿½ï¿½Ìˆï¿½ï¿½ï¿½int win(ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½Ôï¿½)ï¿½É“ï¿½ï¿½ï¿½ï¿½l
 static int MenuLightSet_DrX124_Single(void)
 {
 	static int nTempTimer[USER_DRX124_PATTERN];
 
 	static struct winb_para_tm tWinbmParameter[] = {
-		{	"“_“”ŠÔ ƒpƒ^[ƒ“1[usec]"		,"LedTimer Pattern1[usec]"		,&nTempTimer[0]		,10000	,10		,10		},
-		{	"“_“”ŠÔ ƒpƒ^[ƒ“2[usec]"		,"LedTimer Pattern2[usec]"		,&nTempTimer[1]		,10000	,10		,10		},
-		{	"“_“”ŠÔ ƒpƒ^[ƒ“3[usec]"		,"LedTimer Pattern3[usec]"		,&nTempTimer[2]		,10000	,10		,10		},
-		{	"“_“”ŠÔ ƒpƒ^[ƒ“4[usec]"		,"LedTimer Pattern4[usec]"		,&nTempTimer[3]		,10000	,10		,10		},
-		{	"“_“”ŠÔ ƒpƒ^[ƒ“5[usec]"		,"LedTimer Pattern5[usec]"		,&nTempTimer[4]		,10000	,10		,10		},
-		{	"“_“”ŠÔ ƒpƒ^[ƒ“6[usec]"		,"LedTimer Pattern6[usec]"		,&nTempTimer[5]		,10000	,10		,10		},
+		{	"ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½pï¿½^ï¿½[ï¿½ï¿½1[usec]"		,"LedTimer Pattern1[usec]"		,&nTempTimer[0]		,10000	,10		,10		},
+		{	"ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½pï¿½^ï¿½[ï¿½ï¿½2[usec]"		,"LedTimer Pattern2[usec]"		,&nTempTimer[1]		,10000	,10		,10		},
+		{	"ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½pï¿½^ï¿½[ï¿½ï¿½3[usec]"		,"LedTimer Pattern3[usec]"		,&nTempTimer[2]		,10000	,10		,10		},
+		{	"ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½pï¿½^ï¿½[ï¿½ï¿½4[usec]"		,"LedTimer Pattern4[usec]"		,&nTempTimer[3]		,10000	,10		,10		},
+		{	"ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½pï¿½^ï¿½[ï¿½ï¿½5[usec]"		,"LedTimer Pattern5[usec]"		,&nTempTimer[4]		,10000	,10		,10		},
+		{	"ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½pï¿½^ï¿½[ï¿½ï¿½6[usec]"		,"LedTimer Pattern6[usec]"		,&nTempTimer[5]		,10000	,10		,10		},
 		{	NULL	},
 	};
 
 	static struct button_t btn_set[]={
-		{"]", 96,  1},{"{",100,  1},	//  1, 2
-		{"]", 96,  3},{"{",100,  3},	//  3, 4
-		{"]", 96,  5},{"{",100,  5},	//  5, 6
-		{"]", 96,  7},{"{",100,  7},	//  7, 8
-		{"]", 96,  9},{"{",100,  9},	//  9,10
-		{"]", 96, 11},{"{",100, 11},	// 11,12
+		{"ï¿½]", 96,  1},{"ï¿½{",100,  1},	//  1, 2
+		{"ï¿½]", 96,  3},{"ï¿½{",100,  3},	//  3, 4
+		{"ï¿½]", 96,  5},{"ï¿½{",100,  5},	//  5, 6
+		{"ï¿½]", 96,  7},{"ï¿½{",100,  7},	//  7, 8
+		{"ï¿½]", 96,  9},{"ï¿½{",100,  9},	//  9,10
+		{"ï¿½]", 96, 11},{"ï¿½{",100, 11},	// 11,12
 
 		{"Change"		, 96	, 15},	// 13
 		{"Change"		, 96	, 17},	// 14
@@ -17118,14 +17102,14 @@ static int MenuLightSet_DrX124_Single(void)
 		{NULL, 0, 0}
 	};
 
-	R_RECT	tCheckArea[BRIGHTNESS_CHECK_AREA_NUMBER];	// ”Z“xƒ`ƒFƒbƒNƒGƒŠƒA
-	int nCurrentStep[] = {100, 1000, 10000};		// “d—¬’²®ƒXƒeƒbƒv’l‚Ì”z—ñ[uA]
-	int nStepNum = 0;								// Œ»İ‚ÌƒXƒeƒbƒv”Ô†(”z—ñnCurrentStep[]‚Ì‰½”Ô–Ú‚ğ‘I‘ğ‚µ‚Ä‚¢‚é‚©‚ğ•\‚·)
-	int nCurrentMax = 500000;						// “d—¬Å‘å’l[uA]
-	int nFlagLoop = ON;								// ‚±‚Ìƒtƒ‰ƒO‚ªOFF‚É‚È‚Á‚½‚çƒ‹[ƒv‚©‚ç”²‚¯‚é
-	int nFlagSave = OFF;							// ‚±‚Ìƒtƒ‰ƒO‚ªON‚È‚çAİ’èƒtƒ@ƒCƒ‹‚É•Û‘¶‚·‚é
+	R_RECT	tCheckArea[BRIGHTNESS_CHECK_AREA_NUMBER];	// ï¿½Zï¿½xï¿½`ï¿½Fï¿½bï¿½Nï¿½Gï¿½ï¿½ï¿½A
+	int nCurrentStep[] = {100, 1000, 10000};		// ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½bï¿½vï¿½lï¿½Ì”zï¿½ï¿½[uA]
+	int nStepNum = 0;								// ï¿½ï¿½ï¿½İ‚ÌƒXï¿½eï¿½bï¿½vï¿½Ôï¿½(ï¿½zï¿½ï¿½nCurrentStep[]ï¿½Ì‰ï¿½ï¿½Ô–Ú‚ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½\ï¿½ï¿½)
+	int nCurrentMax = 500000;						// ï¿½dï¿½ï¿½ï¿½Å‘ï¿½l[uA]
+	int nFlagLoop = ON;								// ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½OFFï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½çƒ‹ï¿½[ï¿½vï¿½ï¿½ï¿½ç”²ï¿½ï¿½ï¿½ï¿½
+	int nFlagSave = OFF;							// ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½ONï¿½È‚ï¿½Aï¿½İ’ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½
 	R_POINT tDispPosi;								//
-	int nBoardNumber = 0;							// DR-X-124‚Í1–‡‚¾‚¯g—p‚·‚é
+	int nBoardNumber = 0;							// DR-X-124ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½
 
 	int nPatternNumber = 0;
 	int nCameraNumber;
@@ -17136,31 +17120,31 @@ static int MenuLightSet_DrX124_Single(void)
 
 	int i,j;
 
-	for (i = 0; i < BRIGHTNESS_CHECK_AREA_NUMBER; i++) {	// ”Z“xƒ`ƒFƒbƒNƒGƒŠƒAQÆ	2014.07.22 by araki
+	for (i = 0; i < BRIGHTNESS_CHECK_AREA_NUMBER; i++) {	// ï¿½Zï¿½xï¿½`ï¿½Fï¿½bï¿½Nï¿½Gï¿½ï¿½ï¿½Aï¿½Qï¿½ï¿½	2014.07.22 by araki
 		tCheckArea[i]	= rectLedCheckArea[i];
 	}
 
 	if(Option&NO_DRX124)	return OK;
 
-	// “_“”ƒpƒ^[ƒ“”‚ğ0‚Éİ’è‚·‚é‚ÆAƒpƒ^[ƒ“0‚Ì‚İ‚ğŒJ‚è•Ô‚·‚æ‚¤‚É‚È‚é
-	// ’Êí‚Íƒpƒ^[ƒ“1ˆÈã‚ğg‚¤‚Ì‚ÅAƒpƒ^[ƒ“0‚Éƒf[ƒ^‚ğ‘‚«‚ñ‚Åƒeƒ“ƒ|ƒ‰ƒŠ‚Æ‚µ‚Äg—p‚·‚é
+	// ï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½Éİ’è‚·ï¿½ï¿½ÆAï¿½pï¿½^ï¿½[ï¿½ï¿½0ï¿½Ì‚İ‚ï¿½ï¿½Jï¿½ï¿½Ô‚ï¿½ï¿½æ‚¤ï¿½É‚È‚ï¿½
+	// ï¿½Êï¿½Íƒpï¿½^ï¿½[ï¿½ï¿½1ï¿½Èï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ì‚ÅAï¿½pï¿½^ï¿½[ï¿½ï¿½0ï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åƒeï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ägï¿½pï¿½ï¿½ï¿½ï¿½
 	if(OK != R_drx124_set_turn(HandleDrx124, 0, 1)){
 		printf("R_drx124_set_turn Error!\n");
 		return OK;
 	}
 
-	// ƒpƒ‰ƒ[ƒ^‚Ì’l‚ğƒoƒbƒNƒAƒbƒv‚·‚é
+	// ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½Ì’lï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½ï¿½
 	//nBackupTimer = nLedTimerDrX124;
 	for(j=0 ; j<USER_DRX124_CH_NUMBER ; j++){
 		nBackupCurrent[j] = LedCurrent[j];
 	}
 
-	// •\¦‚ğƒNƒŠƒA
+	// ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
 	R_DrawCls();
 
-	// •\¦ˆÊ’u‚ğVGAAXGA‚Å•Ï‚¦‚é
+	// ï¿½\ï¿½ï¿½ï¿½Ê’uï¿½ï¿½VGAï¿½AXGAï¿½Å•Ï‚ï¿½ï¿½ï¿½
 	if(FxSize<=640){
-		// ƒJƒƒ‰‰ğ‘œ“x‚ªVGAˆÈ‰º‚Ìê‡
+		// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ğ‘œ“xï¿½ï¿½VGAï¿½È‰ï¿½ï¿½Ìê‡
 		tDispPosi.x = 0;
 		tDispPosi.y = 35;
 	}else{
@@ -17172,16 +17156,16 @@ static int MenuLightSet_DrX124_Single(void)
 		nCameraNumber  = _Drx124_Setting->nCameraNo[nPatternNumber];
 		nCaptureNumber = _Drx124_Setting->nCaptureNo[nPatternNumber];
 
-		// ƒpƒ^[ƒ“0‚Éƒf[ƒ^‚ğ‘‚«‚ñ‚Åƒeƒ“ƒ|ƒ‰ƒŠ‚Æ‚µ‚Äg—p‚·‚é
+		// ï¿½pï¿½^ï¿½[ï¿½ï¿½0ï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åƒeï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ägï¿½pï¿½ï¿½ï¿½ï¿½
 		{
 			int nTurn = 0;
 
-			// “_“”ŠÔ‚ğİ’è‚·‚é
+			// ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½İ’è‚·ï¿½ï¿½
 			if(OK != R_drx124_set_time(HandleDrx124, nTurn, SystemPara.nShutterSpeed)){		//nLedTimerDrX124)){
 				printf("R_drx124_set_time Error!\n");
 			}
 
-			// “d—¬’l‚ğİ’è‚·‚é
+			// ï¿½dï¿½ï¿½ï¿½lï¿½ï¿½İ’è‚·ï¿½ï¿½
 			for(j=0 ; j<USER_DRX124_CH_NUMBER ; j++){
 				if(OK != R_drx124_set_current(HandleDrx124, j, nTurn, LedCurrent[j])){
 					printf("R_drx124_set_current Error!\n");
@@ -17189,14 +17173,14 @@ static int MenuLightSet_DrX124_Single(void)
 			}
 		}
 
-		// ‰æ‘œæ‚è‚İ
+		// ï¿½æ‘œï¿½ï¿½èï¿½ï¿½
 		R_CS_Capture(nCameraNumber, nCaptureNumber, GV_NO_VRAM);
 		R_CS_CaptureWait(nCameraNumber);
-		R_CS_CaptureChangeDisplayId();									// ‰æ‘œƒ{[ƒh‚ÌID‚ğƒ‚ƒjƒ^[‚Éo—Í‚µ‚Ä‚¢‚é”Ô†‚ÉØ‚è‘Ö‚¦‚é
-		// ‚»‚Ì‚Ü‚Ü•\¦
+		R_CS_CaptureChangeDisplayId();									// ï¿½æ‘œï¿½{ï¿½[ï¿½hï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½jï¿½^ï¿½[ï¿½Éoï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ôï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½Ì‚Ü‚Ü•\ï¿½ï¿½
 		R_move_gray_memory(  MANUAL_GRAYADDRESS, 0, 0, 0, FxSize-1, FySize-1 );
 
-		// •\¦
+		// ï¿½\ï¿½ï¿½
 		{
 			int posi_x = 81;
 			int posi_y = 0;
@@ -17210,7 +17194,7 @@ static int MenuLightSet_DrX124_Single(void)
 			R_DrawPrintf( DRAW_RED, DISP_NORMAL, tDispPosi.x, tDispPosi.y,  "Camera %1d - Capture %1d", nCameraNumber, nCaptureNumber );
 			R_DrawPrintf( DRAW_RED, DISP_NORMAL, tDispPosi.x, tDispPosi.y+1,"                    " );		// 2013/09/30 by sassa
 //			R_DrawPrintf( DRAW_RED, DISP_NORMAL, tDispPosi.x, tDispPosi.y+1,"[%s]", _InspectionName[nCameraNumber] );		// 2013/09/30 by sassa
-			// ”Z“x‘ª’è••\¦
+			// ï¿½Zï¿½xï¿½ï¿½ï¿½è•ï¿½\ï¿½ï¿½
 			{
 				int nColor[BRIGHTNESS_CHECK_AREA_NUMBER] = {DRAW_GREEN, DRAW_RED, DRAW_BLUE, DRAW_MAGENTA};
 				int nAverage[BRIGHTNESS_CHECK_AREA_NUMBER];
@@ -17224,7 +17208,7 @@ static int MenuLightSet_DrX124_Single(void)
 		}
 
 		switch(R_DrawButtonSetAndGet(DRAW_WHITE,DISP_NORMAL,btn_set,NON_CLOSE_BUTTON|CONTINUOUS_PUSH|NON_WAIT_PUSH|NON_CURSOR)){
-			case 0:						// ƒLƒƒƒ“ƒZƒ‹
+			case 0:						// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½
 				break;
 			case  1:	DecrementValue(&LedCurrent[0] ,nCurrentStep[nStepNum] ,0);				break;
 			case  2:	IncrementValue(&LedCurrent[0] ,nCurrentStep[nStepNum] ,nCurrentMax);	break;
@@ -17279,17 +17263,17 @@ static int MenuLightSet_DrX124_Single(void)
 				while( R_DrawGetCursor());
 		//		if(ON == nLedTimerAdjustMode){		// 2012/12/03 by sassa
 		//			for(i=0 ; i<_Drx124_Setting->nPatternNumber ; i++)	nTempTimer[i] = nLedTimerDrX124[i];
-		//			R_DrawWinbParameterWithMess( tWinbmParameter, "ƒpƒ‰ƒ[ƒ^İ’è", "Prameter Setting");
+		//			R_DrawWinbParameterWithMess( tWinbmParameter, "ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½İ’ï¿½", "Prameter Setting");
 		//			for(i=0 ; i<_Drx124_Setting->nPatternNumber ; i++)	nLedTimerDrX124[i] = nTempTimer[i];
 		//		}
 				break;
 			case 20:
-				// İ’è“à—e‚ğ•Û‘¶‚·‚é
+				// ï¿½İ’ï¿½ï¿½ï¿½eï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½
 				nFlagLoop = OFF;
 				nFlagSave = ON;
 				break;
 			case 21:
-			case ERROR:					// İ’èˆÙí
+			case ERROR:					// ï¿½İ’ï¿½Ùï¿½
 				nFlagLoop = OFF;
 				break;
 		#ifdef USE_DRX124_DIALOG
@@ -17353,36 +17337,36 @@ static int MenuLightSet_DrX124_Single(void)
 		R_time_delay(30000);
 	}
 
-	R_DrawButtonClose(DRAW_WHITE,DISP_NORMAL);	// ƒ‹[ƒv‚©‚ç”²‚¯‚½“_‚Å‚Íƒ{ƒ^ƒ“‚ğƒNƒ[ƒY‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅA‚±‚±‚ÅƒNƒ[ƒY‚·‚é
+	R_DrawButtonClose(DRAW_WHITE,DISP_NORMAL);	// ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ç”²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Å‚Íƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Yï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½ï¿½ï¿½ÅƒNï¿½ï¿½ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½
 	while(R_DrawGetCursor());
 	R_DrawCls();
 
 	if(nFlagSave){
-		for (i = 0; i < BRIGHTNESS_CHECK_AREA_NUMBER; i++) {	// ”Z“xƒ`ƒFƒbƒNƒGƒŠƒA•Û‘¶	2014.07.22 by araki
+		for (i = 0; i < BRIGHTNESS_CHECK_AREA_NUMBER; i++) {	// ï¿½Zï¿½xï¿½`ï¿½Fï¿½bï¿½Nï¿½Gï¿½ï¿½ï¿½Aï¿½Û‘ï¿½	2014.07.22 by araki
 			rectLedCheckArea[i]	= tCheckArea[i];
 		}
-		R_datafile_save(SystemFileData,  SystemFileName);			// ‹@‘äƒf[ƒ^ƒtƒ@ƒCƒ‹•Û‘¶
+		R_datafile_save(SystemFileData,  SystemFileName);			// ï¿½@ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Û‘ï¿½
 	}else{
-		// ƒpƒ‰ƒ[ƒ^‚Ì’l‚ğŒ³‚É–ß‚·
+		// ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½Ì’lï¿½ï¿½ï¿½ï¿½ï¿½É–ß‚ï¿½
 	//	nLedTimerDrX124 = nBackupTimer;
 		for(j=0 ; j<USER_DRX124_CH_NUMBER ; j++){
 			LedCurrent[j] = nBackupCurrent[j];
 		}
 	}
 
-	// “_“”ƒpƒ^[ƒ“”‚ğÄİ’è‚·‚é
+	// ï¿½_ï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äİ’è‚·ï¿½ï¿½
 	if(OK != R_drx124_set_turn(HandleDrx124, _Drx124_Setting->nPatternNumber, 1)){
 		printf("R_drx124_set_turn Error!\n");
 	}
 
-	// •ÏX‚µ‚½’l‚ğİ’è‚·‚é
+	// ï¿½ÏXï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½İ’è‚·ï¿½ï¿½
 	for(i=0 ; i<_Drx124_Setting->nPatternNumber ; i++){
-		// “_“”ŠÔ‚ğİ’è‚·‚é
+		// ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½İ’è‚·ï¿½ï¿½
 		if(OK != R_drx124_set_time(HandleDrx124, i+1, SystemPara.nShutterSpeed)){	//nLedTimerDrX124)){
 			printf("R_drx124_set_time Error!\n");
 		}
 
-		// “d—¬’l‚ğİ’è‚·‚é
+		// ï¿½dï¿½ï¿½ï¿½lï¿½ï¿½İ’è‚·ï¿½ï¿½
 		for(j=0 ; j<USER_DRX124_CH_NUMBER ; j++){
 			if(OK != R_drx124_set_current(HandleDrx124, j, 1, LedCurrent[j])){
 				printf("R_drx124_set_current Error!\n");
@@ -17394,13 +17378,13 @@ static int MenuLightSet_DrX124_Single(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚f‚…‚”‚q‚…‚ƒ‚”
-	‹@  ”\F
-	Œ`  ®F	static void GetRect(R_RECT *area,  int xmax, int ymax, int xmin, int ymin )
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F	static void GetRect(R_RECT *area,  int xmax, int ymax, int xmin, int ymin )
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static void GetRect(R_RECT *area,  int xmax, int ymax, int xmin, int ymin )
 {
@@ -17415,13 +17399,13 @@ static void GetRect(R_RECT *area,  int xmax, int ymax, int xmin, int ymin )
 
 
 /**********************************************************
-	ŠÖ”–¼F
-	‹@  ”\F
-	Œ`  ®F
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F
+	ï¿½@  ï¿½\ï¿½F
+	ï¿½`  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int UserTimeDelay(int nTimer)
 {
@@ -17439,40 +17423,40 @@ static int UserTimeDelay(int nTimer)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	user_getch
-	‹@  ”\F	ƒRƒ“ƒ\[ƒ‹‚©‚ç‚Ì“ü—Í‚ğæ“¾‚·‚é
-	Œ`  ®F	static int user_getch(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	æ“¾‚µ‚½•¶š(ASCI)
-				æ“¾¸”s‚µ‚½ê‡‚Í0‚ğ•Ô‚µ‚Ü‚·
-	‰ğ  àF	ƒRƒ“ƒ\[ƒ‹‚©‚ç1•¶š“ü—Í‚³‚ê‚é‚Ü‚Å‘Ò‚¿A“ü—Í‚³‚ê‚½•¶š‚ğ–ß‚è’l‚Æ‚µ‚Ä•Ô‚µ‚Ü‚·B
-				‚Ü‚½A“ü—Í‚³‚ê‚½•¶š‚Í‰æ–Ê‚É•\¦‚³‚ê‚Ü‚¹‚ñB
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	user_getch
+	ï¿½@  ï¿½\ï¿½F	ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int user_getch(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ASCI)
+				ï¿½æ“¾ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ï¿½0ï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½ï¿½Aï¿½ï¿½ï¿½Í‚ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½lï¿½Æ‚ï¿½ï¿½Ä•Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+				ï¿½Ü‚ï¿½ï¿½Aï¿½ï¿½ï¿½Í‚ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½Í‰ï¿½Ê‚É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B
 
-				¦ANCI‚Ì•W€ŠÖ”‚Égetchar()‚ª‚ ‚è‚Ü‚·‚ªA‚±‚ê‚ğg‚¤‚Æ1•¶š“ü—Í‚µ‚½‚¾‚¯‚Å‚Í“Ç‚İ‚Ü‚ê‚Ü‚¹‚ñB
-				@‰üs‚µ‚½(Enter‚ğ‰Ÿ‚µ‚½)“_‚ÅƒRƒ“ƒ\[ƒ‹‚©‚ç“ü—Í‚ª‚ ‚Á‚½‚Æ”»’f‚µ‚Ä“Ç‚İ‚İ‚Ü‚·B
-				@‚±‚ê‚ÍƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ªs’PˆÊ‚Å“ü—Í‚·‚éƒ‚[ƒh(ƒJƒmƒjƒJƒ‹ƒ‚[ƒh)‚É‚È‚Á‚Ä‚¢‚é‚½‚ß‚È‚Ì‚ÅA
-				@İ’è‚ğ•ÏX‚µ‚Ä‚©‚çƒRƒ“ƒ\[ƒ‹‚Ì“ü—Í‚ğ“Ç‚İ‚ß‚ÎA1•¶š“ü—Í‚µ‚½“_‚Åæ“¾‚Å‚«‚Ü‚·B
-	—¯ˆÓ–€F	ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[AƒJ[ƒ\ƒ‹ƒL[‚È‚Ç‚Ì“ü—Í‚É‚Í‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñB
+				ï¿½ï¿½ANCIï¿½Ì•Wï¿½ï¿½ï¿½Öï¿½ï¿½ï¿½getchar()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚Í“Ç‚İï¿½ï¿½Ü‚ï¿½Ü‚ï¿½ï¿½ï¿½B
+				ï¿½@ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½(Enterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½_ï¿½ÅƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ”ï¿½ï¿½fï¿½ï¿½ï¿½Ä“Ç‚İï¿½ï¿½İ‚Ü‚ï¿½ï¿½B
+				ï¿½@ï¿½ï¿½ï¿½ï¿½ÍƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’è‚ªï¿½sï¿½Pï¿½Ê‚Å“ï¿½ï¿½Í‚ï¿½ï¿½éƒ‚ï¿½[ï¿½h(ï¿½Jï¿½mï¿½jï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½h)ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚½ï¿½ß‚È‚Ì‚ÅA
+				ï¿½@ï¿½İ’ï¿½ï¿½ÏXï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ì“ï¿½ï¿½Í‚ï¿½Ç‚İï¿½ï¿½ß‚ÎA1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Åæ“¾ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F	ï¿½tï¿½@ï¿½ï¿½ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½Aï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Lï¿½[ï¿½È‚Ç‚Ì“ï¿½ï¿½Í‚É‚Í‘Î‰ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B
 **********************************************************/
 static int user_getch(void)
 {
 	struct termios oldt, newt;
 	int ch = 0;
 
-	// ƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ğæ“¾‚µ‚ÄAˆê‘Ş”ğ‚³‚¹‚é
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ÄAï¿½êï¿½Ş”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	tcgetattr( STDIN_FILENO, &oldt );
 	newt = oldt;
 
-	// ƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ğ•ÏX‚µ‚ÄAEnter‚ğ‰Ÿ‚³‚È‚­‚Ä‚à1•¶š“ü—Í‚µ‚½“_‚Å“Ç‚İ‚Ş‚æ‚¤‚É‚·‚é
-	newt.c_lflag &= ~( ICANON | ECHO );			// ”ñƒJƒmƒjƒJƒ‹ƒ‚[ƒhAƒGƒR[–³‚µ‚Éİ’è
-	newt.c_cc[VTIME] = 0;						// ƒ^ƒCƒ€ƒAƒEƒg–³‚µ‚Éİ’è
-	newt.c_cc[VMIN] = 1;						// Å¬•¶š”‚ğ1•¶š‚Éİ’è
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½ï¿½ÏXï¿½ï¿½ï¿½ÄAEnterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ä‚ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Å“Ç‚İï¿½ï¿½Ş‚æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
+	newt.c_lflag &= ~( ICANON | ECHO );			// ï¿½ï¿½Jï¿½mï¿½jï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½Aï¿½Gï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
+	newt.c_cc[VTIME] = 0;						// ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
+	newt.c_cc[VMIN] = 1;						// ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
 	tcsetattr( STDIN_FILENO, TCSANOW, &newt );
 
-	// 1•¶š“ü—Í‚³‚ê‚é‚Ü‚Å‘Ò‚Â(“ü—Í•¶š‚Ích‚ÉŠi”[‚³‚ê‚é)
+	// 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½(ï¿½ï¿½ï¿½Í•ï¿½ï¿½ï¿½ï¿½ï¿½chï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½)
 	read(STDIN_FILENO, &ch, 1);
 
-	// ƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ğŒ³‚É–ß‚·
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½ï¿½ï¿½ï¿½ï¿½É–ß‚ï¿½
 	tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
 
 //	printf("key = %x\n", ch);
@@ -17480,16 +17464,16 @@ static int user_getch(void)
 }
 
 /**********************************************************
-	ŠÖ”–¼F	user_kbhit
-	‹@  ”\F	ƒRƒ“ƒ\[ƒ‹‚©‚ç‚Ì“ü—Í‚ª‚ ‚é‚©‚ğƒ`ƒFƒbƒN‚·‚é
-	Œ`  ®F	static int user_kbhit(void)
-	ˆø‚«”F	‚È‚µ
-	–ß‚è’lF	’l		ˆÓ–¡
-				0		“ü—Í–³‚µ
-				0ˆÈŠO	“ü—Í—L‚è
-	‰ğ  àF	ƒRƒ“ƒ\[ƒ‹‚©‚ç‚Ì“ü—Í‚ª‚ ‚é‚©‚ğƒ`ƒFƒbƒN‚µ‚Ü‚·B
-				“ü—Í‚ª‚ ‚éê‡‚É‚ÍAgetch()‚Å“ü—Í‚ğæ“¾‚Å‚«‚Ü‚·B
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	user_kbhit
+	ï¿½@  ï¿½\ï¿½F	ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
+	ï¿½`  ï¿½ï¿½ï¿½F	static int user_kbhit(void)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F	ï¿½È‚ï¿½
+	ï¿½ß‚ï¿½lï¿½F	ï¿½l		ï¿½Ó–ï¿½
+				0		ï¿½ï¿½ï¿½Í–ï¿½ï¿½ï¿½
+				0ï¿½ÈŠO	ï¿½ï¿½ï¿½Í—Lï¿½ï¿½
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F	ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+				ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½É‚ÍAgetch()ï¿½Å“ï¿½ï¿½Í‚ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int user_kbhit(void)
 {
@@ -17498,26 +17482,26 @@ static int user_kbhit(void)
 	struct timeval tv;
 	int retval;
 
-	// ƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ğæ“¾‚µ‚ÄAˆê‘Ş”ğ‚³‚¹‚é
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ÄAï¿½êï¿½Ş”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	tcgetattr( STDIN_FILENO, &oldt );
 	newt = oldt;
 
-	// ƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ğ•ÏX‚µ‚ÄAEnter‚ğ‰Ÿ‚³‚È‚­‚Ä‚à1•¶š“ü—Í‚µ‚½“_‚Å“Ç‚İ‚Ş‚æ‚¤‚É‚·‚é
-	newt.c_lflag &= ~( ICANON );				// ”ñƒJƒmƒjƒJƒ‹ƒ‚[ƒh‚Éİ’è
-	newt.c_cc[VTIME] = 0;						// ƒ^ƒCƒ€ƒAƒEƒg–³‚µ‚Éİ’è
-	newt.c_cc[VMIN] = 1;						// Å¬•¶š”‚ğ1•¶š‚Éİ’è
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½ï¿½ÏXï¿½ï¿½ï¿½ÄAEnterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ä‚ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Å“Ç‚İï¿½ï¿½Ş‚æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
+	newt.c_lflag &= ~( ICANON );				// ï¿½ï¿½Jï¿½mï¿½jï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½Éİ’ï¿½
+	newt.c_cc[VTIME] = 0;						// ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
+	newt.c_cc[VMIN] = 1;						// ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
 	tcsetattr( STDIN_FILENO, TCSANOW, &newt );
 
-	// selectŠÖ”‚Ìˆø”‚ğİ’è‚·‚é
-	FD_ZERO( &rfds );					// \‘¢‘Ì‰Šú‰»
-	FD_SET( STDIN_FILENO, &rfds );		// ƒRƒ“ƒ\[ƒ‹‚ğ\‘¢‘Ì‚Éİ’è‚·‚é
-	tv.tv_sec = 0;						// ƒ^ƒCƒ€ƒAƒEƒg‚Í0•b‚Éİ’è(ƒ`ƒFƒbƒN‚µ‚½‚ç‚·‚®‚ÉI—¹‚·‚é)
+	// selectï¿½Öï¿½ï¿½Ìˆï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚·ï¿½ï¿½
+	FD_ZERO( &rfds );					// ï¿½\ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
+	FD_SET( STDIN_FILENO, &rfds );		// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚Éİ’è‚·ï¿½ï¿½
+	tv.tv_sec = 0;						// ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½0ï¿½bï¿½Éİ’ï¿½(ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ç‚·ï¿½ï¿½ï¿½ÉIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 	tv.tv_usec = 0;
 
-	// ƒRƒ“ƒ\[ƒ‹‚©‚ç‚Ì“ü—Í‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
 	retval = select( 1, &rfds, NULL, NULL, &tv );
 
-	// ƒRƒ“ƒ\[ƒ‹‚Ìİ’è‚ğŒ³‚É–ß‚·
+	// ï¿½Rï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½ï¿½ï¿½ï¿½ï¿½É–ß‚ï¿½
 	tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
 
 	if( retval )	return 1;
@@ -17531,9 +17515,9 @@ static int AutoTypeChangeLanUser(int command){
 			OutputBusyOff();
 			OutputLockOff();
 			strcpy(QrCode,R_CS_Lan_GetQr(R_CS_Lan_GetHandle()));
-			// Ø‚è‘Ö‚¦Às
+			// ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½s
 			TypeChange_ByQrCode(QrCode, &LotData);
-			// ‘¼‚ÌƒvƒƒZƒX‚Éƒf[ƒ^‘—M‚·‚é		2013/05/25 by sassa
+			// ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Zï¿½Xï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½		2013/05/25 by sassa
 		//	SendQrCodeToOtherProcess();
 
 		//9499- not functional
@@ -17556,13 +17540,13 @@ static int AutoTypeChangeLanUser(int command){
 }
 
 /**********************************************************
-	ŠÖ”–¼F	‚s‚™‚‚…‚b‚ˆ‚‚‚‡‚…Q‚a‚™‚p‚’‚b‚‚„‚…
-	‹@  ”\F	QRƒR[ƒh‚ğŒ³‚ÉA
-	Œ`  ®F	static int TypeChange_ByQrCode(char *sQrCode, LOT_DATA *pLotData)
-	ˆø‚«”F
-	–ß‚è’lF
-	‰ğ  àF
-	—¯ˆÓ–€F
+	ï¿½Öï¿½ï¿½ï¿½ï¿½F	ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½aï¿½ï¿½ï¿½pï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½@  ï¿½\ï¿½F	QRï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ÉA
+	ï¿½`  ï¿½ï¿½ï¿½F	static int TypeChange_ByQrCode(char *sQrCode, LOT_DATA *pLotData)
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½F
+	ï¿½ß‚ï¿½lï¿½F
+	ï¿½ï¿½  ï¿½ï¿½ï¿½F
+	ï¿½ï¿½ï¿½Óï¿½ï¿½ï¿½ï¿½F
 **********************************************************/
 static int TypeChange_ByQrCode(char *sQrCode, LOT_DATA *pLotData)
 {
@@ -17576,16 +17560,16 @@ static int TypeChange_ByQrCode(char *sQrCode, LOT_DATA *pLotData)
 
 //	switch (SystemPara.nAutoChangeMode) {
 //		case QRCODE_DEFAULT:
-			// ‹@í–¼
+			// ï¿½@ï¿½í–¼
 			strcpy(pLotData->sPackageName,R_CS_Lan_GetType(R_CS_Lan_GetHandle()));
 			strcpy(sPackageName,   pLotData->sPackageName);
 
-			// ƒƒbƒg”Ô†
+			// ï¿½ï¿½ï¿½bï¿½gï¿½Ôï¿½
 			strcpy(pLotData->sLotNumber,  R_CS_Lan_GetLotNo(R_CS_Lan_GetHandle()));
 
 			// Machine Setting Code
 			for( dn=0; dn<20; dn++ ) {
-				 SpecDataBak[dn]	= SpecData[dn];				// ‘O‚Ìƒo[ƒR[ƒhƒf[ƒ^[‚ğ•Û‘¶
+				 SpecDataBak[dn]	= SpecData[dn];				// ï¿½Oï¿½Ìƒoï¿½[ï¿½Rï¿½[ï¿½hï¿½fï¿½[ï¿½^ï¿½[ï¿½ï¿½Û‘ï¿½
 				 SpecData[dn]		= 0;
 			}
 			for(dn=0;dn<7;dn++)	SpecData[dn]=sQrCode[108+dn];
@@ -17656,7 +17640,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 
 //    return OK;
 
-	//USB Serial Number‚Ì”FØ
+	//USB Serial Numberï¿½Ì”Fï¿½ï¿½
 	if( NULL == (fpListSerial=fopen("./usb/usbserial.dat","rt")) ){
 		R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (can not open usbserial.dat)" );
 		system( ComUnMount );
@@ -17667,14 +17651,14 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 		while(NULL != fgets(buffer, 128, fpListSerial )){
 			if( list_no > USBKEY_MAX ){
 				fclose( fpListSerial );
-				//“o˜^List‚ª‘½‚·‚¬‚éê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (too many list of usbserial.dat)" );
 				fclose( fpListSerial );
 				system( ComUnMount );
 				return ERROR;
 			}
 			if( 1>=strlen(buffer) ){
-				//“o˜^List‚ªƒ[ƒ‚Ìê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				if( 0 == list_no ){
 					R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (no list of usbserial.dat)" );
 					fclose( fpListSerial );
@@ -17684,7 +17668,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 
 			if( 10 < strlen(buffer) ){
 				buffer[strlen(buffer)-1] = '\0';
-				printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				strcpy( ListSerial[list_no], buffer );
 				printf("ListSerial[%d]:[%s]\n",list_no,ListSerial[list_no] );
 				list_no++;
@@ -17693,13 +17677,13 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 		fclose( fpListSerial );
 		list_count = list_no;
 
-		//List‚Ì•\\¦
+		//Listï¿½Ì•\\ï¿½ï¿½
 		printf("--- USB KEY LIST ---\n");
 		for( i=0; i<list_count; i++){
 			printf("LIST SERIAL[%2d]:[%s]\n",i, ListSerial[i] );
 		}
 
-		//Ú‘±‚³‚ê‚Ä‚¢‚é‚t‚r‚aî•ñ‚Ìæ“¾Ëusbserial.txt‚Ö
+		//ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½Ìæ“¾ï¿½ï¿½usbserial.txtï¿½ï¿½
 		system ( ComSerial );
 
 		if( NULL == (fpTmpSerial=fopen("usbserial.txt","rt")) ){
@@ -17710,7 +17694,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 		else{
 			list_no = 0;
 			while(NULL != fgets(buffer, 128, fpTmpSerial )){
-				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				for( i=0; i<list_count; i++){
 					if( 0==strcmp( buffer, ListSerial[i] ) ){ //success certification of usb key. //list_no //<z2>
 						//R_draw_popup_message( DRAW_GREEN, DISP_4, POPUP_WAIT_CLICK, "-- CERTIFICATION PASS --\nUSB KEY[%s]\nLIST   [%s]",buffer,ListSerial[list_no] );
@@ -17732,7 +17716,7 @@ static int UsbKeyCertification_rist( USB_KEY_INFO *UsbKeyInfo )
 	}
 SERIAL_SUCCESS:
 
-	//USB VendorID, ProductID‚Ì”FØ
+	//USB VendorID, ProductIDï¿½Ì”Fï¿½ï¿½
 	if( NULL == (fpListVendor=fopen("./usb/usbvendor.dat","rt")) ){
 		R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (can not open usbvendor.dat)" );
 		system( ComUnMount );
@@ -17743,14 +17727,14 @@ SERIAL_SUCCESS:
 		while(NULL != fgets(buffer, 128, fpListVendor )){
 			if( list_no > USBKEY_MAX ){
 				fclose( fpListVendor );
-				//“o˜^List‚ª‘½‚·‚¬‚éê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (too many list of usbvendor.dat)" );
 				fclose( fpListVendor );
 				system( ComUnMount );
 				return ERROR;
 			}
 			if( 1>=strlen(buffer) ){
-				//“o˜^List‚ªƒ[ƒ‚Ìê‡‚ÍƒGƒ‰[
+				//ï¿½oï¿½^Listï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìê‡ï¿½ÍƒGï¿½ï¿½ï¿½[
 				if( 0 == list_no ){
 					R_draw_popup_message( DRAW_RED, DISP_4, POPUP_WAIT_CLICK, "-- ERROR!! --\nCan not read USB key information!!\n (no list of usbvendor.dat)" );
 					fclose( fpListVendor );
@@ -17761,7 +17745,7 @@ SERIAL_SUCCESS:
 
 			if( 10 < strlen(buffer) ){
 				buffer[strlen(buffer)-1] = '\0';
-				printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				strcpy( ListVendor[list_no], buffer );
 				printf("ListVendor[%d]:[%s]\n",list_no,ListVendor[list_no] );
 				list_no++;
@@ -17770,13 +17754,13 @@ SERIAL_SUCCESS:
 		fclose( fpListVendor );
 		list_count = list_no;
 
-		//List‚Ì•\\¦
+		//Listï¿½Ì•\\ï¿½ï¿½
 		printf("--- USB KEY LIST ---\n");
 		for( i=0; i<list_count; i++){
 			printf("LIST VENDOR [%2d]:[%s]\n",i, ListVendor[i] );
 		}
 
-		//Ú‘±‚³‚ê‚Ä‚¢‚é‚t‚r‚aî•ñ‚Ìæ“¾Ëusbserial.txt‚Ö
+		//ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½tï¿½rï¿½aï¿½ï¿½ï¿½Ìæ“¾ï¿½ï¿½usbserial.txtï¿½ï¿½
 		system ( ComVendor );
 
 		if( NULL == (fpTmpVendor=fopen("usbvendor.txt","rt")) ){
@@ -17787,7 +17771,7 @@ SERIAL_SUCCESS:
 		else{
 			list_no = 0;
 			while(NULL != fgets(buffer, 128, fpTmpVendor )){
-				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//s––‚Ì‰üsƒR[ƒh‚Ìíœ
+				buffer[strlen(buffer)-1] = '\0';			printf("buffer[%s]\n",buffer);				//ï¿½sï¿½ï¿½ï¿½Ì‰ï¿½ï¿½sï¿½Rï¿½[ï¿½hï¿½Ìíœ
 				for( i=0; i<list_count; i++){
 					if( 0==strcmp( buffer, ListVendor[i] ) ){ //success certification of usb key. //list_no //<z2>
 						//R_draw_popup_message( DRAW_GREEN, DISP_4, POPUP_WAIT_CLICK, "-- CERTIFICATION PASS --\nUSB KEY[%s]\nLIST   [%s]",buffer,ListVendor[list_no] );
