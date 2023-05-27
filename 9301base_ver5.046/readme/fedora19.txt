@@ -1,0 +1,97 @@
+ベースライブラリ Ver.5.000から
+R_CSライブラリと一括で配布しています。
+
+配布時のR_CSフォルダ構成は下記のとおりです。
+	R_CSのインクルードファイル
+		include/R_cs/
+	R_CSのライブラリファイルはベースライブラリと同じフォルダにあります。
+		debug/
+		release/
+
+
+
+
+Fedora19(32bit)用のソフトウェアをビルドするにはベースライブラリ以外のライブラリが必要です。
+プロジェクトファイルに下記のように記述してください。
+
+QT += core gui opengl network
+LIBS += -lopencv_highgui
+LIBS += -lopencv_core
+LIBS += -lopencv_imgproc
+LIBS += -lqwt
+LIBS += -lusb
+
+今後も、ベースライブラリのバージョンアップ時に、
+使用するライブラリが追加されることがあります。
+
+
+
+
+R_plane_save_to_png関数を使用する場合は、PNGライブラリが必要です。
+　LIBS += -lpng
+を追加してください。
+開発環境にPNGライブラリがインストールされていない場合は、
+インターネットもしくは画像処理開発課から
+PNGライブラリ（libpng-devel）を入手してインストールしてください。
+
+
+
+
+R_video_init_basler_usb関数を使用する場合は、Basler社製のSDKが必要です。
+　pylon-5.0.5
+を開発環境と実行環境の両方にインストールしてください。
+SDKはBasler社のサイトもしくは画像処理開発課から入手してください。
+プロジェクトファイルに
+　LIBS += -L$(PYLON_ROOT)/lib
+　LIBS += -lpylonbase
+　LIBS += -lGenApi_gcc_v3_0_Basler_pylon_v5_0
+　LIBS += -lGCBase_gcc_v3_0_Basler_pylon_v5_0
+　LIBS += -lLog_gcc_v3_0_Basler_pylon_v5_0
+　LIBS += -lMathParser_gcc_v3_0_Basler_pylon_v5_0
+　LIBS += -lXmlParser_gcc_v3_0_Basler_pylon_v5_0
+　LIBS += -lNodeMapData_gcc_v3_0_Basler_pylon_v5_0
+を追加してください。
+
+
+
+
+R_video_init_teli_usb関数を使用する場合は、東芝テリー社製のSDKが必要です。
+　TeliCamSDK_Linux_v1_0_0
+を開発環境と実行環境の両方にインストールしてください。
+SDKは東芝テリー社のサイトもしくは画像処理開発課から入手してください。
+プロジェクトファイルに
+　LIBS += -L/opt/TeliCamSDK/lib
+　LIBS += -lTeliCamApi
+　LIBS += -lTeliCamUtl
+を追加してください。
+
+
+
+
+最新TSC-9301使用時の注意
+	Version 4.01 beta195以前のベースライブラリでビルドしたソフトウェアを
+	下記マザーボードが搭載されたTSC-9301で実行すると、Segmentation Faultが発生します。
+	Version 4.01 beta196以降のベースライブラリで再ビルドしてください。
+		GIGABYTE製	GA-H170-D3HP
+		ASUSTek製	H170-PRO
+		ASUSTek製	PRIME H270-PRO
+
+
+
+
+仮想マシンでの実行時の注意
+	Version 4.01 beta205以降のベースライブラリでは、
+	仮想マシン上でソフトウェアを実行する場合、
+	仮想CO-CZ-43モードにするための起動オプション「-co0=V」を必ず追加してください。
+	
+	Version 4.01 beta204以前のベースライブラリでは、「-co0=V」が無くても
+	ソフトウェア起動時にCO-CZ-43が見つからなかった時は仮想マシンでの実行と判断し、
+	自動的に仮想CO-CZ-43モードになっていました。
+	しかし、物理マシンでの実行時にCO-CZ-43基板を認識できなかった時にも
+	仮想CO-CZ-43モードで立ち上がってしまうため、ソフトウェアの動作不具合の原因が
+	基板であることがわかりにくいという問題がありました。
+
+
+
+
+以上

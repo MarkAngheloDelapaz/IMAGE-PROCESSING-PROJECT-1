@@ -1,0 +1,31 @@
+/**********************************************************************************
+	関数名：	Ｒ＿ｒｏｔａｔｅ＿ｇｒａｙ＿ｍｅｍｏｒｙ
+	機　能：	グレーメモリーを回転させる
+	形　式：	#include <R_gray.h>
+				int R_rotate_gray_memory(int nSrcPage, int nDstPage, R_RECT tArea, R_POINT tCenter, double dRadian);
+	引き数：	int nSrcPage		転送元のグレーメモリーのページ数
+				int nDstPage		転送先のグレーメモリーのページ数
+				R_RECT tArea		転送先の領域
+				R_POINT tCenter		回転中心
+				double dRadian		回転角度(正：時計回り)[radian]
+	戻り値：	OK		正常終了
+				ERROR	対象ページ異常
+				ERROR2	回転後の領域異常
+	解　説：	
+	留意事項：	転送元画像の参照領域が画像からはみだす場合処理が遅くなります
+				回転角度が微小な場合 (radian)≒tan(radian)が成り立ちますので
+				radian ≒ 直線の傾き になります
+				<参考> (radian)≒tan(radian)としたときのズレ
+					角度	ズレ	※単位[deg]
+					   2	0.001
+					   3	0.003
+					   4	0.007
+					   5	0.013
+					   7	0.035
+					  10	0.103
+**********************************************************************************/
+// 新規追加  <Ver.3.50> 2008.11.13  by matsu
+int R_rotate_gray_memory(int nSrcPage, int nDstPage, R_RECT tArea, R_POINT tCenter, double dRadian)
+{
+	int sin_th = (int)(sin(-dRadian)*1024.0);
+	int cos_th = (int)(cos(-dRadian)*1024.0);

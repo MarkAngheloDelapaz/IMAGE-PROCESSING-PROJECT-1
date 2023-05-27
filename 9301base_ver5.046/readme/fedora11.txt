@@ -1,0 +1,38 @@
+ベースライブラリ Ver.5.000から
+R_CSライブラリと一括で配布しています。
+
+配布時のR_CSフォルダ構成は下記のとおりです。
+	R_CSのインクルードファイル
+		include/R_cs/
+	R_CSのライブラリファイルはベースライブラリと同じフォルダにあります。
+		fedora11/
+
+
+
+
+Linux(32bit)用のソフトウェアをビルドする場合、
+下記のライブラリをリンクしてください。
+
+POSIX real-time extension (librt)
+GNU Standard C++ Library (libstdc++)
+
+リンカーオプションに
+	-lrt -lstdc++
+を加えてください。
+
+今後も、ベースライブラリのバージョンアップ時に、
+使用するライブラリが追加されることがあります。
+
+R_plane_load_to_png関数または、
+R_plane_save_to_png関数を使用する場合は、OpenCVライブラリが必要です。
+リンカーオプションに
+	-lcv -lhighgui
+を加えてください。
+
+最新TSC-9301使用時の注意
+	Version 4.01 beta195以前のベースライブラリでビルドしたソフトウェアを
+	下記マザーボードが搭載されたTSC-9301で実行すると、Segmentation Faultが発生します。
+	Version 4.01 beta196以降のベースライブラリで再ビルドしてください。
+		GIGABYTE製	GA-H170-D3HP
+		ASUSTek製	H170-PRO
+		ASUSTek製	PRIME H270-PRO
